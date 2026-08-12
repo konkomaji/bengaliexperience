@@ -21,14 +21,14 @@ export function TicketSheet({
 
   const shareUrl = BRAND.url;
   const shareText = song
-    ? `"${song.titleRomanized}" — ${song.artist}. Aboard the ${route.nameEn} bus.`
-    : BRAND.title;
+    ? `"${song.titleRomanized}" — ${song.artist}. Aboard the ${route.name} bus.`
+    : BRAND.seoTitle;
   const seat = `${route.id.slice(0, 2).toUpperCase()}-${String((song?.id.split("-")[0] ?? "1")).padStart(2, "0")}`;
 
   async function share() {
     if (navigator.share) {
       try {
-        await navigator.share({ title: BRAND.title, text: shareText, url: shareUrl });
+        await navigator.share({ title: BRAND.seoTitle, text: shareText, url: shareUrl });
         return;
       } catch {
         /* dismissed — fall through to clipboard */
@@ -71,8 +71,7 @@ export function TicketSheet({
                 <div className="flex items-start justify-between">
                   <div>
                     <p className="text-[8px] uppercase tracking-[0.28em] text-[#2a1f14]/50">Passenger copy</p>
-                    <p className="font-display text-lg font-extrabold leading-tight">{route.nameEn}</p>
-                    <p className="font-display text-sm leading-tight" lang="bn">{route.nameBn}</p>
+                    <p className="font-display text-lg font-extrabold leading-tight">{route.name}</p>
                   </div>
                   <span className="rounded-full border-2 border-[#b23a1f] px-2 py-1 text-[8px] font-black tracking-widest text-[#b23a1f]"
                     style={{ transform: "rotate(-8deg)" }}>

@@ -18,12 +18,18 @@ import type { RouteDef } from "../data/routes";
  *   3  legibility washes — top and bottom darkened so header/player text reads
  *   4  film grain
  */
-export function HeroScene({ route }: { route: RouteDef }) {
+export function HeroScene({ route, honking = false }: { route: RouteDef; honking?: boolean }) {
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
 
   return (
-    <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-30 overflow-hidden bg-surface">
+    <div
+      aria-hidden="true"
+      className="pointer-events-none fixed inset-0 -z-30 overflow-hidden bg-surface"
+      // the horn rattles the whole scene; `honking` is re-triggered by the
+      // hook so repeated presses replay the shake instead of being ignored
+      style={honking ? { animation: "var(--animate-honk)" } : undefined}
+    >
       {/* 0 — dusk gradient base */}
       <div
         className="animate-settle absolute inset-0"
@@ -33,25 +39,71 @@ export function HeroScene({ route }: { route: RouteDef }) {
         }}
       />
 
-      {/* 1 — hero illustration */}
+      {/* 1 — hero illustration. Two nested animations: the wrapper rides on
+             the suspension (engine-bob), the image itself drifts slowly
+             (ken-burns). Composing them on separate elements avoids the two
+             transforms fighting over the same property. */}
       {!failed && (
-        <img
-          src={route.hero}
-          alt=""
-          fetchPriority="high"
-          decoding="async"
-          onLoad={() => setLoaded(true)}
-          onError={() => setFailed(true)}
-          className="absolute inset-0 size-full object-cover transition-opacity duration-[1200ms] ease-[var(--ease-glide)]"
-          style={{ objectPosition: "var(--hero-position)", opacity: loaded ? 1 : 0 }}
-        />
+        <div
+          className="absolute inset-0 will-change-transform"
+          style={{ animation: loaded ? "var(--animate-engine-bob)" : undefined }}
+        >
+          <img
+            src={route.hero}
+            alt=""
+            fetchPriority="high"
+            decoding="async"
+            onLoad={() => setLoaded(true)}
+            onError={() => setFailed(true)}
+            className="absolute inset-0 size-full object-cover will-change-transform transition-opacity duration-[1200ms] ease-[var(--ease-glide)]"
+            style={{
+              objectPosition: "var(--hero-position)",
+              opacity: loaded ? 1 : 0,
+              animation: loaded ? "var(--animate-ken-burns)" : undefined,
+            }}
+          />
+        </div>
       )}
 
-      {/* 2 — drifting clouds. Kept very low opacity: the hero illustrations
-             already have rich painted skies, so this layer is only here to
-             add slow motion, not to add cloud detail on top of cloud detail. */}
+      {/* 1b — road rush: blurred streaks tearing past along the road surface.
+              This is what actually reads as speed, since the bus itself is
+              part of the still image and can't be translated. */}
+      {loaded && (
+        <div
+          className="absolute inset-x-0 bottom-0 h-[26%] overflow-hidden opacity-45"
+          style={{
+            maskImage: "linear-gradient(to bottom, transparent 0%, #000 35%, #000 75%, transparent 100%)",
+            WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, #000 35%, #000 75%, transparent 100%)",
+          }}
+        >
+          <div
+            className="h-full w-[200%] blur-[2px] will-change-transform"
+            style={{
+              animation: "var(--animate-road-rush)",
+              backgroundImage:
+                "repeating-linear-gradient(90deg, rgba(255,214,150,0) 0px, rgba(255,214,150,0) 60px, rgba(255,214,150,0.5) 60px, rgba(255,214,150,0.5) 120px)",
+              backgroundSize: "240px 100%",
+            }}
+          />
+        </div>
+      )}
+
+      {/* warm light bloom breathing over the scene */}
       <div
-        className="absolute inset-x-0 top-0 h-[46%] opacity-[0.13] mix-blend-screen"
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(60% 45% at 50% 62%, rgba(255,180,90,0.55) 0%, rgba(255,140,60,0.12) 45%, transparent 75%)",
+          mixBlendMode: "screen",
+          animation: "var(--animate-headlamp)",
+        }}
+      />
+
+      {/* 2 — drifting clouds. Low opacity because the hero illustrations
+             already have rich painted skies: this layer exists to add visible
+             motion across them, not more cloud detail. */}
+      <div
+        className="absolute inset-x-0 top-0 h-[46%] opacity-[0.28] mix-blend-screen"
         style={{
           maskImage: "linear-gradient(to bottom, #000 0%, #000 40%, transparent 100%)",
           WebkitMaskImage: "linear-gradient(to bottom, #000 0%, #000 40%, transparent 100%)",

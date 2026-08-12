@@ -24,11 +24,13 @@ export function Player({
   engine,
   onOpenQueue,
   onOpenTicket,
+  onHonk,
   queueSize,
 }: {
   engine: PlayerEngine;
   onOpenQueue: () => void;
   onOpenTicket: () => void;
+  onHonk: () => void;
   queueSize: number;
 }) {
   const song = engine.currentSong;
@@ -63,11 +65,12 @@ export function Player({
         case "p": engine.prev(); break;
         case "q": onOpenQueue(); break;
         case "t": onOpenTicket(); break;
+        case "h": onHonk(); break;
       }
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [engine, onOpenQueue, onOpenTicket]);
+  }, [engine, onOpenQueue, onOpenTicket, onHonk]);
 
   return (
     <motion.div
@@ -92,9 +95,6 @@ export function Player({
             {song?.titleRomanized ?? "…"}
           </p>
           <p className="truncate text-[11px] leading-tight text-on-surface-muted">{song?.artist}</p>
-          <p className="truncate font-display text-[11px] leading-tight text-on-surface-muted/70" lang="bn">
-            {song?.title}
-          </p>
         </div>
 
         <button

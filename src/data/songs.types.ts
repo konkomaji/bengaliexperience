@@ -22,7 +22,7 @@ export interface Song {
 }
 
 export const ERA_LABELS: Record<Era, string> = {
-  retro: "রেট্রো",
+  retro: "Retro",
   "90s": "'90s",
   "2000s": "2000s",
   "2010s": "2010s",

@@ -26,8 +26,8 @@ export function Hero({
       </p>
 
       <h1 className="font-display mt-1 text-4xl font-extrabold leading-[0.95] text-on-surface sm:text-6xl md:text-7xl"
-        style={{ textShadow: "0 4px 28px rgba(0,0,0,0.7)" }} lang="bn">
-        {BRAND.nameBn}
+        style={{ textShadow: "0 4px 28px rgba(0,0,0,0.7)" }} >
+        {BRAND.nameEn}
       </h1>
 
       <div className="mt-3 flex items-center gap-3 text-[9px] font-semibold uppercase tracking-[0.28em] text-white/55 sm:text-[11px]">
@@ -45,7 +45,7 @@ export function Hero({
         whileTap={{ scale: 0.9 }}
       >
         <span className="text-[#2b1600]"><HornIcon size={15} /></span>
-        <span className="font-display text-xs font-extrabold leading-none text-[#2b1600]">হর্ন বাজান</span>
+        <span className="font-display text-xs font-extrabold leading-none text-[#2b1600]">HORN OK PLEASE</span>
       </motion.button>
     </motion.div>
   );

@@ -21,7 +21,7 @@ export function RoutePage({ routeId }: { routeId: RouteId }) {
   const route = getRoute(routeId);
   const engine = usePlayerEngine(SONGS);
   const aboard = useAboardCount();
-  const honk = useHorn();
+  const { honk, honking } = useHorn();
 
   const [queueOpen, setQueueOpen] = useState(false);
   const [ticketOpen, setTicketOpen] = useState(false);
@@ -32,7 +32,19 @@ export function RoutePage({ routeId }: { routeId: RouteId }) {
   return (
     <>
       <JsonLd data={buildJsonLd(routeId, route, SONGS)} />
-      <HeroScene route={route} />
+      <HeroScene route={route} honking={honking} />
+
+      {/* horn callout — appears over the scene for the length of the honk */}
+      {honking && (
+        <div className="pointer-events-none fixed inset-x-0 top-[38%] z-20 flex justify-center">
+          <span
+            className="animate-echo rounded-full border-2 border-[#2b1600] px-4 py-2 font-display text-sm font-extrabold text-[#2b1600] shadow-[0_6px_20px_rgba(0,0,0,0.5)]"
+            style={{ background: "linear-gradient(180deg, #ffdd55 0%, #ffa726 100%)" }}
+          >
+            HORN OK PLEASE
+          </span>
+        </div>
+      )}
 
       {/* pointer-events-none on the shell so the scene stays interactive;
           each interactive cluster opts back in explicitly */}
@@ -43,8 +55,8 @@ export function RoutePage({ routeId }: { routeId: RouteId }) {
           <Hero route={route} trackCount={SONGS.length} onHonk={honk} />
 
           <p className="pointer-events-none mt-3 max-w-md text-center font-display text-xs text-white/75 sm:text-sm"
-            style={{ textShadow: "0 1px 10px rgba(0,0,0,0.85)" }} lang="bn">
-            {route.taglineBn}
+            style={{ textShadow: "0 1px 10px rgba(0,0,0,0.85)" }}>
+            {route.tagline}
           </p>
 
           <div className="flex-1" />
@@ -55,6 +67,7 @@ export function RoutePage({ routeId }: { routeId: RouteId }) {
               queueSize={SONGS.length}
               onOpenQueue={() => setQueueOpen(true)}
               onOpenTicket={() => setTicketOpen(true)}
+              onHonk={honk}
             />
 
             <footer className="pointer-events-auto w-full max-w-xl text-center text-[11px] text-on-surface-muted">
@@ -62,12 +75,12 @@ export function RoutePage({ routeId }: { routeId: RouteId }) {
                 {ROUTES.map((r) => (
                   <Link key={r.id} to={ROUTE_PATH[r.id]}
                     className="underline decoration-white/20 underline-offset-4 hover:text-on-surface hover:decoration-primary">
-                    {r.nameEn}
+                    {r.name}
                   </Link>
                 ))}
               </nav>
               <p className="opacity-70">
-                {BRAND.title} · streams official YouTube uploads, nothing rehosted.
+                {BRAND.seoTitle} · streams official YouTube uploads, nothing rehosted.
               </p>
             </footer>
           </div>

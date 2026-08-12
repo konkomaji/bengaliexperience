@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **"Who's driving?" card** — curator credit in the header: avatar, name, bio
+  and an Instagram follow button, matching the reference site's layout.
+- **Visible ambient motion.** The scene previously had only a 90-second cloud
+  drift at 0.13 opacity — technically running, but imperceptible, so the page
+  read as a dead screenshot. Now the hero image has a slow Ken Burns push-in,
+  the frame rides an engine bob, blurred streaks rush along the road surface,
+  and a warm light bloom breathes over everything. The bus is painted into the
+  image and cannot be moved on its own, so the scene moves around it instead.
+- **The horn now has a visual.** Pressing it (or `H`) rattles the whole scene
+  with a damped shake and flashes a "HORN OK PLEASE" callout, alongside the
+  existing synthesized honk.
+- Clock now shows **seconds and AM/PM**, ticking every second.
+- Live listener count animates when the number changes.
+
+### Changed
+- **All visible copy is English.** The on-screen brand is "Bengali Experience";
+  the "Bengali Bus Driver Playlist" phrasing is kept only in title/meta/JSON-LD,
+  where the search intent actually lives.
+- Route pills no longer carry emoji.
+- Song titles display romanized only. Bengali script stays in the data for
+  structured data and search.
+
+### Fixed
+- The `H` horn shortcut appeared in the on-screen legend but was never wired up.
+
 ### To do
 - Verify layout on real mobile hardware (narrow-viewport rendering has not yet
   been visually confirmed — see Known issues).

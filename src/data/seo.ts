@@ -34,7 +34,7 @@ export interface RouteSeo {
 
 export const ROUTE_SEO: Record<RouteId, RouteSeo> = {
   kolkata: {
-    title: BRAND.title,
+    title: BRAND.seoTitle,
     description:
       "Press play on the Bengali bus driver playlist — nonstop Bangla bangers from the 90s to the 20s, Kumar Sanu and Nachiketa to Anupam Roy and Arijit. Free, no login, straight through Kolkata at night.",
     keywords: [
@@ -46,7 +46,6 @@ export const ROUTE_SEO: Record<RouteId, RouteSeo> = {
       "anupam roy songs",
       "arijit singh bengali songs",
       "kolkata bus playlist",
-      "বাংলা গান প্লেলিস্ট",
     ],
   },
   digha: {

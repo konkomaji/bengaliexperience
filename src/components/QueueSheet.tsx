@@ -56,7 +56,7 @@ export function QueueSheet({
           >
             <div className="flex shrink-0 items-center justify-between px-5 pb-2 pt-4">
               <p className="font-display text-sm font-bold text-on-surface">
-                প্লেলিস্ট · {songs.length} tracks
+                Playlist · {songs.length} tracks
               </p>
               <button type="button" onClick={onClose} aria-label="Close queue"
                 className="rounded-full p-1.5 text-on-surface-muted hover:text-on-surface">
@@ -65,7 +65,7 @@ export function QueueSheet({
             </div>
 
             <div className="flex shrink-0 gap-1.5 overflow-x-auto px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              <Chip active={era === null} onClick={() => setEra(null)} label="সব" />
+              <Chip active={era === null} onClick={() => setEra(null)} label="All" />
               {eras.map((e) => (
                 <Chip key={e} active={era === e} onClick={() => setEra(era === e ? null : e)} label={ERA_LABELS[e]} />
               ))}
