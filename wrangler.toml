@@ -8,5 +8,5 @@ pages_build_output_dir = "dist"
 #   npx wrangler kv namespace create ABOARD --preview
 [[kv_namespaces]]
 binding = "ABOARD"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
-preview_id = "REPLACE_WITH_PREVIEW_KV_NAMESPACE_ID"
+id = "cd29e734e202435eb5c0ad7d6c803e9b"
+preview_id = "c423e5855f8c4d2ebbb6130ee47643a1"
