@@ -1,0 +1,159 @@
+@import "tailwindcss";
+@import "@fontsource-variable/manrope";
+@import "@fontsource/hind-siliguri/400.css";
+@import "@fontsource/hind-siliguri/500.css";
+@import "@fontsource/hind-siliguri/600.css";
+@import "@fontsource/baloo-da-2/500.css";
+@import "@fontsource/baloo-da-2/600.css";
+@import "@fontsource/baloo-da-2/700.css";
+@import "@fontsource/baloo-da-2/800.css";
+
+/*
+  বাংলা এক্সপেরিয়েন্স — design tokens.
+
+  Palette is pulled straight off a Kolkata bus: deep yellow panels, maroon
+  window band, the red stripe, cream skirt. Everything sits on a near-black
+  dusk surface so the hero photograph carries the colour and the UI stays
+  quiet on top of it.
+*/
+@theme {
+  --font-display: "Baloo Da 2", "Hind Siliguri", ui-sans-serif, sans-serif;
+  --font-body: "Hind Siliguri", "Manrope Variable", ui-sans-serif, sans-serif;
+  --font-latin: "Manrope Variable", ui-sans-serif, sans-serif;
+
+  /* --- bus livery --- */
+  --color-primary: #ff9a45;          /* ember / headlamp warm */
+  --color-primary-dim: #c1450f;
+  --color-on-primary: #2b0900;
+  --color-primary-container: #4a1607;
+
+  --color-secondary: #ffc72c;        /* bus yellow */
+  --color-on-secondary: #2a1600;
+
+  --color-maroon: #6e2a2e;           /* window band */
+  --color-cream: #f4f0e4;            /* lower skirt */
+
+  --color-surface: #150803;          /* dusk */
+  --color-surface-dim: #0c0502;
+  --color-surface-bright: #241109;
+  --color-surface-container: #1c0d05;
+  --color-surface-container-high: #2a150a;
+  --color-on-surface: #f7ece4;
+  --color-on-surface-muted: #c8b6a8;
+  --color-outline: #4a382c;
+  --color-outline-variant: #2c2019;
+
+  --color-success: #7ed99a;
+  --color-error: #ff8a80;
+
+  /* --- shape --- */
+  --radius-xs: 10px;
+  --radius-sm: 16px;
+  --radius-md: 22px;
+  --radius-lg: 28px;
+  --radius-xl: 36px;
+  --radius-full: 999px;
+
+  /* --- motion --- */
+  --ease-glide: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-expressive: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  --animate-blink: blink 2s steps(1) infinite;
+  --animate-drift: drift 90s linear infinite;
+  --animate-rise: rise 0.9s var(--ease-glide) both;
+  --animate-settle: settle 1.6s var(--ease-glide) both;
+  --animate-beacon: beacon 2.4s var(--ease-standard) infinite;
+  --animate-glint: glint 3.6s ease-in-out infinite;
+  --animate-equalize: equalize 1s ease-in-out infinite;
+  --animate-vinyl: vinyl 3.2s linear infinite;
+
+  @keyframes blink {
+    0%, 45% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+  }
+  /* one full loop of a 2x-wide tiled strip — seamless because the second
+     copy is identical to the first */
+  @keyframes drift {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(-50%, 0, 0); }
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes settle {
+    from { opacity: 0; transform: scale(1.04); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes beacon {
+    0% { transform: scale(1); opacity: 0.7; }
+    70%, 100% { transform: scale(2.4); opacity: 0; }
+  }
+  @keyframes glint {
+    0%, 92%, 100% { box-shadow: 0 0 0 0 rgba(255, 199, 44, 0); }
+    96% { box-shadow: 0 0 18px 2px rgba(255, 199, 44, 0.35); }
+  }
+  @keyframes equalize {
+    0%, 100% { transform: scaleY(0.4); }
+    50% { transform: scaleY(1); }
+  }
+  @keyframes vinyl {
+    to { transform: rotate(360deg); }
+  }
+}
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  html {
+    color-scheme: dark;
+  }
+  body {
+    background: var(--color-surface);
+    color: var(--color-on-surface);
+    font-family: var(--font-body);
+    overscroll-behavior: none;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-secondary);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  ::selection {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+  }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: var(--color-outline); border-radius: 999px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+}
+
+@layer utilities {
+  .pt-safe { padding-top: max(env(safe-area-inset-top), 0px); }
+  .pb-safe { padding-bottom: max(env(safe-area-inset-bottom), 0px); }
+}
+
+/*
+  Hero framing. The generated scene image is ultrawide (21:9) but phones are
+  tall and narrow, so object-fit alone would crop the bus out of frame. These
+  breakpoints pan the focal point sideways as the viewport narrows — the same
+  trick the reference site uses — keeping the bus centred at every width.
+*/
+:root {
+  --hero-position: 50% 55%;
+}
+@media (max-width: 1280px) { :root { --hero-position: 52% 55%; } }
+@media (max-width: 1024px) { :root { --hero-position: 55% 55%; } }
+@media (max-width: 768px)  { :root { --hero-position: 58% 56%; } }
+@media (max-width: 480px)  { :root { --hero-position: 60% 58%; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

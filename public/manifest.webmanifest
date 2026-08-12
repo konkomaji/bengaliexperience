@@ -1,0 +1,14 @@
+{
+  "name": "Bengali Bus Driver Playlist",
+  "short_name": "Bus Driver",
+  "description": "Nonstop Bangla bangers from the 90s to the 20s, on famous West Bengal bus routes.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#150803",
+  "theme_color": "#150803",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

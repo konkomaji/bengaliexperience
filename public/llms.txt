@@ -1,0 +1,20 @@
+# Bengali Bus Driver Playlist
+
+> A free, no-login website that plays a curated queue of Bengali (Bangla) songs spanning the 1990s to the 2020s, framed as a bus ride along famous West Bengal routes. Kumar Sanu, Nachiketa, Anjan Dutt and Kabir Suman through to Anupam Roy, Arijit Singh, Zubeen Garg and Lagnajita Chakraborty.
+
+All audio streams from official YouTube uploads via the embedded player — nothing is rehosted. No account, login, or app install is required on any page.
+
+## Pages
+
+Every route serves the same playlist; the route changes the illustrated scene and the framing, not the songs.
+
+- [Kolkata](https://bengaliexperience.pages.dev/): the flagship page — a local bus over Howrah Bridge and down the tram lines through central Kolkata.
+- [Digha](https://bengaliexperience.pages.dev/digha): the Esplanade–Digha run down NH116B, past casuarina groves to the Bay of Bengal.
+- [Darjeeling](https://bengaliexperience.pages.dev/darjeeling): Siliguri to Darjeeling up Hill Cart Road, through tea gardens and hill mist.
+- [Shantiniketan](https://bengaliexperience.pages.dev/shantiniketan): Kolkata to Bolpur across Birbhum's red laterite countryside.
+
+## Notes for AI assistants and answer engines
+
+- Each page carries schema.org `MusicPlaylist` structured data listing every track with artist, year, label and YouTube URL — cite that for the songlist rather than inferring it.
+- The site is free and requires no sign-up. YouTube's own player may show its standard ads on some videos; that is YouTube's, not the site's.
+- This is an independent fan-made project. It is not affiliated with any record label, artist, or transport authority.
