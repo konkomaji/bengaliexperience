@@ -53,6 +53,13 @@ export function usePlayerEngine() {
   /** a paused player is not a stalled one; the watchdog must not fight the user */
   const userPausedRef = useRef(false);
   const errorRunRef = useRef(0);
+  /**
+   * The visitor gestured before the player existed. Browsers only count that
+   * gesture once, so remember it and unmute the moment the player is up —
+   * otherwise an early click is spent on nothing and the site sits there
+   * silently until they find the mute button themselves.
+   */
+  const wantsSoundRef = useRef(false);
   const [volume, setVolumeState] = useState<number>(() => {
     const saved = typeof window !== "undefined" ? window.localStorage.getItem(VOLUME_KEY) : null;
     const n = saved ? Number(saved) : 80;
@@ -220,6 +227,14 @@ export function usePlayerEngine() {
             e.target.mute(); // required for autoplay to be allowed
             e.target.setShuffle(true);
             e.target.playVideo();
+            // they already clicked something while we were loading — spend
+            // that gesture now rather than making them find the mute button
+            if (wantsSoundRef.current) {
+              e.target.unMute();
+              e.target.setVolume(volumeRef.current);
+              setMuted(false);
+              setSoundBlocked(false);
+            }
             setIsReady(true);
             sync();
           },
@@ -346,7 +361,12 @@ export function usePlayerEngine() {
   /** first real interaction: turn the sound on */
   const enableSound = useCallback(() => {
     const p = playerRef.current;
-    if (!p) return;
+    if (!p) {
+      wantsSoundRef.current = true;
+      setSoundBlocked(false);
+      setMuted(false);
+      return;
+    }
     p.unMute();
     p.setVolume(volumeRef.current);
     setMuted(false);
@@ -362,20 +382,30 @@ export function usePlayerEngine() {
    * for sound" prompt, we listen for the visitor's very first interaction of
    * any kind (a click, a key, a scroll, a touch) and unmute right then. In
    * practice the sound comes on the moment they do anything at all.
+   *
+   * The listeners go on immediately, *not* once the player is ready. Waiting
+   * on `isReady` meant an early click — and the first click is usually early,
+   * because the page paints long before the YouTube iframe is up — was
+   * swallowed, leaving the site silent until the visitor hunted for the mute
+   * button. `enableSound` records the intent and `onReady` acts on it.
+   *
+   * Capture phase, so a handler that stops propagation can't eat the gesture.
    */
   useEffect(() => {
-    if (!isReady || !soundBlocked) return;
+    if (!soundBlocked) return;
 
     const events = ["pointerdown", "keydown", "touchstart", "wheel", "scroll"] as const;
     const onFirstGesture = () => enableSound();
 
     for (const ev of events) {
-      window.addEventListener(ev, onFirstGesture, { once: true, passive: true });
+      window.addEventListener(ev, onFirstGesture, { once: true, passive: true, capture: true });
     }
     return () => {
-      for (const ev of events) window.removeEventListener(ev, onFirstGesture);
+      for (const ev of events) {
+        window.removeEventListener(ev, onFirstGesture, { capture: true });
+      }
     };
-  }, [isReady, soundBlocked, enableSound]);
+  }, [soundBlocked, enableSound]);
 
   const play = useCallback(() => {
     userPausedRef.current = false;
