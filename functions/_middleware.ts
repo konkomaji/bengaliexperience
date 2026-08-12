@@ -9,7 +9,6 @@
  */
 import { PATH_TO_ROUTE, ROUTE_SEO } from "../src/data/seo";
 import { getRoute } from "../src/data/routes";
-import { SONGS } from "../src/data/songs";
 import { buildJsonLd } from "../src/lib/jsonld";
 import { BRAND } from "../src/data/brand";
 
@@ -23,7 +22,7 @@ export const onRequest: PagesFunction = async ({ request, next }) => {
 
   const seo = ROUTE_SEO[routeId];
   const canonical = BRAND.url + url.pathname;
-  const jsonLd = buildJsonLd(routeId, getRoute(routeId), SONGS);
+  const jsonLd = buildJsonLd(routeId, getRoute(routeId));
 
   const setAttr = (attr: string, value: string) => ({
     element: (el: Element) => { el.setAttribute(attr, value); },

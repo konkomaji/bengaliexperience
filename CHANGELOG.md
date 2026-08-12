@@ -8,6 +8,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **The player runs on YouTube playlists, not a hardcoded tracklist.** The
+  45-track array in `src/data/songs.ts` is gone; the engine loads nine real
+  playlists natively (`listType: "playlist"`), so adding a song on YouTube
+  makes it appear on the site with no redeploy. `src/lib/title.ts` turns messy
+  uploader titles into song + artist for display.
+- **Weighted opener selection** (`src/lib/selection.ts`) — IST hour affinity
+  and recency (last three openers, remembered in `localStorage`) bias which
+  playlist starts the session, weighted rather than ranked, so two people
+  boarding in the same minute still get different journeys. Every step falls
+  back to a uniform random pick.
+- **Breakdown screen + error boundary.** A crash or an unknown URL now lands on
+  a themed chai-break scene instead of a white page or a generic 404. Styled
+  with inline CSS and its own keyframes, so it renders even if the stylesheet
+  and fonts failed to load; the backdrop is `public/hero/breakdown.jpg`.
 - **"Who's driving?" card** — curator credit in the header: avatar, name, bio
   and an Instagram follow button, matching the reference site's layout.
 - **Visible ambient motion.** The scene previously had only a 90-second cloud
@@ -16,9 +30,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the frame rides an engine bob, blurred streaks rush along the road surface,
   and a warm light bloom breathes over everything. The bus is painted into the
   image and cannot be moved on its own, so the scene moves around it instead.
-- **The horn now has a visual.** Pressing it (or `H`) rattles the whole scene
-  with a damped shake and flashes a "HORN OK PLEASE" callout, alongside the
-  existing synthesized honk.
+- **A real bus horn.** The old two-tone beep lasted a fifth of a second and sat
+  under the music. It is now a 3.4-second air horn — two fundamentals a minor
+  third apart, each doubled and detuned so the voices beat, through a lowpass
+  and a compressor — and **the music ducks under it**, down to 12% in 240ms
+  and back up over 700ms. The visitor's own volume is never overwritten.
+  Pressing it (or `H`) also rattles the scene and holds a "HORN OK PLEASE"
+  callout for the length of the blast.
+- **New place, new music.** The four routes share one player, so changing
+  scene now deliberately rolls the playlist; with only one usable list left it
+  at least skips to another song.
+- **The breakdown screen has something to look at.** Embers drift off the
+  stove, headlights sweep past down the road and the photograph breathes on a
+  34-second cycle, so a screen you might sit on for a while never reads as
+  frozen. All of it is inline CSS with its own keyframes — this screen has to
+  render even when the stylesheet did not load.
+- `npm run check:playlists` — one command that says which playlists the
+  embedded player will actually accept, and why the others are refused.
 - Clock now shows **seconds and AM/PM**, ticking every second.
 - Live listener count animates when the number changes.
 
@@ -31,9 +59,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   structured data and search.
 
 ### Fixed
+- **The site never played.** It sat on "Boarding…" forever. Three separate
+  causes, all now handled:
+  1. Seven of the nine playlists were created in **YouTube Music**. Those get
+     an ordinary `PL…` id and open fine on youtube.com, but the IFrame player
+     refuses them with error 150 and an empty tracklist, whatever their
+     visibility is set to. (Confirmed against YouTube's oEmbed endpoint: 401
+     for all seven, 200 for the two made on YouTube proper.)
+  2. `onError` on a refused *list* was handled as if a single video had died,
+     and `nextVideo()` on an empty playlist does nothing — so the player sat
+     there. Empty tracklist now means the list is dead, not the track.
+  3. The player only muted itself in `onReady`. Chrome decides whether to
+     honour autoplay when the iframe loads, before that ever fires, so
+     `mute: 1` is now a player var.
+- **The playlist name could lie.** `loadPlaylist` on a refused list does not
+  reliably raise `onError`, and `getPlaylistId()` echoes back whatever it was
+  asked for — so the header showed one playlist while a different one played.
+  Every load is now checked against the tracklist it replaced (by membership,
+  since shuffle reorders the array) and rolled on if nothing changed.
+- **Dead lists are now caught before they cost silence.** YouTube's oEmbed
+  endpoint allows cross-origin reads and answers 200 only for lists the embed
+  will take, so a refused list is skipped in ~100ms instead of several seconds
+  of dead air. A watchdog still covers anything that slips through, and when
+  nothing is left the engine reports `stalled` instead of pretending to load.
 - The `H` horn shortcut appeared in the on-screen legend but was never wired up.
 
 ### To do
+- Recreate the seven YouTube Music playlists as public playlists **on
+  youtube.com** — until then the site rides on two lists. Verify with
+  `npm run check:playlists`.
 - Verify layout on real mobile hardware (narrow-viewport rendering has not yet
   been visually confirmed — see Known issues).
 - Register the real domain and replace the `.pages.dev` placeholder in

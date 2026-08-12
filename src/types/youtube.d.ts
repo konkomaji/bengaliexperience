@@ -25,6 +25,19 @@ declare namespace YT {
     };
   }
 
+  interface VideoData {
+    video_id?: string;
+    title?: string;
+    author?: string;
+  }
+
+  interface LoadPlaylistArgs {
+    list: string;
+    listType?: string;
+    index?: number;
+    startSeconds?: number;
+  }
+
   class Player {
     constructor(elementId: string | HTMLElement, options: PlayerOptions);
     playVideo(): void;
@@ -33,6 +46,19 @@ declare namespace YT {
     seekTo(seconds: number, allowSeekAhead: boolean): void;
     loadVideoById(videoId: string): void;
     cueVideoById(videoId: string): void;
+    /* playlist controls */
+    loadPlaylist(args: LoadPlaylistArgs): void;
+    cuePlaylist(args: LoadPlaylistArgs): void;
+    getPlaylist(): string[] | null;
+    /** id of the list actually loaded — not necessarily the one we asked for */
+    getPlaylistId(): string | null;
+    getPlaylistIndex(): number;
+    playVideoAt(index: number): void;
+    nextVideo(): void;
+    previousVideo(): void;
+    setShuffle(shuffle: boolean): void;
+    setLoop(loop: boolean): void;
+    getVideoData(): VideoData;
     setVolume(volume: number): void;
     getVolume(): number;
     mute(): void;

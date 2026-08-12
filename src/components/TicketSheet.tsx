@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import type { RouteDef } from "../data/routes";
-import type { Song } from "../data/songs.types";
 import { BRAND } from "../data/brand";
 
 /**
@@ -10,20 +9,22 @@ import { BRAND } from "../data/brand";
  * lot more fun to send someone than a bare link, which is the entire point.
  */
 export function TicketSheet({
-  open, onClose, route, song,
+  open, onClose, route, song, seatNo,
 }: {
   open: boolean;
   onClose: () => void;
   route: RouteDef;
-  song: Song | undefined;
+  song: { title: string; artist: string } | undefined;
+  /** position in the current playlist, printed as the seat number */
+  seatNo: number;
 }) {
   const [copied, setCopied] = useState(false);
 
   const shareUrl = BRAND.url;
   const shareText = song
-    ? `"${song.titleRomanized}" — ${song.artist}. Aboard the ${route.name} bus.`
+    ? `"${song.title}" — ${song.artist}. Aboard the ${route.name} bus.`
     : BRAND.seoTitle;
-  const seat = `${route.id.slice(0, 2).toUpperCase()}-${String((song?.id.split("-")[0] ?? "1")).padStart(2, "0")}`;
+  const seat = `${route.id.slice(0, 2).toUpperCase()}-${String(seatNo).padStart(2, "0")}`;
 
   async function share() {
     if (navigator.share) {
@@ -84,7 +85,7 @@ export function TicketSheet({
                 <div className="mt-3 border-t border-dashed border-[#2a1f14]/25 pt-2">
                   <p className="text-[8px] uppercase tracking-[0.22em] text-[#2a1f14]/50">Now playing</p>
                   <p className="mt-0.5 font-display text-sm font-bold leading-snug">
-                    {song?.titleRomanized ?? BRAND.nameEn}
+                    {song?.title ?? BRAND.nameEn}
                   </p>
                   <p className="text-[11px] text-[#2a1f14]/70">{song?.artist ?? "A whole playlist, actually"}</p>
                 </div>

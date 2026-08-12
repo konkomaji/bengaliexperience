@@ -74,6 +74,8 @@
   --animate-road-rush: road-rush 0.75s linear infinite;
   --animate-board: board 2.6s var(--ease-glide) both;
   --animate-echo: echo 1.8s var(--ease-glide) both;
+  /* the horn callout has to last as long as the blast itself (BLAST_MS) */
+  --animate-blast: echo 3.4s var(--ease-glide) both;
 
   @keyframes blink {
     0%, 45% { opacity: 1; }

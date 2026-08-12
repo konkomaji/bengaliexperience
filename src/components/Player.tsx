@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import type { PlayerEngine } from "../hooks/usePlayerEngine";
 import { PLAYER_MOUNT_ID } from "../hooks/usePlayerEngine";
 import { Record } from "./Record";
+import { cleanTitle, splitTitle } from "../lib/title";
 import {
   PlayIcon, PauseIcon, NextIcon, PrevIcon,
   ShuffleIcon, RepeatIcon, VolumeIcon, QueueIcon, TicketIcon,
@@ -16,39 +17,31 @@ function fmt(s: number) {
 }
 
 /**
- * The dock. Deliberately a short, wide bar: one row of info + transport,
- * one thin row of scrubber. Keeps the hero illustration visible behind it
- * instead of becoming a tall panel that eats the screen.
+ * The dock. Short and wide: one row of info + transport, one thin scrubber
+ * row, so the scene behind it stays the hero.
  */
 export function Player({
-  engine,
-  onOpenQueue,
-  onOpenTicket,
-  onHonk,
-  queueSize,
+  engine, onOpenQueue, onOpenTicket, onHonk,
 }: {
   engine: PlayerEngine;
   onOpenQueue: () => void;
   onOpenTicket: () => void;
   onHonk: () => void;
-  queueSize: number;
 }) {
-  const song = engine.currentSong;
   const [scrub, setScrub] = useState<number | null>(null);
   const [volOpen, setVolOpen] = useState(false);
   const barRef = useRef<HTMLDivElement>(null);
 
+  const { title, artist } = splitTitle(engine.track?.title ?? "", engine.track?.author ?? "");
   const pct = engine.duration ? ((scrub ?? engine.currentTime) / engine.duration) * 100 : 0;
 
   function seekFromX(clientX: number) {
     const el = barRef.current;
     if (!el || !engine.duration) return;
     const r = el.getBoundingClientRect();
-    const ratio = Math.min(1, Math.max(0, (clientX - r.left) / r.width));
-    setScrub(ratio * engine.duration);
+    setScrub(Math.min(1, Math.max(0, (clientX - r.left) / r.width)) * engine.duration);
   }
 
-  // keyboard shortcuts, matching the legend below the bar
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       const tag = (e.target as HTMLElement | null)?.tagName;
@@ -84,17 +77,24 @@ export function Player({
         <div id={PLAYER_MOUNT_ID} />
       </div>
 
+      {/* No "tap for sound" prompt: autoplay starts muted because browsers
+          require it, and the engine unmutes silently on the visitor's first
+          interaction of any kind. See usePlayerEngine. */}
+
       <div className="flex items-center gap-3">
         <Record
-          thumbUrl={song ? `https://i.ytimg.com/vi/${song.youtubeId}/mqdefault.jpg` : undefined}
+          thumbUrl={engine.track ? `https://i.ytimg.com/vi/${engine.track.videoId}/mqdefault.jpg` : undefined}
           isPlaying={engine.isPlaying}
         />
 
         <div className="min-w-0 flex-1">
           <p className="truncate font-display text-sm font-bold leading-tight text-on-surface">
-            {song?.titleRomanized ?? "…"}
+            {title || "Boarding…"}
           </p>
-          <p className="truncate text-[11px] leading-tight text-on-surface-muted">{song?.artist}</p>
+          <p className="truncate text-[11px] leading-tight text-on-surface-muted">{artist}</p>
+          <p className="truncate text-[10px] leading-tight text-on-surface-muted/60">
+            {engine.playlist.label}
+          </p>
         </div>
 
         <button
@@ -117,30 +117,24 @@ export function Player({
         </div>
 
         <button
-          type="button" onClick={engine.cycleRepeat} aria-label={`Repeat: ${engine.repeat}`}
-          className={`relative hidden shrink-0 rounded-full p-2 transition-colors sm:block ${engine.repeat !== "off" ? "text-primary" : "text-on-surface-muted hover:text-on-surface"}`}
+          type="button" onClick={engine.toggleRepeat} aria-pressed={engine.repeat} aria-label="Repeat playlist"
+          className={`hidden shrink-0 rounded-full p-2 transition-colors sm:block ${engine.repeat ? "text-primary" : "text-on-surface-muted hover:text-on-surface"}`}
         >
           <RepeatIcon />
-          {engine.repeat === "one" && (
-            <span className="absolute right-0 top-0 flex size-3 items-center justify-center rounded-full bg-primary text-[7px] font-bold text-on-primary">1</span>
-          )}
         </button>
 
-        <IconBtn label={`Queue, ${queueSize} songs`} onClick={onOpenQueue} muted><QueueIcon /></IconBtn>
+        <IconBtn label="Queue" onClick={onOpenQueue} muted><QueueIcon /></IconBtn>
         <IconBtn label="Your ticket" onClick={onOpenTicket} muted><TicketIcon /></IconBtn>
       </div>
 
-      {/* scrubber row, with volume tucked at the end */}
+      {/* scrubber + volume */}
       <div className="mt-1.5 flex items-center gap-1.5 text-[10px] tabular-nums text-on-surface-muted">
         <span className="w-8 text-right">{fmt(scrub ?? engine.currentTime)}</span>
         <div
           ref={barRef}
-          role="slider"
-          aria-label="Seek"
-          aria-valuemin={0}
-          aria-valuemax={Math.round(engine.duration)}
-          aria-valuenow={Math.round(scrub ?? engine.currentTime)}
-          tabIndex={0}
+          role="slider" aria-label="Seek"
+          aria-valuemin={0} aria-valuemax={Math.round(engine.duration)}
+          aria-valuenow={Math.round(scrub ?? engine.currentTime)} tabIndex={0}
           className="group relative h-4 flex-1 cursor-pointer touch-none"
           onPointerDown={(e) => { (e.target as Element).setPointerCapture(e.pointerId); seekFromX(e.clientX); }}
           onPointerMove={(e) => { if (e.buttons === 1) seekFromX(e.clientX); }}
@@ -152,10 +146,8 @@ export function Player({
         >
           <div className="absolute top-1/2 h-1 w-full -translate-y-1/2 rounded-full bg-white/12" />
           <div className="absolute top-1/2 h-1 -translate-y-1/2 rounded-full bg-primary" style={{ width: `${pct}%` }} />
-          <div
-            className="absolute top-1/2 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary opacity-0 shadow transition-opacity group-hover:opacity-100"
-            style={{ left: `${pct}%` }}
-          />
+          <div className="absolute top-1/2 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary opacity-0 shadow transition-opacity group-hover:opacity-100"
+            style={{ left: `${pct}%` }} />
         </div>
         <span className="w-8">{fmt(engine.duration)}</span>
 
@@ -169,9 +161,7 @@ export function Player({
           {volOpen && (
             <motion.input
               key="vol" type="range" min={0} max={100}
-              initial={{ width: 0, opacity: 0 }}
-              animate={{ width: 56, opacity: 1 }}
-              exit={{ width: 0, opacity: 0 }}
+              initial={{ width: 0, opacity: 0 }} animate={{ width: 56, opacity: 1 }} exit={{ width: 0, opacity: 0 }}
               transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
               value={engine.muted ? 0 : engine.volume}
               onChange={(e) => engine.setVolume(Number(e.target.value))}
@@ -182,7 +172,6 @@ export function Player({
         </AnimatePresence>
       </div>
 
-      {/* shortcut legend — desktop only */}
       <div className="mt-1.5 hidden flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[9px] uppercase tracking-wide text-on-surface-muted/55 sm:flex">
         <Key k="Space" label="play" /><Key k="←→" label="seek" /><Key k="N P" label="track" />
         <Key k="Q" label="queue" /><Key k="T" label="ticket" /><Key k="H" label="horn" />
@@ -191,14 +180,12 @@ export function Player({
   );
 }
 
-function IconBtn({
-  children, onClick, label, muted,
-}: { children: React.ReactNode; onClick: () => void; label: string; muted?: boolean }) {
+function IconBtn({ children, onClick, label, muted }: {
+  children: React.ReactNode; onClick: () => void; label: string; muted?: boolean;
+}) {
   return (
-    <button
-      type="button" onClick={onClick} aria-label={label}
-      className={`flex size-9 items-center justify-center rounded-full transition-transform duration-150 ease-[var(--ease-expressive)] hover:bg-white/5 active:scale-90 ${muted ? "text-on-surface-muted hover:text-on-surface" : "text-on-surface"}`}
-    >
+    <button type="button" onClick={onClick} aria-label={label}
+      className={`flex size-9 items-center justify-center rounded-full transition-transform duration-150 ease-[var(--ease-expressive)] hover:bg-white/5 active:scale-90 ${muted ? "text-on-surface-muted hover:text-on-surface" : "text-on-surface"}`}>
       {children}
     </button>
   );
@@ -212,3 +199,5 @@ function Key({ k, label }: { k: string; label: string }) {
     </span>
   );
 }
+
+export { cleanTitle };

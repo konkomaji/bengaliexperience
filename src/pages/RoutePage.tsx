@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { getRoute, ROUTES, type RouteId } from "../data/routes";
-import { SONGS } from "../data/songs";
+import { TOTAL_TRACKS } from "../data/playlists";
 import { ROUTE_PATH, ROUTE_SEO } from "../data/seo";
 import { BRAND } from "../data/brand";
 import { buildJsonLd } from "../lib/jsonld";
+import { splitTitle } from "../lib/title";
 import { usePlayerEngine } from "../hooks/usePlayerEngine";
 import { useDocumentHead } from "../hooks/useDocumentHead";
 import { useAboardCount } from "../hooks/useAboardCount";
@@ -19,40 +20,60 @@ import { JsonLd } from "../components/JsonLd";
 
 export function RoutePage({ routeId }: { routeId: RouteId }) {
   const route = getRoute(routeId);
-  const engine = usePlayerEngine(SONGS);
+  const engine = usePlayerEngine();
   const aboard = useAboardCount();
-  const { honk, honking } = useHorn();
+
+  // the horn ducks the music under itself, then hands the volume back
+  const { setDucked } = engine;
+  const duck = useCallback((on: boolean) => setDucked(on), [setDucked]);
+  const { honk, honking, blasting } = useHorn({ onDuck: duck });
 
   const [queueOpen, setQueueOpen] = useState(false);
   const [ticketOpen, setTicketOpen] = useState(false);
 
+  // new place, new music — the routes share one player, so changing scene has
+  // to change the playlist deliberately or the ride sounds identical
+  const lastRoute = useRef(routeId);
+  const { rollPlaylist } = engine;
+  useEffect(() => {
+    if (lastRoute.current === routeId) return;
+    lastRoute.current = routeId;
+    rollPlaylist();
+  }, [routeId, rollPlaylist]);
+
   const seo = ROUTE_SEO[routeId];
   useDocumentHead(seo, ROUTE_PATH[routeId]);
 
+  const nowPlaying = splitTitle(engine.track?.title ?? "", engine.track?.author ?? "");
+
   return (
     <>
-      <JsonLd data={buildJsonLd(routeId, route, SONGS)} />
+      <JsonLd data={buildJsonLd(routeId, route)} />
       <HeroScene route={route} honking={honking} />
 
-      {/* horn callout — appears over the scene for the length of the honk */}
-      {honking && (
+      {/* horn callout — on screen for the length of the blast, not just the
+          shake, so it lasts as long as the sound does */}
+      {blasting && (
         <div className="pointer-events-none fixed inset-x-0 top-[38%] z-20 flex justify-center">
           <span
-            className="animate-echo rounded-full border-2 border-[#2b1600] px-4 py-2 font-display text-sm font-extrabold text-[#2b1600] shadow-[0_6px_20px_rgba(0,0,0,0.5)]"
-            style={{ background: "linear-gradient(180deg, #ffdd55 0%, #ffa726 100%)" }}
+            className="rounded-full border-2 border-[#2b1600] px-4 py-2 font-display text-sm font-extrabold text-[#2b1600] shadow-[0_6px_20px_rgba(0,0,0,0.5)]"
+            style={{
+              background: "linear-gradient(180deg, #ffdd55 0%, #ffa726 100%)",
+              animation: "var(--animate-blast)",
+            }}
           >
             HORN OK PLEASE
           </span>
         </div>
       )}
 
-      {/* pointer-events-none on the shell so the scene stays interactive;
-          each interactive cluster opts back in explicitly */}
+      {/* pointer-events-none shell so the scene stays interactive; each
+          interactive cluster opts back in */}
       <div className="pointer-events-none relative z-10 flex min-h-dvh flex-col">
         <Header route={route} aboard={aboard} />
 
         <main className="flex flex-1 flex-col items-center px-4 pb-4 pt-32 sm:pt-28">
-          <Hero route={route} trackCount={SONGS.length} onHonk={honk} />
+          <Hero route={route} trackCount={TOTAL_TRACKS} onHonk={honk} />
 
           <p className="pointer-events-none mt-3 max-w-md text-center font-display text-xs text-white/75 sm:text-sm"
             style={{ textShadow: "0 1px 10px rgba(0,0,0,0.85)" }}>
@@ -64,7 +85,6 @@ export function RoutePage({ routeId }: { routeId: RouteId }) {
           <div className="flex w-full flex-col items-center gap-3">
             <Player
               engine={engine}
-              queueSize={SONGS.length}
               onOpenQueue={() => setQueueOpen(true)}
               onOpenTicket={() => setTicketOpen(true)}
               onHonk={honk}
@@ -87,14 +107,13 @@ export function RoutePage({ routeId }: { routeId: RouteId }) {
         </main>
       </div>
 
-      <QueueSheet
-        open={queueOpen} onClose={() => setQueueOpen(false)}
-        songs={SONGS} currentIndex={engine.currentIndex}
-        isPlaying={engine.isPlaying} onPlay={(i) => { engine.playIndex(i); setQueueOpen(false); }}
-      />
+      <QueueSheet open={queueOpen} onClose={() => setQueueOpen(false)} engine={engine} />
       <TicketSheet
-        open={ticketOpen} onClose={() => setTicketOpen(false)}
-        route={route} song={engine.currentSong}
+        open={ticketOpen}
+        onClose={() => setTicketOpen(false)}
+        route={route}
+        song={engine.track ? { title: nowPlaying.title, artist: nowPlaying.artist } : undefined}
+        seatNo={engine.index + 1}
       />
     </>
   );
