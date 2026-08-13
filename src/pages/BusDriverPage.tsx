@@ -9,7 +9,7 @@ import { usePlayerEngine } from "../hooks/usePlayerEngine";
 import { useDocumentHead } from "../hooks/useDocumentHead";
 import { useAboardCount } from "../hooks/useAboardCount";
 import { useHorn } from "../hooks/useHorn";
-import { HeroScene } from "../components/HeroScene";
+import { RoadScene } from "../components/RoadScene";
 import { Header } from "../components/Header";
 import { Hero } from "../components/Hero";
 import { Player } from "../components/Player";
@@ -44,7 +44,7 @@ export function BusDriverPage() {
   return (
     <>
       <JsonLd data={buildJsonLd("busdriver")} />
-      <HeroScene honking={honking} shake={hornStyle.scene} shakeMs={hornStyle.sceneMs} />
+      <RoadScene honking={honking} />
 
       {/* No callout on press. A second badge appearing mid-screen was a second
           thing to read at the exact moment the horn is meant to be felt, not

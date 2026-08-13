@@ -83,7 +83,7 @@ function busBody(): string[] {
 
   return [
     `<h2>The ride</h2>`,
-    `<p>${escape(SCENE.tagline)}. ${escape(SCENE.heroAlt)}</p>`,
+    `<p>${escape(SCENE.heroAlt)}</p>`,
     `<h2>What plays</h2>`,
     `<p>${escape(
       PLAYLISTS.length === 1
