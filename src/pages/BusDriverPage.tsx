@@ -46,21 +46,9 @@ export function BusDriverPage() {
       <JsonLd data={buildJsonLd("busdriver")} />
       <HeroScene honking={honking} />
 
-      {/* horn callout, on screen for the length of the blast rather than the
-          shake, so it lasts as long as the sound does */}
-      {blasting && (
-        <div className="pointer-events-none fixed inset-x-0 top-[38%] z-20 flex justify-center">
-          <span
-            className="rounded-full border-2 border-[#2b1600] px-4 py-2 font-display text-sm font-extrabold text-[#2b1600] shadow-[0_6px_20px_rgba(0,0,0,0.5)]"
-            style={{
-              background: "linear-gradient(180deg, #ffdd55 0%, #ffa726 100%)",
-              animation: "var(--animate-blast)",
-            }}
-          >
-            HORN OK PLEASE
-          </span>
-        </div>
-      )}
+      {/* No callout on press. A second badge appearing mid-screen was a second
+          thing to read at the exact moment the horn is meant to be felt, not
+          read: the sound, the scene rattle and the dancing heading say it. */}
 
       {/* pointer-events-none shell so the scene stays interactive; each
           interactive cluster opts back in */}
@@ -68,7 +56,7 @@ export function BusDriverPage() {
         <Header aboard={aboard} />
 
         <main className="flex flex-1 flex-col items-center px-4 pb-4 pt-32 sm:pt-28">
-          <Hero trackCount={TOTAL_TRACKS} onHonk={honk} />
+          <Hero trackCount={TOTAL_TRACKS} onHonk={honk} blasting={blasting} />
 
           <div className="flex-1" />
 

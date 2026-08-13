@@ -1,173 +1,153 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 /**
- * How long a full blast lasts.
+ * The horn: five real recordings, plus the flags the page animates from.
  *
- * A real bus driver taps the horn, they do not lean on it for four seconds.
- * The earlier 3.4s version was a ship's horn: impressive once, tiring twice,
- * and nothing like the short hard stab you actually hear on a road here.
+ * This used to be synthesized with Web Audio, two tones a fourth apart through
+ * a lowpass and a compressor. It was a decent imitation and it was still an
+ * imitation. Real buses do not agree with each other: one horn is a flat blare,
+ * the next is cracked, the next has that rising double-tap. Five recordings,
+ * picked at random, carry that variety for free, and nothing about an
+ * oscillator was ever going to.
+ *
+ * Two flags come out of here:
+ *   `honking`  a short scene rattle, deliberately not the whole blast, because
+ *              shaking the screen for three seconds is sickening
+ *   `blasting` true for exactly as long as the sound lasts, so the heading can
+ *              dance and the music can stay ducked for the real duration
+ *              rather than a guessed one
+ *
+ * The music ducks underneath: `onDuck(true)` when the horn starts, and
+ * `onDuck(false)` when it actually ends. That contrast, not raw gain, is what
+ * makes a horn read as loud, and it is why the duck is driven by the audio
+ * element's own `ended` event instead of a timer that hopes to match it.
  */
-export const BLAST_MS = 1200;
-/** The scene only rattles at the start; shaking for the whole blast is sickening. */
-const SHAKE_MS = 420;
+
+/** Recordings in /public/horns/, one picked per press. */
+const HORNS = ["/horns/horn-1.mp3", "/horns/horn-2.mp3", "/horns/horn-3.mp3", "/horns/horn-4.mp3", "/horns/horn-5.mp3"];
 
 /**
- * The two tones.
+ * How long before the end of a recording the picture settles down.
  *
- * Not invented. Indian commercial vehicles run ARAI-certified dual-tone
- * horns, and the standard pairing is 420 Hz and 560 Hz, which is a perfect
- * fourth apart. That interval is the reason the sound is instantly placeable:
- * a fourth is bright and open where the minor third this used to use sat dark
- * and mournful, more foghorn than bus. Musical and multi-tone horns are
- * actually illegal on Indian commercial vehicles, so the plain hard two-tone
- * is both the legal sound and the real one.
+ * The five horns run from 3s to 15s, so nothing visual can be a fixed
+ * duration. The shake and the dancing letters stop one second before the
+ * audio does, which is what a real horn looks like: the bus stops shuddering
+ * while the note is still fading off down the road. Ending them exactly on
+ * the audio would make the whole page freeze on the same frame the sound
+ * cuts, which reads as a glitch rather than a horn.
  */
-const TONES = [
-  [420, 0.3],
-  [560, 0.26],
-] as const;
+const SETTLE_BEFORE_END_MS = 1000;
+
+/** If metadata never arrives, shake for this long and no longer. */
+const FALLBACK_VISUAL_MS = 2200;
 
 /**
- * The horn: a synthesized air horn plus two flags the page uses, `honking`
- * for the short scene rattle and `blasting` for the length of the sound.
+ * Backstop for the duck.
  *
- * Audio is generated with Web Audio rather than shipped as a file, so there is
- * nothing to license and nothing to download. Each of the two tones is doubled
- * and detuned so the voices beat against each other the way two real horn
- * trumpets never quite agree, run through a lowpass to take the digital fizz
- * off and a compressor so four sawtooths at this level do not clip.
- *
- * While it blasts, the music ducks: `onDuck(true)` on the way in, and
- * `onDuck(false)` when the horn releases. That is what actually makes it read
- * as loud. The horn is over the music, not mixed into it.
+ * `ended` is the signal that matters, but if a file stalls or the element
+ * errors after playback has begun, `ended` never fires and the music would
+ * stay at 12% forever. Nothing here is anywhere near this long.
  */
+const MAX_BLAST_MS = 20000;
+
 export function useHorn({ onDuck }: { onDuck?: (ducked: boolean) => void } = {}) {
-  const ctxRef = useRef<AudioContext | null>(null);
-  const stopRef = useRef<(() => void) | null>(null);
-  const shakeTimer = useRef<number | null>(null);
-  const blastTimer = useRef<number | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const lastIndexRef = useRef(-1);
+  const visualTimer = useRef<number | null>(null);
+  const failsafeTimer = useRef<number | null>(null);
+  /** the scene rattle */
   const [honking, setHonking] = useState(false);
+  /** the dancing heading; same window as the rattle, kept separate so the
+   *  page can drive the two independently if that ever stops being true */
   const [blasting, setBlasting] = useState(false);
 
   const duckRef = useRef(onDuck);
   duckRef.current = onDuck;
 
-  const honk = useCallback(() => {
-    // a second press restarts the horn rather than layering a second one
-    stopRef.current?.();
-    if (shakeTimer.current) window.clearTimeout(shakeTimer.current);
-    if (blastTimer.current) window.clearTimeout(blastTimer.current);
-
-    // --- visual: rattle now, callout for the whole blast ---
+  /** the picture settles; the sound may still be finishing */
+  const endVisuals = useCallback(() => {
+    if (visualTimer.current) window.clearTimeout(visualTimer.current);
+    visualTimer.current = null;
     setHonking(false);
-    requestAnimationFrame(() => {
-      setHonking(true);
-      shakeTimer.current = window.setTimeout(() => setHonking(false), SHAKE_MS);
-    });
-    setBlasting(true);
-    blastTimer.current = window.setTimeout(() => setBlasting(false), BLAST_MS);
+    setBlasting(false);
+  }, []);
 
-    // --- music gets out of the way ---
+  /** everything that has to happen when a blast is over, however it ended */
+  const endBlast = useCallback(() => {
+    if (failsafeTimer.current) window.clearTimeout(failsafeTimer.current);
+    failsafeTimer.current = null;
+    endVisuals();
+    duckRef.current?.(false);
+  }, [endVisuals]);
+
+  const honk = useCallback(() => {
+    // A second press restarts the horn rather than layering a second one on
+    // top, which is what a driver does and also what stops five overlapping
+    // recordings turning into noise.
+    const previous = audioRef.current;
+    if (previous) {
+      previous.pause();
+      previous.currentTime = 0;
+    }
+    if (visualTimer.current) window.clearTimeout(visualTimer.current);
+    if (failsafeTimer.current) window.clearTimeout(failsafeTimer.current);
+
+    // Never the same horn twice running: with five files a plain random pick
+    // repeats often enough to read as "it only has one sound".
+    let i = Math.floor(Math.random() * HORNS.length);
+    if (i === lastIndexRef.current) i = (i + 1 + Math.floor(Math.random() * (HORNS.length - 1))) % HORNS.length;
+    lastIndexRef.current = i;
+
+    // --- visual: shake and dance, for a window this press does not know yet
+    setHonking(true);
+    setBlasting(true);
+    // Until the file reports its length, assume a short one. A wrong guess
+    // here settles the picture early, which is invisible; the alternative is
+    // a page that shakes on after a horn that already stopped.
+    visualTimer.current = window.setTimeout(endVisuals, FALLBACK_VISUAL_MS);
+
+    // --- music gets out of the way
     duckRef.current?.(true);
 
-    // --- audio ---
-    const Ctx =
-      window.AudioContext ??
-      (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-    if (!Ctx) {
-      window.setTimeout(() => duckRef.current?.(false), BLAST_MS);
-      return;
-    }
+    // --- audio
+    const audio = new Audio(HORNS[i]);
+    audio.preload = "auto";
+    audio.volume = 1;
+    audioRef.current = audio;
 
-    const ctx = (ctxRef.current ??= new Ctx());
-    if (ctx.state === "suspended") void ctx.resume();
+    // The real visual window, once the recording says how long it is.
+    audio.addEventListener(
+      "loadedmetadata",
+      () => {
+        if (audioRef.current !== audio || !Number.isFinite(audio.duration)) return;
+        if (visualTimer.current) window.clearTimeout(visualTimer.current);
+        const ms = Math.max(500, audio.duration * 1000 - SETTLE_BEFORE_END_MS);
+        visualTimer.current = window.setTimeout(endVisuals, ms);
+      },
+      { once: true },
+    );
 
-    const now = ctx.currentTime;
-    const hold = BLAST_MS / 1000;
-    const release = 0.16; // short: an electric horn stops, it does not sigh
-    const end = now + hold + release;
+    audio.addEventListener("ended", endBlast, { once: true });
+    audio.addEventListener("error", endBlast, { once: true });
+    failsafeTimer.current = window.setTimeout(endBlast, MAX_BLAST_MS);
 
-    // shared output chain: lowpass takes the digital fizz off the sawtooths,
-    // the compressor keeps four loud voices from clipping the master. Opened
-    // up from 2600Hz because these horns are brassy and rude, and cutting the
-    // upper harmonics was rounding off exactly the part that carries.
-    const tone = ctx.createBiquadFilter();
-    tone.type = "lowpass";
-    tone.frequency.setValueAtTime(4200, now);
-    tone.Q.value = 0.7;
+    void audio.play().catch(() => {
+      // Blocked or unplayable. The scene still rattles, but the music must
+      // not be left ducked under a horn that never sounded.
+      endBlast();
+    });
+  }, [endBlast, endVisuals]);
 
-    const comp = ctx.createDynamicsCompressor();
-    comp.threshold.value = -14;
-    comp.ratio.value = 8;
-    comp.attack.value = 0.004;
-    comp.release.value = 0.15;
-
-    const master = ctx.createGain();
-    master.gain.setValueAtTime(0.0001, now);
-    // Faster than before. An electric horn is on the instant the contact
-    // closes; the slow swell was what made the old one sound pneumatic.
-    master.gain.exponentialRampToValueAtTime(0.85, now + 0.02);
-    master.gain.setValueAtTime(0.85, now + hold);
-    master.gain.exponentialRampToValueAtTime(0.0001, end);
-
-    tone.connect(comp).connect(master).connect(ctx.destination);
-
-    // buzz from the vibrating diaphragm, faster and shallower than the slow
-    // pressure wobble of a true air horn
-    const lfo = ctx.createOscillator();
-    const lfoGain = ctx.createGain();
-    lfo.frequency.value = 8;
-    lfoGain.gain.value = 1.6;
-    lfo.connect(lfoGain);
-
-    const oscs: OscillatorNode[] = [lfo];
-
-    // two-tone chord, each voice doubled and detuned so they beat
-    for (const [freq, level] of TONES) {
-      for (const detune of [-7, 7]) {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = "sawtooth";
-        osc.frequency.setValueAtTime(freq, now);
-        osc.detune.setValueAtTime(detune, now);
-        // a very slight droop as the current settles, over the whole blast
-        // rather than the pronounced air-pressure sag it had before
-        osc.frequency.linearRampToValueAtTime(freq * 0.995, now + hold);
-        lfoGain.connect(osc.detune);
-
-        gain.gain.value = level;
-        osc.connect(gain).connect(tone);
-        osc.start(now);
-        osc.stop(end);
-        oscs.push(osc);
-      }
-    }
-    lfo.start(now);
-    lfo.stop(end);
-
-    let stopped = false;
-    const unduck = window.setTimeout(() => duckRef.current?.(false), BLAST_MS);
-    stopRef.current = () => {
-      if (stopped) return;
-      stopped = true;
-      window.clearTimeout(unduck);
-      const t = ctx.currentTime;
-      try {
-        master.gain.cancelScheduledValues(t);
-        master.gain.setValueAtTime(Math.max(master.gain.value, 0.0001), t);
-        master.gain.exponentialRampToValueAtTime(0.0001, t + 0.06);
-        for (const o of oscs) o.stop(t + 0.07);
-      } catch {
-        /* already stopped */
-      }
-    };
-  }, []);
-
-  // a horn left mid-blast by a navigation shouldn't leave the music ducked
-  useEffect(() => () => {
-    stopRef.current?.();
-    duckRef.current?.(false);
-  }, []);
+  // a horn left mid-blast by a navigation should not leave the music ducked
+  useEffect(
+    () => () => {
+      audioRef.current?.pause();
+      if (visualTimer.current) window.clearTimeout(visualTimer.current);
+      if (failsafeTimer.current) window.clearTimeout(failsafeTimer.current);
+      duckRef.current?.(false);
+    },
+    [],
+  );
 
   return { honk, honking, blasting };
 }

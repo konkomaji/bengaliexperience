@@ -77,9 +77,9 @@ export function Player({
         <div id={PLAYER_MOUNT_ID} />
       </div>
 
-      {/* No "tap for sound" prompt: autoplay starts muted because browsers
-          require it, and the engine unmutes silently on the visitor's first
-          interaction of any kind. See usePlayerEngine. */}
+      {/* No "tap for sound" prompt, because there is nothing to unmute: the
+          page opens silent with the playlist cued, and the play button starts
+          it audibly in one press. See usePlayerEngine. */}
 
       <div className="flex items-center gap-3">
         <Record

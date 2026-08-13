@@ -43,11 +43,34 @@ export const TicketIcon = (p: { size?: number }) => (
     <path d="M4 8a2 2 0 0 0-2 2v1.5a1.5 1.5 0 0 1 0 3V16a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-1.5a1.5 1.5 0 0 1 0-3V10a2 2 0 0 0-2-2zm7 1h2v1.5h-2zm0 3h2v1.5h-2zm0 3h2v1.5h-2z" />
   </svg>
 );
+/**
+ * The bulb horn: flared bell, tapering neck, rubber squeeze bulb.
+ *
+ * Not a speaker with sound waves coming out of it, which is the generic
+ * "audio" glyph and says nothing. This is the horn painted on the back of
+ * every truck and bus on an Indian road next to the words themselves, so it
+ * is the one shape that reads as "press this to honk" without a label.
+ */
 export const HornIcon = (p: { size?: number }) => (
   <svg viewBox="0 0 24 24" width={p.size ?? 16} height={p.size ?? 16} fill="currentColor">
-    <path d="M3 10v4h3l5 4V6L6 10H3z" />
-    <path d="M15.5 8.5a5 5 0 0 1 0 7" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" />
-    <path d="M18.5 6a9 9 0 0 1 0 12" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.65" />
+    {/* Tilted, because a horn sits at an angle on a bus and a level one reads
+        as a megaphone. */}
+    <g transform="rotate(-14 12 12)">
+      {/* Bell. The mouth is an outward arc rather than a flat edge: a straight
+          one turns the whole shape into a play triangle at 16px, which is the
+          one glyph it must not be mistaken for. */}
+      <path d="M10.8 8.1 3.4 4.3a6.3 6.3 0 0 0 0 11.4l7.4-3.8Z" />
+      {/* neck, running back to the bulb */}
+      <path
+        d="M11 10c2.3.5 4.1 1.5 5.5 3"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.1"
+        strokeLinecap="round"
+      />
+      {/* the squeeze bulb */}
+      <circle cx="18.7" cy="16.2" r="3.1" />
+    </g>
   </svg>
 );
 export const CloseIcon = (p: { size?: number }) => (

@@ -125,27 +125,61 @@ spinning vinyl record stands in for it visually.
 
 ### The horn
 
-`useHorn` synthesizes the horn rather than shipping an audio file. The two
-tones are not invented: Indian commercial vehicles run ARAI-certified
-dual-tone horns, and the standard pairing is **420 Hz and 560 Hz**, a perfect
-fourth apart. That interval is why the sound is instantly placeable. An
-earlier version used a minor third, which sat dark and mournful, more foghorn
-than bus. Each tone is doubled and detuned so the voices beat the way two real
-trumpets never quite agree, through a lowpass and a compressor.
+Five real recordings in `public/horns/`, one picked at random per press, never
+the same one twice running. Earlier versions synthesized it with Web Audio,
+two tones a fourth apart through a lowpass and a compressor, tuned to the
+ARAI dual-tone standard Indian commercial vehicles actually run. It was a
+decent imitation and it was still an imitation: real buses do not agree with
+each other, one horn is a flat blare, the next is cracked, the next has the
+rising double-tap. Recordings carry that variety for free.
 
-It holds for **1.2s**, because a driver taps the horn rather than leaning on
-it. The first version held for 3.4 seconds, which was impressive once and
-tiring twice.
+**The recordings run from 3.2s to 15.1s**, so nothing timed can be a constant:
 
-**The music ducks under it**, down to 12% in ~180ms and back up over ~420ms,
-via `engine.setDucked`. The visitor's own volume is never overwritten; ducking
-works below it. That contrast, not raw gain, is what makes the horn read as
-loud.
+- **The music ducks for the whole horn**, down to 12% and back up after, via
+  `engine.setDucked`. The release is driven by the audio element's own `ended`
+  event, not a timer hoping to match it. The visitor's own volume is never
+  overwritten; ducking works below it. That contrast, not raw gain, is what
+  makes a horn read as loud.
+- **The picture settles one second before the sound does.** The scene rattle
+  and the dancing heading stop at `duration - 1s`, which is what a real horn
+  looks like: the bus stops shuddering while the note is still fading off down
+  the road. Ending them exactly on the audio froze the whole page on the frame
+  the sound cut, which read as a glitch.
+- **The rattle loops** at constant amplitude instead of decaying once. A
+  single settling shake was over before most of these recordings had started.
 
-### Autoplay and shuffle
+The heading is split one letter per span (`DancingText` in `Hero.tsx`) with an
+increasing per-letter delay, so the word ripples rather than jumping in
+unison. Words are `inline-block` so a letter-split heading still wraps at word
+boundaries on a phone, and the whole thing is `aria-hidden` behind the h1's
+`aria-label`, because a screen reader should hear the title and not
+twenty-four separate characters.
 
-Playback starts on its own and starts **somewhere random in the list**, every
-visit, for everyone.
+There is no callout badge on press. A second thing to read, appearing at the
+exact moment the horn is meant to be felt, was working against the sound.
+
+### Nothing plays until you press play
+
+The page opens silent, with the playlist cued and the first track already
+named. Pressing play starts it **audibly, on the first press**.
+
+This is a deliberate reversal. Browsers refuse to start audible media before a
+user gesture, and the only way around that is to autoplay muted, which leaves
+two bad options: open silently while pretending to play, or nag for a second
+interaction to turn the sound on. The play button *is* the gesture, so
+pressing it can unmute and start in one move. `play()` therefore unmutes and
+resets the volume on every call rather than only calling `playVideo()`;
+spending the gesture on playback alone is exactly how a site ends up playing
+silently with no visible reason.
+
+One consequence worth knowing: the 8s watchdog cannot run before the first
+press. "Ready but not playing" is now the resting state, not a symptom, and a
+watchdog that could not tell the difference would declare the playlist dead 8
+seconds after every page load.
+
+### Where the ride starts
+
+Playback begins **somewhere random in the list**, every visit, for everyone.
 
 The random start is set through the `index` player variable when the player is
 constructed, and that placement is the whole trick. `setShuffle(true)` only
@@ -177,13 +211,6 @@ uniform random pick.
 
 When a playlist runs out the engine rolls straight into another one, so the
 bus never reaches a dead end.
-
-### Autoplay
-
-Playback starts automatically, **muted**. Every major browser refuses to start
-audible media before a user gesture, and this cannot be worked around. A "Tap
-for sound" control unmutes on the first interaction. The first press of play
-does the same thing, so the prompt is never a dead end.
 
 ---
 
@@ -368,6 +395,7 @@ reshuffles and keeps driving.
 | `public/hero/hero-kolkata.jpg` | 1920×825 | 21:9, dark, bus centred in the middle band |
 | `public/hero/breakdown.jpg` | 16:9, night | the chai-break error / 404 screen |
 | `public/opengraph.jpg` | 1200×630 | the social card, shared by both pages |
+| `public/horns/horn-1…5.mp3` | 3.2s to 15.1s | the horn, one picked at random per press |
 
 Top and bottom ~25% of the hero sit under gradients and the player, so keep
 the subject in the middle band. No text in the images, since generators garble

@@ -37,9 +37,14 @@ export interface Track {
  * visitors start in the same place. When one list is exhausted the engine
  * rolls straight into another random one, so the bus never stops.
  *
- * Autoplay note: browsers refuse to start audible media before a user
- * gesture. We therefore start muted (which *is* allowed), and unmute on the
- * visitor's first interaction — see `soundBlocked` / `enableSound`.
+ * **Nothing plays until the visitor presses play.** Browsers refuse to start
+ * audible media before a user gesture, and the only way around that is to
+ * start muted, which means the site either opens silently and pretends it is
+ * playing, or nags for a second interaction to turn the sound on. Both are
+ * worse than simply waiting. The play button *is* the gesture, so pressing it
+ * can unmute and start audibly in one move: press once, hear music. The
+ * playlist is cued at a random point in the meantime, so the track showing
+ * before the press is the track that plays.
  */
 export function usePlayerEngine() {
   const playerRef = useRef<YT.Player | null>(null);
@@ -57,8 +62,7 @@ export function usePlayerEngine() {
   const [duration, setDuration] = useState(0);
   const [shuffle, setShuffle] = useState(true);
   const [repeat, setRepeat] = useState(false);
-  const [muted, setMuted] = useState(true); // starts muted so autoplay is permitted
-  const [soundBlocked, setSoundBlocked] = useState(true);
+  const [muted, setMuted] = useState(false); // nothing autoplays, so nothing needs muting
   /** every playlist YouTube has refused to load this session */
   const deadRef = useRef<Set<string>>(new Set());
   /** true once nothing is left to roll to — the bus really has broken down */
@@ -67,12 +71,14 @@ export function usePlayerEngine() {
   const userPausedRef = useRef(false);
   const errorRunRef = useRef(0);
   /**
-   * The visitor gestured before the player existed. Browsers only count that
-   * gesture once, so remember it and unmute the moment the player is up —
-   * otherwise an early click is spent on nothing and the site sits there
-   * silently until they find the mute button themselves.
+   * Has the visitor asked for music yet?
+   *
+   * The watchdog treats "ready but not playing" as a stuck playlist, which is
+   * correct once someone has pressed play and completely wrong before that,
+   * when not playing is simply the resting state. Nothing may be diagnosed as
+   * broken until playback has actually been asked for.
    */
-  const wantsSoundRef = useRef(false);
+  const startedRef = useRef(false);
   const [volume, setVolumeState] = useState<number>(() => {
     const saved = typeof window !== "undefined" ? window.localStorage.getItem(VOLUME_KEY) : null;
     const n = saved ? Number(saved) : 80;
@@ -301,10 +307,11 @@ export function usePlayerEngine() {
           // during startup, which is why every visitor used to open on the
           // same first track no matter what shuffle said.
           index: randomStartIndex(playlistRef.current),
-          autoplay: 1,
-          // muted at load, not just in onReady — Chrome decides whether to
-          // honour autoplay when the iframe loads, before onReady ever fires
-          mute: 1,
+          // Cue, do not play. The visitor's press is what starts the music,
+          // and because that press is a real user gesture it is allowed to
+          // start it audibly.
+          autoplay: 0,
+          mute: 0,
           playsinline: 1,
           controls: 0,
           disablekb: 1,
@@ -315,21 +322,12 @@ export function usePlayerEngine() {
         events: {
           onReady: (e) => {
             e.target.setVolume(volumeRef.current);
-            e.target.mute(); // required for autoplay to be allowed
-            e.target.playVideo();
+            e.target.unMute();
             // Shuffle governs what comes next. The opening track is already
             // random via the `index` playerVar, which is the only way to
             // choose it: playVideoAt during startup is quietly ignored, so
             // asking for a random track here left everyone on track one.
             enableShuffleRef.current();
-            // they already clicked something while we were loading — spend
-            // that gesture now rather than making them find the mute button
-            if (wantsSoundRef.current) {
-              e.target.unMute();
-              e.target.setVolume(volumeRef.current);
-              setMuted(false);
-              setSoundBlocked(false);
-            }
             setIsReady(true);
             sync();
           },
@@ -398,6 +396,10 @@ export function usePlayerEngine() {
    * the list as dead and roll on.
    */
   useEffect(() => {
+    // Not before the visitor has asked for music. Sitting cued and silent is
+    // the resting state now, not a symptom, and a watchdog that cannot tell
+    // the difference would declare the playlist dead 8s after every page load.
+    if (!startedRef.current) return;
     if (!isReady || isPlaying || stalled || userPausedRef.current) return;
     const id = window.setTimeout(() => {
       if (!userPausedRef.current) abandonCurrentPlaylist();
@@ -457,72 +459,32 @@ export function usePlayerEngine() {
     return () => window.clearInterval(id);
   }, [isPlaying, index, sync]);
 
-  /** first real interaction: turn the sound on */
-  const enableSound = useCallback(() => {
+  /**
+   * Start playing, audibly.
+   *
+   * Every call unmutes and resets the volume first. That is not redundant: the
+   * press that reaches here is the user gesture the browser was holding out
+   * for, and spending it on `playVideo()` alone is how a site ends up playing
+   * silently with no obvious reason why. Unmuting inside the same gesture is
+   * what makes the first press produce actual sound.
+   */
+  const play = useCallback(() => {
     const p = playerRef.current;
-    if (!p) {
-      wantsSoundRef.current = true;
-      setSoundBlocked(false);
-      setMuted(false);
-      return;
-    }
+    if (!p) return;
+    userPausedRef.current = false;
+    startedRef.current = true;
     p.unMute();
     p.setVolume(volumeRef.current);
     setMuted(false);
-    setSoundBlocked(false);
-    if (p.getPlayerState?.() !== window.YT?.PlayerState.PLAYING) p.playVideo();
-  }, []);
-
-  /**
-   * Sound on, with no button to press.
-   *
-   * Autoplay has to start muted — every browser blocks audible media before a
-   * user gesture and there is no way around it. So instead of showing a "tap
-   * for sound" prompt, we listen for the visitor's very first interaction of
-   * any kind (a click, a key, a scroll, a touch) and unmute right then. In
-   * practice the sound comes on the moment they do anything at all.
-   *
-   * The listeners go on immediately, *not* once the player is ready. Waiting
-   * on `isReady` meant an early click — and the first click is usually early,
-   * because the page paints long before the YouTube iframe is up — was
-   * swallowed, leaving the site silent until the visitor hunted for the mute
-   * button. `enableSound` records the intent and `onReady` acts on it.
-   *
-   * Capture phase, so a handler that stops propagation can't eat the gesture.
-   */
-  useEffect(() => {
-    if (!soundBlocked) return;
-
-    const events = ["pointerdown", "keydown", "touchstart", "wheel", "scroll"] as const;
-    const onFirstGesture = () => enableSound();
-
-    for (const ev of events) {
-      window.addEventListener(ev, onFirstGesture, { once: true, passive: true, capture: true });
-    }
-    return () => {
-      for (const ev of events) {
-        window.removeEventListener(ev, onFirstGesture, { capture: true });
-      }
-    };
-  }, [soundBlocked, enableSound]);
-
-  const play = useCallback(() => {
-    userPausedRef.current = false;
-    playerRef.current?.playVideo();
+    p.playVideo();
   }, []);
   const pause = useCallback(() => {
     userPausedRef.current = true;
     playerRef.current?.pauseVideo();
   }, []);
   const togglePlay = useCallback(() => {
-    // if sound is still blocked, the first press should also unmute —
-    // that press is the gesture the browser was waiting for
-    if (soundBlocked) {
-      enableSound();
-      return;
-    }
     isPlaying ? pause() : play();
-  }, [isPlaying, play, pause, soundBlocked, enableSound]);
+  }, [isPlaying, play, pause]);
 
   const seek = useCallback((s: number) => {
     playerRef.current?.seekTo(s, true);
@@ -536,7 +498,6 @@ export function usePlayerEngine() {
     if (c > 0 && muted) {
       playerRef.current?.unMute();
       setMuted(false);
-      setSoundBlocked(false);
     }
     window.localStorage.setItem(VOLUME_KEY, String(c));
   }, [muted]);
@@ -547,7 +508,6 @@ export function usePlayerEngine() {
     if (muted) {
       p.unMute();
       setMuted(false);
-      setSoundBlocked(false);
     } else {
       p.mute();
       setMuted(true);
@@ -637,10 +597,8 @@ export function usePlayerEngine() {
     duration,
     volume,
     muted,
-    soundBlocked,
     shuffle,
     repeat,
-    enableSound,
     play,
     pause,
     togglePlay,

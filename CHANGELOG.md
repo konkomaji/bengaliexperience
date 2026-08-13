@@ -75,6 +75,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Live listener count animates when the number changes.
 
 ### Changed
+- **Nothing autoplays. Pressing play starts the music audibly, first press.**
+  Autoplay has to begin muted, which left two bad options: open silently while
+  pretending to play, or nag for a second interaction to turn the sound on.
+  The play button is itself the user gesture browsers were waiting for, so it
+  now unmutes and starts in one move. `play()` unmutes and resets volume on
+  every call, because spending that gesture on `playVideo()` alone is exactly
+  how a site ends up playing silently for no visible reason. The watchdog is
+  gated behind the first press: "ready but not playing" is the resting state
+  now, and an ungated watchdog would have declared the playlist dead 8 seconds
+  after every page load.
+- **The horn is five real recordings, not a synthesizer.** The previous
+  version was tuned to the ARAI dual-tone standard and was still an
+  imitation; real buses do not agree with each other. One of five files in
+  `public/horns/` plays per press, never the same one twice running. They run
+  from 3.2s to 15.1s, so every timing is now derived rather than fixed: the
+  music unducks on the audio's own `ended` event, and the scene rattle and
+  dancing heading stop at `duration - 1s`, so the bus settles while the note
+  is still fading. The rattle loops at constant amplitude instead of decaying
+  once, which was over before most of these recordings had started.
+- **The heading dances while the horn sounds.** One letter per span with an
+  increasing delay, so the word ripples rather than jumping in unison. Split
+  by word first so it still wraps on a phone, and `aria-hidden` behind the
+  h1's label so a screen reader hears the title rather than twenty-four
+  characters.
+- **A real horn button.** Bulb horn icon, the shape painted on the back of
+  every truck on an Indian road, rather than a speaker with sound waves, which
+  is the generic audio glyph and says nothing. Bigger, reads "HORN PLEASEEEE",
+  and sits visibly pressed in with the bulb shaking for as long as the horn
+  lasts. The floating "HORN OK PLEASE" callout is gone: a second thing to read
+  at the exact moment the horn is meant to be felt was working against it.
 - **One playlist, honestly, instead of nine that mostly did not work.** Seven
   of the nine were made in YouTube Music, which the IFrame player silently
   refuses, so the site advertised nine and was really running on two. They are
