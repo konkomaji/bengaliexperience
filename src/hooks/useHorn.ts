@@ -24,7 +24,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 /**
  * How a horn moves the page.
  *
- * Every recording gets its own pair of animations rather than all five
+ * Every recording gets its own letter animation rather than all of them
  * sharing one. Five different sounds driving one identical shake makes the
  * page feel like it has a single canned reaction it plays regardless of what
  * it heard, which is exactly the impression a random horn is supposed to
@@ -37,9 +37,6 @@ export interface HornStyle {
   letterMs: number;
   /** added per letter, so the word ripples instead of jumping in unison */
   staggerMs: number;
-  /** keyframes applied to the whole scene */
-  scene: string;
-  sceneMs: number;
 }
 
 /**
@@ -63,7 +60,7 @@ const HORNS: { src: string; style: HornStyle }[] = [
      * waits, the way the sound does.
      */
     src: "/horns/horn-1.mp3",
-    style: { letters: "letter-jolt", letterMs: 630, staggerMs: 14, scene: "shake-jolt", sceneMs: 630 },
+    style: { letters: "letter-jolt", letterMs: 630, staggerMs: 14 },
   },
   {
     /**
@@ -75,7 +72,7 @@ const HORNS: { src: string; style: HornStyle }[] = [
      * either.
      */
     src: "/horns/horn-2.mp3",
-    style: { letters: "letter-stutter", letterMs: 215, staggerMs: 8, scene: "shake-stutter", sceneMs: 215 },
+    style: { letters: "letter-stutter", letterMs: 215, staggerMs: 8 },
   },
   {
     /**
@@ -86,7 +83,7 @@ const HORNS: { src: string; style: HornStyle }[] = [
      * run for eight seconds without becoming punishing.
      */
     src: "/horns/horn-3.mp3",
-    style: { letters: "letter-sway", letterMs: 1200, staggerMs: 45, scene: "shake-sway", sceneMs: 1200 },
+    style: { letters: "letter-sway", letterMs: 1200, staggerMs: 45 },
   },
 ];
 

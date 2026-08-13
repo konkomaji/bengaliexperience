@@ -29,8 +29,46 @@ import { SCENE_GEOMETRY as G } from "../data/sceneGeometry";
  * more than the animation itself.
  */
 
-/** Ground speed, CSS px/s at a 1440px-wide viewport, scaled with the layout. */
-const BASE_SPEED = 300;
+/**
+ * How big the bus is drawn, and therefore how big everything is.
+ *
+ * Height alone used to decide this, which works on a wide screen and fails
+ * badly on a tall narrow one: the sprite is 2.58 times as wide as it is tall,
+ * so 44% of a phone's height came out 880px wide inside a 386px viewport, and
+ * all you saw was the middle of the bus with both ends and the wheels cropped
+ * off. Constrained by width as well now, whichever is smaller.
+ */
+const BUS_ASPECT = G.bus.w / G.bus.h;
+const BUS_H_OF_VIEWPORT = 0.44;
+const BUS_W_OF_VIEWPORT = 0.92;
+const BUS_MIN_PX = 104;
+const BUS_MAX_PX = 460;
+
+/** The CSS and the physics have to agree on this exactly: it is the number
+ *  wheel radius is derived from, and a mismatch makes the tyres slip. */
+const busHeightPx = (w: number, h: number) =>
+  Math.max(
+    BUS_MIN_PX,
+    Math.min(BUS_MAX_PX, BUS_H_OF_VIEWPORT * h, (BUS_W_OF_VIEWPORT * w) / BUS_ASPECT),
+  );
+
+const BUS_H_CSS = `clamp(${BUS_MIN_PX}px, min(${BUS_H_OF_VIEWPORT * 100}cqh, ${(
+  (BUS_W_OF_VIEWPORT / BUS_ASPECT) *
+  100
+).toFixed(3)}cqw), ${BUS_MAX_PX}px)`;
+
+/**
+ * Ground speed, in the sprite's own pixels per second.
+ *
+ * Not pixels of screen: that was scaled by viewport width, so a phone ran at
+ * 80px/s against a desktop's 400px/s while drawing a *larger* bus, and the
+ * thing crawled. What a viewer actually perceives is bus lengths per second,
+ * which is invariant only if speed comes from the size the bus is drawn at.
+ * Every other quantity below is in sprite space for the same reason, so the
+ * same journey plays at the same apparent speed, with the same bumps in the
+ * same places, on any screen.
+ */
+const SPEED_SPRITE_PX = 708;
 
 /** Depth. The road is 1 by definition; the rest are fractions of it. */
 const PARALLAX = { far: 0.16, mid: 0.42, near: 0.86 } as const;
@@ -80,7 +118,7 @@ export function RoadScene({ honking = false, paused = false }: { honking?: boole
      * incommensurate sine terms so it never audibly repeats.
      */
     const roughness = (x: number) =>
-      Math.sin(x * 0.031) * 0.55 + Math.sin(x * 0.0117 + 1.3) * 0.3 + Math.sin(x * 0.0071 + 2.7) * 0.15;
+      Math.sin(x * 0.0175) * 0.55 + Math.sin(x * 0.0066 + 1.3) * 0.3 + Math.sin(x * 0.004 + 2.7) * 0.15;
 
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
@@ -93,9 +131,11 @@ export function RoadScene({ honking = false, paused = false }: { honking?: boole
       const dt = Math.min((now - last) / 1000, 0.1);
       last = now;
 
-      const width = el.clientWidth || 1;
-      const scale = width / 1440;
-      const speed = pausedRef.current ? 0 : BASE_SPEED * scale;
+      // One number the whole scene is built from: how many screen pixels one
+      // pixel of the bus sprite occupies. The layout uses the same figure via
+      // BUS_H_CSS, so nothing can drift out of step with anything else.
+      const scale = busHeightPx(el.clientWidth || 1, el.clientHeight || 1) / G.bus.h;
+      const speed = pausedRef.current ? 0 : SPEED_SPRITE_PX * scale;
 
       acc += dt;
       while (acc >= STEP) {
@@ -105,13 +145,14 @@ export function RoadScene({ honking = false, paused = false }: { honking?: boole
         // The horn is an impulse, not a force. Applying it as a force for one
         // 8ms step moved the body a fraction of a pixel; a bus rocking on its
         // springs is a sudden change in velocity, so that is what it is.
-        if (hornRef.current && !hornWasOn) bounceV += 150 * scale;
+        if (hornRef.current && !hornWasOn) bounceV += 354 * scale;
         hornWasOn = hornRef.current;
 
-        // Road input against the spring. The amplitude is set so the body
-        // actually travels a few pixels: at the first value it settled at
-        // 0.18px, which is real physics and completely invisible.
-        const force = roughness(dist) * 520 * scale - SPRING_K * bounce - SPRING_D * bounceV;
+        // Road input against the spring, sampled in sprite space so a given
+        // pothole belongs to a place on the road rather than to a screen size.
+        // The amplitude is set so the body actually travels a few pixels: at
+        // the first value it settled at 0.18px, real physics and invisible.
+        const force = roughness(dist / scale) * 1226 * scale - SPRING_K * bounce - SPRING_D * bounceV;
 
         bounceV += force * STEP;
         bounce += bounceV * STEP;
@@ -145,8 +186,14 @@ export function RoadScene({ honking = false, paused = false }: { honking?: boole
       }
 
       // ω = v / r. The one relationship that has to be exact.
-      const busScale = (el.clientHeight * 0.44) / G.bus.h;
-      const wheelR = G.axles[0].r * 1.06 * busScale;
+      //
+      // The radius is measured off the wheel as actually laid out, not
+      // recomputed from the geometry. Deriving it independently meant two
+      // expressions had to agree about how a percentage height resolves, and
+      // they did not: the tyre was drawn 36% larger than the radius being spun,
+      // so it turned too fast for its own size. Reading the DOM cannot drift.
+      const wheelEl = wheelRefs.current[0];
+      const wheelR = (wheelEl?.clientWidth ?? 0) / 2 || G.axles[0].r * 1.06 * scale;
       const spin = (dist / wheelR) * (180 / Math.PI);
       for (const w of wheelRefs.current) {
         if (w) w.style.transform = `rotate(${(spin % 360).toFixed(2)}deg)`;
@@ -159,14 +206,25 @@ export function RoadScene({ honking = false, paused = false }: { honking?: boole
 
   // Sprite scale is decided in CSS so the first painted frame is already
   // right; the loop only ever moves things.
-  const busH = "clamp(150px, 44cqh, 460px)";
-
+  //
+  // Everything below is a multiple of `--bus-h` rather than a percentage of
+  // the viewport. Percentages made the composition change shape with the
+  // screen: on a phone the road band came out taller than the bus. Tied to the
+  // bus, the scene holds its proportions at any size.
   return (
     <div
       ref={rootRef}
       aria-hidden="true"
       className="pointer-events-none fixed inset-0 -z-30 overflow-hidden bg-surface"
-      style={{ containerType: "size" }}
+      style={{
+        containerType: "size",
+        "--bus-h": BUS_H_CSS,
+        // Where the wheels meet the road. Everything vertical hangs off this,
+        // so the bus always sits ON the road rather than near it. The cqh floor
+        // lifts the whole street clear of the player dock on a phone, where the
+        // bus-relative value alone put the bus behind it.
+        "--road-y": "max(calc(var(--bus-h) * 0.43), 21cqh)",
+      } as React.CSSProperties}
     >
       {/* sky */}
       <div
@@ -177,12 +235,15 @@ export function RoadScene({ honking = false, paused = false }: { honking?: boole
         }}
       />
 
-      <Layer refEl={farRef} src="/scene/bg-far.webp" tile={G.layers["bg-far"]} bottom="26%" opacity={0.72} />
-      <Layer refEl={midRef} src="/scene/bg-mid.webp" tile={G.layers["bg-mid"]} bottom="22%" opacity={0.9} />
-      <Layer refEl={nearRef} src="/scene/bg-near.webp" tile={G.layers["bg-near"]} bottom="18%" />
+      <Layer refEl={farRef} src="/scene/bg-far.webp" bottom={0.16} height={1.15} heightFloor={42} opacity={0.72} />
+      <Layer refEl={midRef} src="/scene/bg-mid.webp" bottom={0.07} height={1.18} heightFloor={43} opacity={0.9} />
+      <Layer refEl={nearRef} src="/scene/bg-near.webp" bottom={-0.02} height={1.17} heightFloor={43} />
 
       {/* road */}
-      <div className="absolute inset-x-0 bottom-0 h-[30%] overflow-hidden">
+      <div
+        className="absolute inset-x-0 bottom-0 overflow-hidden"
+        style={{ height: "calc(var(--road-y) + var(--bus-h) * 0.36)" }}
+      >
         <div
           ref={roadRef}
           className="absolute inset-y-0 left-0 w-[300%] will-change-transform"
@@ -200,8 +261,8 @@ export function RoadScene({ honking = false, paused = false }: { honking?: boole
         className="absolute will-change-transform"
         style={{
           left: "50%",
-          bottom: "19%",
-          height: busH,
+          bottom: "var(--road-y)",
+          height: "var(--bus-h)",
           aspectRatio: `${G.bus.w} / ${G.bus.h}`,
           translate: "-50% 0",
           transformOrigin: "50% 100%",
@@ -245,16 +306,34 @@ export function RoadScene({ honking = false, paused = false }: { honking?: boole
 /** One scrolling strip. Three times the tile width, so a slow layer still has
  *  something to show after the fast ones have wrapped many times. */
 function Layer({
-  refEl, src, tile, bottom, opacity = 1,
+  refEl, src, bottom, height, heightFloor, opacity = 1,
 }: {
   refEl: React.RefObject<HTMLDivElement | null>;
   src: string;
-  tile: { w: number; h: number };
-  bottom: string;
+  /** how far above the road line, in bus heights */
+  bottom: number;
+  /** how tall, in bus heights */
+  height: number;
+  /**
+   * Height floor in cqh, for tall narrow screens.
+   *
+   * Tied to the bus alone, a phone.s small bus left the street occupying a
+   * fifth of the screen under an enormous empty sky. The floor only binds in
+   * portrait: on desktop the bus-relative value is larger and wins, so the
+   * composition there is untouched.
+   */
+  heightFloor: number;
   opacity?: number;
 }) {
   return (
-    <div className="absolute inset-x-0 overflow-hidden" style={{ bottom, height: `${(tile.h / 900) * 62}%`, opacity }}>
+    <div
+      className="absolute inset-x-0 overflow-hidden"
+      style={{
+        bottom: `calc(var(--road-y) + var(--bus-h) * ${bottom})`,
+        height: `max(calc(var(--bus-h) * ${height}), ${heightFloor}cqh)`,
+        opacity,
+      }}
+    >
       <div
         ref={refEl}
         className="absolute inset-y-0 left-0 w-[300%] will-change-transform"
