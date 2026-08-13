@@ -62,10 +62,14 @@ index.html                 single HTML shell; its head is rewritten per route at
 │
 ├─ functions/              Cloudflare Pages Functions
 │  ├─ _middleware.ts       rewrites head + JSON-LD per route, before the response ships
+│  ├─ sitemap.xml.ts       sitemap, generated from src/data/seo.ts
+│  ├─ llms.txt.ts          the same answers, in the format answer engines read
 │  └─ api/aboard.ts        KV-backed live listener count
 │
 └─ scripts/
-   └─ check-playlists.mjs  which playlists the embed will actually accept
+   ├─ check-playlists.mjs  which playlists the embed will actually accept
+   ├─ stamp-lastmod.mjs    reads git for each route's real last-modified date
+   └─ make-og-images.mjs   crops a social card per route out of its hero
 ```
 
 ### The scene is an image, not code
@@ -164,11 +168,43 @@ the visible page says.
 
 Question-shaped search intent ("what is the Bengali bus driver playlist",
 "is it free", "where does the music come from") is answered in one place,
-`FAQ` in `src/data/seo.ts`, and emitted twice: as crawlable text and as
-`FAQPage` data, so the two can never drift.
+`FAQ` in `src/data/seo.ts`, and emitted three ways — crawlable text,
+`FAQPage` structured data, and `llms.txt` prose — so they cannot drift.
 
-Also shipped: `sitemap.xml`, `robots.txt` (AI crawlers explicitly allowed),
-`llms.txt` (same answers, in the format answer engines read), web manifest.
+**Nothing about a route is written down twice.** `sitemap.xml` and `llms.txt`
+are Pages Functions that read `src/data/seo.ts`, not static files kept in step
+by hand; a fifth route would appear in both without anyone remembering to add
+it. The sitemap emits only `<loc>` and `<lastmod>` — Google has said it ignores
+`changefreq` and `priority`, and `<lastmod>` it uses only while it stays
+truthful, so the date comes from `git log` at build time
+(`scripts/stamp-lastmod.mjs`) and is **omitted rather than invented** when the
+build has no history to read.
+
+Three things that quietly undercut all of the above, now fixed:
+
+- **`/kolkata` used to declare itself canonical.** It is an alias of `/`, but
+  the canonical link was built from the requested path, so the alias competed
+  with the page it aliases. It is built from the route's own path now.
+- **Unknown URLs returned 200.** The SPA fallback serves `index.html` for
+  everything, which is right for the visitor and a soft 404 for a crawler —
+  every typo and every junk URL indexable as a duplicate of the home page.
+  Unmatched paths now return a real 404 with `noindex`, and still render the
+  breakdown screen.
+- **Every route shared one social card.** Each has its own now, cropped from
+  its own scene by `npm run make:og`, so a shared link previews the ride it
+  opens. The hero also carries real alt text, from the same `imageAlt` the
+  card and the `ImageObject` use.
+
+The graph carries `WebSite`, `WebPage`, `MusicPlaylist`, `FAQPage`,
+`BreadcrumbList`, `ItemList`, `ImageObject` and a `Person` for the curator —
+an attributed page is a stronger thing to cite than an anonymous one — plus
+`isAccessibleForFree`, because "free, no login" is the site's central claim
+and there is a field built to say it.
+
+Also shipped: `robots.txt` (AI crawlers explicitly allowed), web manifest, and
+an edge-injected `<link rel="preload">` for the hero — it is the LCP element
+and React renders it, so without the preload the browser cannot discover it
+until ~130 kB of JavaScript has run.
 
 ### Robustness
 
@@ -261,7 +297,12 @@ Drop these in `public/hero/`:
 | `hero-darjeeling.jpg` | 1920×825 | |
 | `hero-shantiniketan.jpg` | 1920×825 | |
 | `breakdown.jpg` | 16:9, night | the chai-break error / 404 screen |
-| `../opengraph.jpg` | 1200×630 | social card, in `public/` |
+
+Social cards are **not** drawn by hand — `npm run make:og` centre-crops one per
+route out of its hero into `public/og/`, so they cannot fall out of step with
+the scenes. Re-run it after changing a hero and commit the output.
+(`public/opengraph.jpg` is the old single card. Nothing references it any more;
+it stays only so links shared before the change keep resolving.)
 
 Top and bottom ~25% of each hero sit under gradients and the player, so keep
 the subject in the middle band. No text in the images — generators garble

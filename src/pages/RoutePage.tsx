@@ -42,7 +42,7 @@ export function RoutePage({ routeId }: { routeId: RouteId }) {
   }, [routeId, rollPlaylist]);
 
   const seo = ROUTE_SEO[routeId];
-  useDocumentHead(seo, ROUTE_PATH[routeId]);
+  useDocumentHead(seo, ROUTE_PATH[routeId], route.og);
 
   const nowPlaying = splitTitle(engine.track?.title ?? "", engine.track?.author ?? "");
 

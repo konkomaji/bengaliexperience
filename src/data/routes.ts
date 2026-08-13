@@ -20,6 +20,12 @@ export interface RouteDef {
   distanceKm: number;
   /** hero image in /public/hero/ */
   hero: string;
+  /**
+   * Social card in /public/og/, cropped from the hero by
+   * `scripts/make-og-images.mjs`. Per route, so a shared link previews the
+   * ride it actually opens instead of all four looking identical.
+   */
+  og: string;
 }
 
 export const ROUTES: RouteDef[] = [
@@ -31,6 +37,7 @@ export const ROUTES: RouteDef[] = [
     tagline: "Over Howrah Bridge and down the tram lines, through the heart of the city",
     distanceKm: 18,
     hero: "/hero/hero-kolkata.jpg",
+    og: "/og/og-kolkata.jpg",
   },
   {
     id: "digha",
@@ -40,6 +47,7 @@ export const ROUTES: RouteDef[] = [
     tagline: "Past the casuarina groves, salt wind all the way down to the Bay",
     distanceKm: 183,
     hero: "/hero/hero-digha.jpg",
+    og: "/og/og-digha.jpg",
   },
   {
     id: "darjeeling",
@@ -49,6 +57,7 @@ export const ROUTES: RouteDef[] = [
     tagline: "Up through the tea gardens and pines, climbing into the mist",
     distanceKm: 77,
     hero: "/hero/hero-darjeeling.jpg",
+    og: "/og/og-darjeeling.jpg",
   },
   {
     id: "shantiniketan",
@@ -58,6 +67,7 @@ export const ROUTES: RouteDef[] = [
     tagline: "Red laterite roads and rows of palm, out into Birbhum",
     distanceKm: 152,
     hero: "/hero/hero-shantiniketan.jpg",
+    og: "/og/og-shantiniketan.jpg",
   },
 ];
 

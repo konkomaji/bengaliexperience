@@ -36,9 +36,20 @@
       content="Nonstop Bangla bangers from the 90s to the 20s — Kumar Sanu to Arijit. Free, no login."
     />
     <meta property="og:url" content="https://bengaliexperience.wtf/" />
-    <meta property="og:image" content="https://bengaliexperience.wtf/opengraph.jpg" />
+    <!--
+      Social card. These defaults are the Kolkata (home) route; every other
+      route swaps in its own card at the edge — see functions/_middleware.ts.
+      The *:image:alt tags have to exist here for HTMLRewriter to rewrite them:
+      it edits elements, it cannot invent ones the document never had.
+    -->
+    <meta property="og:image" content="https://bengaliexperience.wtf/og/og-kolkata.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta
+      property="og:image:alt"
+      content="A yellow and red Kolkata bus with luggage roped to its roof, stopped on wet tram lines at dusk with the Howrah Bridge and an Ambassador taxi behind it."
+    />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Bengali Bus Driver Playlist — Bangers from 90s to 20s" />
@@ -46,7 +57,11 @@
       name="twitter:description"
       content="Nonstop Bangla bangers from the 90s to the 20s — Kumar Sanu to Arijit. Free, no login."
     />
-    <meta name="twitter:image" content="https://bengaliexperience.wtf/opengraph.jpg" />
+    <meta name="twitter:image" content="https://bengaliexperience.wtf/og/og-kolkata.jpg" />
+    <meta
+      name="twitter:image:alt"
+      content="A yellow and red Kolkata bus with luggage roped to its roof, stopped on wet tram lines at dusk with the Howrah Bridge and an Ambassador taxi behind it."
+    />
 
     <link rel="preconnect" href="https://www.youtube.com" />
     <link rel="preconnect" href="https://www.youtube-nocookie.com" />

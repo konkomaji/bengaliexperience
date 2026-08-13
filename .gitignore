@@ -29,3 +29,6 @@ dist-ssr
 
 # generated-image sources (kept locally, not deployed)
 design/
+
+# written by scripts/stamp-lastmod.mjs on every build, from git itself
+src/data/lastmod.ts

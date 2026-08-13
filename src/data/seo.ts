@@ -40,6 +40,12 @@ export interface RouteSeo {
   intro: string;
   /** short factual lines — the shape LLMs lift most readily */
   facts: string[];
+  /**
+   * Alt text for the route's hero and social card. Describes the illustration,
+   * not the page: it is read aloud by screen readers and is the only account
+   * of the image an indexer or an answer engine ever gets.
+   */
+  imageAlt: string;
 }
 
 /**
@@ -103,6 +109,8 @@ export const ROUTE_SEO: Record<RouteId, RouteSeo> = {
       "The Kolkata route runs Howrah Bridge to Esplanade to Gariahat.",
       "Every track streams from its official upload on YouTube.",
     ],
+    imageAlt:
+      "A yellow and red Kolkata bus with luggage roped to its roof, stopped on wet tram lines at dusk with the Howrah Bridge and an Ambassador taxi behind it.",
   },
   digha: {
     title: `Digha Road Trip Playlist — Bangla Bangers to the Sea | ${BRAND.nameEn}`,
@@ -123,6 +131,8 @@ export const ROUTE_SEO: Record<RouteId, RouteSeo> = {
       "Bengali road trip songs spanning the 90s to the 2020s.",
       "Free, no account, plays straight through on mobile data.",
     ],
+    imageAlt:
+      "The same yellow and red bus on the coast road at sunset, luggage on the roof and the driver at the wheel, casuarina trees bent by the wind and the surf of the Bay of Bengal behind them.",
   },
   darjeeling: {
     title: `Darjeeling Hill Route Playlist — Bangla Songs | ${BRAND.nameEn}`,
@@ -143,6 +153,8 @@ export const ROUTE_SEO: Record<RouteId, RouteSeo> = {
       "Bangla band era and nostalgic adhunik songs.",
       "Free, no login, nonstop playback.",
     ],
+    imageAlt:
+      "The bus climbing a hill road cut through terraced tea gardens and pines, a mist-filled valley below and the snow peaks of the Kanchenjunga range lit orange on the horizon.",
   },
   shantiniketan: {
     title: `Shantiniketan Route Playlist — Bangla Songs | ${BRAND.nameEn}`,
@@ -162,5 +174,7 @@ export const ROUTE_SEO: Record<RouteId, RouteSeo> = {
       "Bengali folk-leaning adhunik and modern Bangla songs.",
       "Free, no account needed.",
     ],
+    imageAlt:
+      "The bus on a red laterite road through Birbhum at sunset, trunks and bundles roped to the roof, fan palms and low village huts beyond the fields.",
   },
 };

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { RouteDef } from "../data/routes";
+import { ROUTE_SEO } from "../data/seo";
 
 /**
  * The scene behind everything.
@@ -50,7 +51,10 @@ export function HeroScene({ route, honking = false }: { route: RouteDef; honking
         >
           <img
             src={route.hero}
-            alt=""
+            // Not decorative: this illustration is the entire visual content
+            // of the page, so it gets the same description the social card
+            // and the structured data use.
+            alt={ROUTE_SEO[route.id].imageAlt}
             fetchPriority="high"
             decoding="async"
             onLoad={() => setLoaded(true)}

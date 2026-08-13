@@ -8,19 +8,24 @@ import type { RouteSeo } from "../data/seo";
  * the HTML at the edge — this just keeps things right as the user clicks
  * between routes.
  */
-export function useDocumentHead(seo: RouteSeo, canonicalPath: string) {
+export function useDocumentHead(seo: RouteSeo, canonicalPath: string, ogPath: string) {
   useEffect(() => {
+    const ogImage = BRAND.url + ogPath;
     document.title = seo.title;
     setMeta('meta[name="description"]', seo.description);
     setMeta('meta[name="keywords"]', seo.keywords.join(", "));
     setMeta('meta[property="og:title"]', seo.title);
     setMeta('meta[property="og:description"]', seo.description);
     setMeta('meta[property="og:url"]', BRAND.url + canonicalPath);
+    setMeta('meta[property="og:image"]', ogImage);
+    setMeta('meta[property="og:image:alt"]', seo.imageAlt);
     setMeta('meta[name="twitter:title"]', seo.title);
     setMeta('meta[name="twitter:description"]', seo.description);
+    setMeta('meta[name="twitter:image"]', ogImage);
+    setMeta('meta[name="twitter:image:alt"]', seo.imageAlt);
     const link = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
     if (link) link.href = BRAND.url + canonicalPath;
-  }, [seo, canonicalPath]);
+  }, [seo, canonicalPath, ogPath]);
 }
 
 function setMeta(selector: string, content: string) {

@@ -62,6 +62,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Live listener count animates when the number changes.
 
 ### Changed
+- **`sitemap.xml` and `llms.txt` are generated, not maintained.** Both were
+  static files that repeated the route list, the domain and the whole FAQ, so
+  every one of those facts existed twice and could quietly disagree with the
+  app. They are Pages Functions now, reading the same `src/data/seo.ts` the
+  router and the edge rewriter read. The sitemap drops `changefreq` and
+  `priority` — Google ignores both — and gains `<lastmod>` taken from `git log`
+  per route at build time, omitted rather than faked when the build has no
+  history (`scripts/stamp-lastmod.mjs`).
+- **A social card per route.** All four pages previewed with the same image, so
+  a shared link said nothing about which ride it opened. `npm run make:og`
+  centre-crops one card per route out of that route's own hero, and the edge
+  swaps it in along with `og:image:alt`.
+- **The hero has real alt text.** It was `alt=""` — reasonable for decoration,
+  wrong for the one illustration that is the entire visual content of the page.
+  The same `imageAlt` now feeds the `<img>`, the social card and an
+  `ImageObject` in the graph.
 - **Live on a real domain: `https://bengaliexperience.wtf`.** The
   `.pages.dev` placeholder is gone from `BRAND.url`, `index.html`,
   `robots.txt`, `sitemap.xml` and `llms.txt`, so canonical links, `og:url`,
@@ -78,6 +94,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   structured data and search.
 
 ### Fixed
+- **`/kolkata` declared itself canonical.** It is an alias that the router
+  redirects to `/`, but the edge built the canonical link from the requested
+  path, so the alias pointed at itself and competed with the page it aliases —
+  while the JSON-LD on the same response correctly said `/`. Both are built
+  from the route's own path now.
+- **Unknown URLs returned 200.** `_redirects` sends everything to `index.html`
+  so the router can show the breakdown screen; the side effect was that every
+  typo and every junk URL was a soft 404 — status 200 tells a crawler the page
+  is real, so they accumulate in the index as duplicates of the home page.
+  Unmatched paths now return a real 404 and `noindex, follow`, and still render
+  the breakdown screen. The existing robots tags are rewritten rather than a
+  second one appended, so the page never carries two contradicting directives.
+- **The home page's breadcrumb listed itself as its own child** — the site,
+  then the same URL again at position 2. It is a single item on `/` now.
+- **The hero was invisible to the preloader.** It is the LCP element but React
+  renders it, so the browser could not discover it until the JavaScript bundle
+  had downloaded, parsed and run. The edge now injects a
+  `<link rel="preload" as="image">` for the route's hero.
 - **The site never played.** It sat on "Boarding…" forever. Three separate
   causes, all now handled:
   1. Seven of the nine playlists were created in **YouTube Music**. Those get

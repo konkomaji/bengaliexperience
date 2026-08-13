@@ -1,7 +1,7 @@
-import { BRAND } from "../data/brand";
+import { BRAND, DRIVER } from "../data/brand";
 import { PLAYLISTS, TOTAL_TRACKS } from "../data/playlists";
 import type { RouteDef, RouteId } from "../data/routes";
-import { ROUTES } from "../data/routes";
+import { DEFAULT_ROUTE, ROUTES } from "../data/routes";
 import { FAQ, ROUTE_PATH, ROUTE_SEO } from "../data/seo";
 
 /**
@@ -19,10 +19,23 @@ import { FAQ, ROUTE_PATH, ROUTE_SEO } from "../data/seo";
 export function buildJsonLd(routeId: RouteId, route: RouteDef) {
   const seo = ROUTE_SEO[routeId];
   const url = `${BRAND.url}${ROUTE_PATH[routeId]}`;
+  const image = `${BRAND.url}${route.og}`;
 
   return {
     "@context": "https://schema.org",
     "@graph": [
+      // One named human behind the site. An answer engine asked "who made
+      // this?" should not have to guess, and an unattributed page is a weaker
+      // thing to cite than an attributed one. Person, not Organization,
+      // because that is what this actually is.
+      {
+        "@type": "Person",
+        "@id": `${BRAND.url}/#curator`,
+        name: DRIVER.name,
+        description: DRIVER.bio,
+        url: BRAND.url,
+        sameAs: [DRIVER.href],
+      },
       {
         "@type": "WebSite",
         "@id": `${BRAND.url}/#website`,
@@ -31,6 +44,16 @@ export function buildJsonLd(routeId: RouteId, route: RouteDef) {
         alternateName: [BRAND.seoTitle, "Bengali Bus Driver Playlist"],
         description: BRAND.tagline,
         inLanguage: ["en-IN", "bn-IN"],
+        publisher: { "@id": `${BRAND.url}/#curator` },
+      },
+      {
+        "@type": "ImageObject",
+        "@id": `${url}#primaryimage`,
+        url: image,
+        contentUrl: image,
+        width: 1200,
+        height: 630,
+        caption: seo.imageAlt,
       },
       {
         "@type": "WebPage",
@@ -42,6 +65,12 @@ export function buildJsonLd(routeId: RouteId, route: RouteDef) {
         inLanguage: "en-IN",
         about: { "@type": "Thing", name: `${route.name} bus route, West Bengal` },
         mainEntity: { "@id": `${BRAND.url}/#collection` },
+        primaryImageOfPage: { "@id": `${url}#primaryimage` },
+        breadcrumb: { "@id": `${url}#breadcrumb` },
+        // "Free, no login" is the site's central claim and the thing people
+        // search for. Saying it in a field built for it is worth more than
+        // saying it again in prose.
+        isAccessibleForFree: true,
       },
       {
         "@type": "MusicPlaylist",
@@ -53,6 +82,8 @@ export function buildJsonLd(routeId: RouteId, route: RouteDef) {
         genre: ["Bengali music", "Bangla adhunik", "Bengali film music", "Bangla band"],
         inLanguage: ["bn-IN", "en-IN"],
         numTracks: TOTAL_TRACKS,
+        isAccessibleForFree: true,
+        creator: { "@id": `${BRAND.url}/#curator` },
         hasPart: PLAYLISTS.map((p) => ({
           "@type": "MusicPlaylist",
           name: p.youtubeTitle,
@@ -74,13 +105,20 @@ export function buildJsonLd(routeId: RouteId, route: RouteDef) {
       // Four sibling routes, not a hierarchy — the breadcrumb says where this
       // page sits, and the ItemList tells a crawler the other three exist
       // even before it follows a link.
+      //
+      // The flagship route IS the home page, so it gets a one-item trail. The
+      // old two-item version listed the site and then the same URL again as
+      // its own child, which is a loop dressed up as a hierarchy.
       {
         "@type": "BreadcrumbList",
         "@id": `${url}#breadcrumb`,
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: BRAND.nameEn, item: BRAND.url },
-          { "@type": "ListItem", position: 2, name: route.name, item: url },
-        ],
+        itemListElement:
+          routeId === DEFAULT_ROUTE
+            ? [{ "@type": "ListItem", position: 1, name: BRAND.nameEn, item: url }]
+            : [
+                { "@type": "ListItem", position: 1, name: BRAND.nameEn, item: `${BRAND.url}/` },
+                { "@type": "ListItem", position: 2, name: route.name, item: url },
+              ],
       },
       {
         "@type": "ItemList",
