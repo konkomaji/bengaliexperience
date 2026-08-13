@@ -39,5 +39,7 @@ export const DRIVER = {
   get href() {
     return `https://instagram.com/${this.handle}`;
   },
+  /** where the footer credit points */
+  linkedin: "https://www.linkedin.com/in/konkomaji/",
   footnote: "New songs join the bus most weeks.",
 } as const;

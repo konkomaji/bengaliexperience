@@ -94,17 +94,15 @@ export function HomePage() {
 
         <footer className="mt-16 border-t border-outline-variant pt-6 text-[11px] leading-relaxed text-on-surface-muted/70">
           <p>
-            Made by{" "}
+            Built by{" "}
             <a
-              href={DRIVER.href}
+              href={DRIVER.linkedin}
               target="_blank"
               rel="noopener noreferrer"
               className="underline decoration-white/20 underline-offset-4 hover:text-on-surface hover:decoration-primary"
             >
-              {DRIVER.name}
+              Konko M
             </a>
-            . Independent and fan made, with no connection to any label, artist or institution.
-            Audio streams from official YouTube uploads. Nothing is rehosted.
           </p>
         </footer>
       </div>

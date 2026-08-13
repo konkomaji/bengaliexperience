@@ -13,9 +13,14 @@
 
 export interface Scene {
   name: string;
-  /** small caps line under the wordmark */
-  ticker: string;
-  /** all-caps punchline under the big hero title */
+  /**
+   * All-caps line under the big hero title.
+   *
+   * There used to be a `ticker` here too, naming the stops the bus called at.
+   * It is gone, along with every other mention of a route: this is one bus and
+   * you are on it, and listing stops made it read like a timetable for a
+   * service you had to pick.
+   */
   punchline: string;
   tagline: string;
   distanceKm: number;
@@ -31,8 +36,7 @@ export interface Scene {
 
 export const SCENE: Scene = {
   name: "Kolkata",
-  ticker: "Howrah · Esplanade · Gariahat",
-  punchline: "ALL THE WAY THROUGH THE CITY",
+  punchline: "ALL THE WAY THROUGH CALCUTTA",
   tagline: "Over Howrah Bridge and down the tram lines, through the heart of the city",
   distanceKm: 18,
   hero: "/hero/hero-kolkata.jpg",

@@ -165,10 +165,6 @@ export const PAGE_FAQ: Record<PageId, QA[]> = {
       q: "Why does this exist?",
       a: "Because Bengali culture online is almost all documentation: articles about the festivals, photo essays about the city, recipe posts about the food. The record survives and the feeling does not. And it was never the festivals that people miss most, it was the ordinary hours around them, which nobody thinks to write down because nobody thinks they are going anywhere. These rebuild the feeling rather than the record, for anyone far from home or never there in the first place.",
     },
-    {
-      q: "Who makes it?",
-      a: "One person, working under the name konko, from Kolkata. It is independent and fan made, with no connection to any record label, artist, brand or cultural institution.",
-    },
   ],
   busdriver: [
     {

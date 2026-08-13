@@ -1,4 +1,4 @@
-import { BRAND, DRIVER } from "../data/brand";
+import { BRAND } from "../data/brand";
 import { EXPERIENCES } from "../data/experiences";
 import { PLAYLISTS, TOTAL_TRACKS } from "../data/playlists";
 import { SCENE } from "../data/scene";
@@ -53,9 +53,8 @@ export function renderStaticBody(pageId: PageId): string {
     ...head,
     ...body,
     `<h2>Questions</h2>${questions(PAGE_FAQ[pageId])}`,
-    `<p>${escape(
-      `${BRAND.nameEn}. Free, no login. Made by ${DRIVER.name}, independent and fan made.`,
-    )}</p>`,
+    // Credit lives on the front page only, same as the visible footer.
+    ...(pageId === "home" ? [`<p>${escape("Built by Konko M.")}</p>`] : []),
     `</div>`,
   ].join("");
 }

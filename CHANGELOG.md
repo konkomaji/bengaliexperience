@@ -75,6 +75,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Live listener count animates when the number changes.
 
 ### Changed
+- **The ticket prints before it appears.** A conductor's ticket comes off a
+  machine, and the two seconds of it feeding out is the difference between a
+  card that faded in and an object that was made for you. A printer housing
+  sits above the slot, the ticket emerges from behind it in stepped pulls
+  rather than a smooth glide, and the share button stays disabled until it is
+  out. `prefers-reduced-motion` skips straight to the finished ticket.
+- **The ticket is properly branded and carries no route.** Bengali Experience
+  and the experience name at the top, a FREE stamp, what is playing, seat, and
+  a ticket number derived from the seat and the track so the same ride prints
+  the same number every time rather than a new random one on each look.
+  Fibre-speckled stock, heavier perforation, punched notches.
+- **No route anywhere on the page either.** The "Howrah · Esplanade ·
+  Gariahat" line under the wordmark is gone, and the punchline is now **ALL
+  THE WAY THROUGH CALCUTTA**. There is one bus and you are already on it;
+  naming stops made it read like a timetable for a service you had to pick.
+- **Credit is one line on the front page.** "Built by Konko M", linking to
+  LinkedIn. The bus page footer carries only the link back to the collection,
+  and the "who makes it" FAQ entry is gone.
 - **Nothing autoplays. Pressing play starts the music audibly, first press.**
   Autoplay has to begin muted, which left two bad options: open silently while
   pretending to play, or nag for a second interaction to turn the sound on.

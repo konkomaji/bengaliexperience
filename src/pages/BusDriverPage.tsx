@@ -84,9 +84,6 @@ export function BusDriverPage() {
                   More from {BRAND.nameEn}
                 </Link>
               </p>
-              <p className="opacity-70">
-                {seo.h1} · streams official YouTube uploads, nothing rehosted.
-              </p>
             </footer>
           </div>
         </main>

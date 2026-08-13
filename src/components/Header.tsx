@@ -2,14 +2,17 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { BRAND } from "../data/brand";
-import { SCENE } from "../data/scene";
 import { PAGE_PATH } from "../data/seo";
 import { useISTClock } from "../hooks/useISTClock";
 import { DriverCard } from "./DriverCard";
 
 /**
- * The fixed top bar on the bus page: the brand, the route it is running, the
- * Kolkata clock, how many people are listening, and the curator card.
+ * The fixed top bar on the bus page: the brand, the Kolkata clock, how many
+ * people are listening, and the curator card.
+ *
+ * The line of stops that used to sit under the wordmark is gone. There is one
+ * bus and you are already on it; naming the stops made it read like a
+ * timetable for a service you had to pick.
  *
  * The wordmark is a link home. It is the only route out of the experience and
  * back to the rest of the project, which matters more now that the project is
@@ -33,9 +36,6 @@ export function Header({ aboard }: { aboard: number | null }) {
               {BRAND.nameEn}
             </span>
           </Link>
-          <span className="mt-1 truncate text-[8px] uppercase tracking-[0.26em] text-white/50 sm:text-[9px]">
-            {SCENE.ticker}
-          </span>
         </motion.div>
 
         <div className="flex shrink-0 flex-col items-end gap-1.5">

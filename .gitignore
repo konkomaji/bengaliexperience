@@ -32,3 +32,6 @@ design/
 
 # written by scripts/stamp-lastmod.mjs on every build, from git itself
 src/data/lastmod.ts
+
+# asset brief, kept local
+ASSETS.md
