@@ -62,6 +62,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Live listener count animates when the number changes.
 
 ### Changed
+- **Live on a real domain: `https://bengaliexperience.wtf`.** The
+  `.pages.dev` placeholder is gone from `BRAND.url`, `index.html`,
+  `robots.txt`, `sitemap.xml` and `llms.txt`, so canonical links, `og:url`,
+  the JSON-LD `@id`s and the sitemap now all name the same origin.
+  A custom domain does not switch the `*.pages.dev` one off, so the edge
+  middleware 301s `bengaliexperience.pages.dev` to the canonical host rather
+  than leaving two origins serving identical pages; the match is exact, so
+  preview deployments still resolve.
 - **All visible copy is English.** The on-screen brand is "Bengali Experience";
   the "Bengali Bus Driver Playlist" phrasing is kept only in title/meta/JSON-LD,
   where the search intent actually lives.
@@ -101,9 +109,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `npm run check:playlists`.
 - Verify layout on real mobile hardware (narrow-viewport rendering has not yet
   been visually confirmed — see Known issues).
-- Register the real domain and replace the `.pages.dev` placeholder in
-  `src/data/brand.ts`, `public/robots.txt` and `public/sitemap.xml`.
-- Create the `ABOARD` KV namespace and fill in the ids in `wrangler.toml`.
+- Submit `https://bengaliexperience.wtf/sitemap.xml` to Google Search Console
+  and Bing Webmaster Tools.
 - Optional `clouds.png` overlay asset (the scene currently falls back to an
   inline haze, which looks fine).
 

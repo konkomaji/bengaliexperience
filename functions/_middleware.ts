@@ -13,11 +13,25 @@ import { buildJsonLd } from "../src/lib/jsonld";
 import { renderStaticBody } from "../src/lib/prerender";
 import { BRAND } from "../src/data/brand";
 
+/**
+ * The Pages project keeps answering on its own `*.pages.dev` host even after a
+ * custom domain is attached, so the same site is reachable at two origins and
+ * a crawler that finds the old one splits the ranking signal. Canonical tags
+ * ask nicely; a 301 settles it. Matched exactly, so preview deployments
+ * (`<hash>.bengaliexperience.pages.dev`) stay reachable for testing.
+ */
+const LEGACY_HOST = "bengaliexperience.pages.dev";
+
 export const onRequest: PagesFunction = async ({ request, next }) => {
+  const url = new URL(request.url);
+
+  if (url.hostname === LEGACY_HOST) {
+    return Response.redirect(BRAND.url + url.pathname + url.search, 301);
+  }
+
   const response = await next();
   if (!(response.headers.get("content-type") ?? "").includes("text/html")) return response;
 
-  const url = new URL(request.url);
   const routeId = PATH_TO_ROUTE[url.pathname];
   if (!routeId) return response; // unknown path — SPA fallback handles it
 

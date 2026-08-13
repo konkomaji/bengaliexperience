@@ -287,8 +287,27 @@ Paste both ids into `wrangler.toml`, then `npm run deploy` — or connect the
 repo to Cloudflare Pages with build command `npm run build`, output directory
 `dist`, and an `ABOARD` KV binding under Settings → Functions.
 
-Before going live, replace the `.pages.dev` placeholder in
-`src/data/brand.ts`, `public/robots.txt` and `public/sitemap.xml`.
+### Domain
+
+Live at **https://bengaliexperience.wtf**, a custom domain on the same Pages
+project.
+
+`BRAND.url` in `src/data/brand.ts` is the single source for every absolute URL
+the site emits — canonical links, `og:url`, JSON-LD `@id`s, breadcrumbs. Only
+`index.html`, `public/robots.txt`, `public/sitemap.xml` and `public/llms.txt`
+spell the domain out separately, because they are static files no build step
+templates. A domain change means editing those five.
+
+Attaching a custom domain does not retire the `*.pages.dev` one — the project
+keeps answering there, which is a second origin serving identical content and
+a split ranking signal. `functions/_middleware.ts` 301s
+`bengaliexperience.pages.dev` to the canonical host. The match is exact, so
+preview deployments at `<hash>.bengaliexperience.pages.dev` still open
+normally.
+
+After the first deploy on the real domain, submit
+`https://bengaliexperience.wtf/sitemap.xml` in Google Search Console and Bing
+Webmaster Tools.
 
 ---
 

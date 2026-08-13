@@ -8,10 +8,10 @@ All audio streams from official YouTube uploads through the embedded player — 
 
 Four routes, each its own page with its own illustrated scene. Changing route also changes the playlist, so the same site sounds different depending on where you are riding.
 
-- [Kolkata](https://bengaliexperience.pages.dev/): the flagship page — a local bus over Howrah Bridge, past Esplanade and down to Gariahat.
-- [Digha](https://bengaliexperience.pages.dev/digha): the Esplanade–Digha run down NH116B, past casuarina groves to the Bay of Bengal.
-- [Darjeeling](https://bengaliexperience.pages.dev/darjeeling): Siliguri to Darjeeling up Hill Cart Road, through tea gardens and hill mist.
-- [Shantiniketan](https://bengaliexperience.pages.dev/shantiniketan): Kolkata to Bolpur across Birbhum's red laterite countryside.
+- [Kolkata](https://bengaliexperience.wtf/): the flagship page — a local bus over Howrah Bridge, past Esplanade and down to Gariahat.
+- [Digha](https://bengaliexperience.wtf/digha): the Esplanade–Digha run down NH116B, past casuarina groves to the Bay of Bengal.
+- [Darjeeling](https://bengaliexperience.wtf/darjeeling): Siliguri to Darjeeling up Hill Cart Road, through tea gardens and hill mist.
+- [Shantiniketan](https://bengaliexperience.wtf/shantiniketan): Kolkata to Bolpur across Birbhum's red laterite countryside.
 
 ## Questions and answers
 

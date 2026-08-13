@@ -16,8 +16,12 @@ export const BRAND = {
   seoTitle: "Bengali Bus Driver Playlist — Bangers from 90s to 20s",
   tagline:
     "Press play on the Bengali bus driver playlist — nonstop Bangla bangers from the 90s to the 20s, Kumar Sanu to Arijit. Free, no login.",
-  /** update once the real domain is registered */
-  url: "https://bengaliexperience.pages.dev",
+  /**
+   * Canonical origin. Every absolute URL the site emits — canonical links,
+   * og:url, JSON-LD @ids, the sitemap — is built from this, so it is the only
+   * place a domain change has to happen. No trailing slash.
+   */
+  url: "https://bengaliexperience.wtf",
 } as const;
 
 /** The "Who's driving?" card — the curator credit shown in the header. */

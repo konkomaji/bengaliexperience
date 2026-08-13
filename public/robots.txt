@@ -23,4 +23,4 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
-Sitemap: https://bengaliexperience.pages.dev/sitemap.xml
+Sitemap: https://bengaliexperience.wtf/sitemap.xml

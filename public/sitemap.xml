@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://bengaliexperience.pages.dev/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://bengaliexperience.pages.dev/digha</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://bengaliexperience.pages.dev/darjeeling</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://bengaliexperience.pages.dev/shantiniketan</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://bengaliexperience.wtf/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://bengaliexperience.wtf/digha</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://bengaliexperience.wtf/darjeeling</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://bengaliexperience.wtf/shantiniketan</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 </urlset>
