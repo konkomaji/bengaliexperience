@@ -31,7 +31,7 @@ export function BusDriverPage() {
   // the horn ducks the music under itself, then hands the volume back
   const { setDucked } = engine;
   const duck = useCallback((on: boolean) => setDucked(on), [setDucked]);
-  const { honk, honking, blasting } = useHorn({ onDuck: duck });
+  const { honk, honking, blasting, style: hornStyle } = useHorn({ onDuck: duck });
 
   const [queueOpen, setQueueOpen] = useState(false);
   const [ticketOpen, setTicketOpen] = useState(false);
@@ -44,7 +44,7 @@ export function BusDriverPage() {
   return (
     <>
       <JsonLd data={buildJsonLd("busdriver")} />
-      <HeroScene honking={honking} />
+      <HeroScene honking={honking} shake={hornStyle.scene} shakeMs={hornStyle.sceneMs} />
 
       {/* No callout on press. A second badge appearing mid-screen was a second
           thing to read at the exact moment the horn is meant to be felt, not
@@ -56,7 +56,14 @@ export function BusDriverPage() {
         <Header aboard={aboard} />
 
         <main className="flex flex-1 flex-col items-center px-4 pb-4 pt-32 sm:pt-28">
-          <Hero trackCount={TOTAL_TRACKS} onHonk={honk} blasting={blasting} />
+          <Hero
+            trackCount={TOTAL_TRACKS}
+            onHonk={honk}
+            blasting={blasting}
+            letters={hornStyle.letters}
+            letterMs={hornStyle.letterMs}
+            staggerMs={hornStyle.staggerMs}
+          />
 
           <div className="flex-1" />
 

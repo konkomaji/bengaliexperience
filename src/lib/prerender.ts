@@ -42,13 +42,21 @@ export function renderStaticBody(pageId: PageId): string {
 
   const body = pageId === "home" ? homeBody() : busBody();
 
+  // Wrapped and identified so index.html can hide it the instant JavaScript
+  // is known to be running. React clears #root on first paint, but "first
+  // paint" is after the bundle has downloaded, parsed and executed, and until
+  // then this markup is on screen: a flash of unstyled headings and FAQ that
+  // every visitor sees for a moment on a slow connection. See the `.js` rule
+  // in index.html for how it is suppressed without hiding it from crawlers.
   return [
+    `<div id="prerender">`,
     ...head,
     ...body,
     `<h2>Questions</h2>${questions(PAGE_FAQ[pageId])}`,
     `<p>${escape(
       `${BRAND.nameEn}. Free, no login. Made by ${DRIVER.name}, independent and fan made.`,
     )}</p>`,
+    `</div>`,
   ].join("");
 }
 

@@ -18,7 +18,16 @@ import { SCENE } from "../data/scene";
  *   3  legibility washes — top and bottom darkened so header/player text reads
  *   4  film grain
  */
-export function HeroScene({ honking = false }: { honking?: boolean }) {
+export function HeroScene({
+  honking = false,
+  shake,
+  shakeMs,
+}: {
+  honking?: boolean;
+  /** keyframes for the current horn; see HORNS in useHorn */
+  shake?: string;
+  shakeMs?: number;
+}) {
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
 
@@ -26,9 +35,14 @@ export function HeroScene({ honking = false }: { honking?: boolean }) {
     <div
       aria-hidden="true"
       className="pointer-events-none fixed inset-0 -z-30 overflow-hidden bg-surface"
-      // the horn rattles the whole scene; `honking` is re-triggered by the
-      // hook so repeated presses replay the shake instead of being ignored
-      style={honking ? { animation: "var(--animate-honk)" } : undefined}
+      // The horn rattles the whole scene, on that horn's own rhythm: a hard
+      // five-tap blast and a stuttering one should not shake the page the
+      // same way. See HORNS in useHorn for where the numbers come from.
+      style={
+        honking && shake
+          ? { animation: `${shake} ${shakeMs ?? 300}ms linear infinite` }
+          : undefined
+      }
     >
       {/* 0 — dusk gradient base */}
       <div

@@ -74,6 +74,30 @@
     <link rel="preconnect" href="https://www.youtube-nocookie.com" />
     <link rel="preconnect" href="https://i.ytimg.com" />
 
+    <!--
+      The crawler body, hidden from anyone whose browser runs JavaScript.
+
+      functions/_middleware.ts injects a full text version of the page into
+      #root for crawlers that do not execute JavaScript. React clears #root on
+      its first paint, but that is after the bundle has downloaded, parsed and
+      run, so until then the raw markup is on screen: a flash of unstyled
+      headings and FAQ on every load, worse the slower the connection.
+
+      This is the ordinary progressive-enhancement answer. The class lands
+      while the head is still parsing, before anything has painted, so a
+      browser with JavaScript never shows the fallback for a single frame. A
+      client that does not run scripts never gets the class and reads the text
+      normally. It is not cloaking: the hidden markup says exactly what the
+      React page goes on to say, and a crawler that does execute JavaScript
+      sees that page rather than this.
+    -->
+    <script>
+      document.documentElement.classList.add("js");
+    </script>
+    <style>
+      .js #prerender { display: none !important; }
+    </style>
+
     <script type="application/ld+json" id="ld-json">{}</script>
   </head>
   <body>

@@ -125,15 +125,31 @@ spinning vinyl record stands in for it visually.
 
 ### The horn
 
-Five real recordings in `public/horns/`, one picked at random per press, never
-the same one twice running. Earlier versions synthesized it with Web Audio,
-two tones a fourth apart through a lowpass and a compressor, tuned to the
-ARAI dual-tone standard Indian commercial vehicles actually run. It was a
+Three real recordings in `public/horns/`, one picked at random per press,
+never the same one twice running. Earlier versions synthesized it with Web
+Audio, two tones a fourth apart through a lowpass and a compressor, tuned to
+the ARAI dual-tone standard Indian commercial vehicles actually run. It was a
 decent imitation and it was still an imitation: real buses do not agree with
-each other, one horn is a flat blare, the next is cracked, the next has the
-rising double-tap. Recordings carry that variety for free.
+each other. Recordings carry that for free.
 
-**The recordings run from 3.2s to 15.1s**, so nothing timed can be a constant:
+**Each horn moves the page to its own rhythm.** Not by taste: every file was
+decoded and measured, an RMS envelope in 30ms windows, counting bursts above
+28% of peak, plus attack time and zero-crossing rate as a brightness proxy.
+The animation cycle is that horn's own burst rate, so the page moves on the
+beat of whichever one is sounding.
+
+| File | Measured | Motion |
+|---|---|---|
+| `horn-1` | 3.2s, 5 bursts (~630ms), 0.03s attack, brightest at ~2.3kHz | `jolt`: hits hard on each tap, then holds still |
+| `horn-2` | 8.2s, 38 bursts (~215ms), sounds only 37% of the time | `stutter`: small, fast, mostly at rest |
+| `horn-3` | 8.4s, 7 bursts (~1.2s), sounds 89% of the time | `sway`: slow and heavy, nothing sharp |
+
+Matching 38 full-sized shakes to the stuttering one would be unbearable and
+would not look like the sound either; a sharp jolt held for eight seconds is
+just as wrong the other way. The keyframes live in `src/index.css`, the
+pairings in `HORNS` in `src/hooks/useHorn.ts`.
+
+**The recordings run from 3.2s to 8.4s**, so nothing timed can be a constant:
 
 - **The music ducks for the whole horn**, down to 12% and back up after, via
   `engine.setDucked`. The release is driven by the audio element's own `ended`
@@ -243,9 +259,17 @@ ships one empty `<div id="root">`, and while Google renders JavaScript, the
 answer engines this site invites in `robots.txt`, GPTBot and PerplexityBot and
 ClaudeBot and CCBot, mostly do not. They were being allowed in and handed a
 blank page. The middleware injects the heading, the direct answer, the facts,
-the catalogue or the playlists, and the FAQ into `#root`; React clears that
-container on first paint, so a visitor never sees it and nothing is cloaked.
-The markup says exactly what the visible page says.
+the catalogue or the playlists, and the FAQ into `#root`. The markup says
+exactly what the visible page says, so nothing is cloaked.
+
+React clears `#root` on its first paint, but "first paint" is after ~130 kB of
+JavaScript has downloaded, parsed and run, and until then that fallback is on
+screen: a flash of unstyled headings and FAQ on every load, worse the slower
+the connection. It is wrapped in `#prerender` and hidden by a rule in
+`index.html` that only applies once a tiny inline script has added `.js` to
+the root element. That happens while the head is still parsing, before
+anything paints, so a browser with JavaScript never shows it for a frame,
+while a client that does not run scripts reads it normally.
 
 ### Written to be quoted
 
@@ -395,7 +419,7 @@ reshuffles and keeps driving.
 | `public/hero/hero-kolkata.jpg` | 1920×825 | 21:9, dark, bus centred in the middle band |
 | `public/hero/breakdown.jpg` | 16:9, night | the chai-break error / 404 screen |
 | `public/opengraph.jpg` | 1200×630 | the social card, shared by both pages |
-| `public/horns/horn-1…5.mp3` | 3.2s to 15.1s | the horn, one picked at random per press |
+| `public/horns/horn-1…3.mp3` | 3.2s to 8.4s | the horn, one picked at random per press |
 
 Top and bottom ~25% of the hero sit under gradients and the player, so keep
 the subject in the middle band. No text in the images, since generators garble

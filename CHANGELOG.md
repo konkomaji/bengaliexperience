@@ -85,15 +85,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   gated behind the first press: "ready but not playing" is the resting state
   now, and an ungated watchdog would have declared the playlist dead 8 seconds
   after every page load.
-- **The horn is five real recordings, not a synthesizer.** The previous
+- **The horn is three real recordings, not a synthesizer.** The previous
   version was tuned to the ARAI dual-tone standard and was still an
-  imitation; real buses do not agree with each other. One of five files in
+  imitation; real buses do not agree with each other. One of three files in
   `public/horns/` plays per press, never the same one twice running. They run
-  from 3.2s to 15.1s, so every timing is now derived rather than fixed: the
+  from 3.2s to 8.4s, so every timing is now derived rather than fixed: the
   music unducks on the audio's own `ended` event, and the scene rattle and
   dancing heading stop at `duration - 1s`, so the bus settles while the note
-  is still fading. The rattle loops at constant amplitude instead of decaying
-  once, which was over before most of these recordings had started.
+  is still fading.
+- **Each horn moves the page to its own rhythm.** Every file was decoded and
+  measured, an RMS envelope in 30ms windows, bursts above 28% of peak, attack
+  time and zero-crossing rate, and its animation cycle is set to its own burst
+  rate. `horn-1` is five hard taps 630ms apart and gets a jolt that hits and
+  holds still; `horn-2` is 38 short taps that sound only 37% of the time and
+  gets a small fast stutter; `horn-3` is near-continuous blares 1.2s apart and
+  gets a slow heavy sway. One canned shake for three different sounds was the
+  thing a random horn is supposed to avoid.
 - **The heading dances while the horn sounds.** One letter per span with an
   increasing delay, so the word ripples rather than jumping in unison. Split
   by word first so it still wraps on a phone, and `aria-hidden` behind the
@@ -171,6 +178,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   structured data and search.
 
 ### Fixed
+- **Every page load flashed a wall of unstyled text.** The crawler fallback
+  the edge injects into `#root` is cleared by React on first paint, but that
+  is after the bundle has downloaded, parsed and run, so until then the raw
+  headings and FAQ were on screen: brief on a fast connection, ugly on a slow
+  one, and on every single load. It is wrapped in `#prerender` now and hidden
+  by a rule that only applies once an inline script has added `.js` to the
+  root element, which happens while the head is still parsing. A browser with
+  JavaScript never shows it; a client that does not run scripts still reads
+  it.
+- **A quick second press left the horn with no animation at all.** Pressing
+  again pauses the previous audio element, and a paused-then-abandoned element
+  can still fire `error` a moment later. That stale event ran the end-of-blast
+  cleanup on the press that had just replaced it, so the new horn sounded with
+  no shake and no dancing letters. Every handler checks it is still the
+  current horn before acting.
 - **A single slow start could end the ride permanently.** The 8s watchdog
   marked a playlist unplayable and rolled on, which is correct with nine lists
   and fatal with one: the only list got written off over a slow network and the

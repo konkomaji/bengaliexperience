@@ -11,12 +11,16 @@ import { HornIcon } from "./icons";
  * the bus, not the project, and the brand sits above it in the header.
  */
 export function Hero({
-  trackCount, onHonk, blasting = false,
+  trackCount, onHonk, blasting = false, letters, letterMs, staggerMs,
 }: {
   trackCount: number;
   onHonk: () => void;
-  /** true for exactly as long as the horn recording is sounding */
+  /** true from the press until a second before the horn recording ends */
   blasting?: boolean;
+  /** keyframes for the current horn; see HORNS in useHorn */
+  letters?: string;
+  letterMs?: number;
+  staggerMs?: number;
 }) {
   return (
     <motion.div
@@ -35,7 +39,13 @@ export function Hero({
         style={{ textShadow: "0 4px 28px rgba(0,0,0,0.7)" }}
         aria-label={PAGE_SEO.busdriver.h1}
       >
-        <DancingText text={PAGE_SEO.busdriver.h1} dancing={blasting} />
+        <DancingText
+          text={PAGE_SEO.busdriver.h1}
+          dancing={blasting && !!letters}
+          keyframes={letters}
+          cycleMs={letterMs}
+          staggerMs={staggerMs}
+        />
       </h1>
 
       <div className="mt-3 flex items-center gap-3 text-[9px] font-semibold uppercase tracking-[0.28em] text-white/55 sm:text-[11px]">
@@ -94,7 +104,15 @@ export function Hero({
  * `aria-label`: a screen reader should hear the title, not twenty-six
  * individual characters.
  */
-function DancingText({ text, dancing }: { text: string; dancing: boolean }) {
+function DancingText({
+  text, dancing, keyframes, cycleMs = 500, staggerMs = 30,
+}: {
+  text: string;
+  dancing: boolean;
+  keyframes?: string;
+  cycleMs?: number;
+  staggerMs?: number;
+}) {
   let n = 0;
   return (
     <span aria-hidden className="inline-block">
@@ -105,8 +123,11 @@ function DancingText({ text, dancing }: { text: string; dancing: boolean }) {
               key={`${char}-${c}`}
               className="inline-block will-change-transform"
               style={
-                dancing
-                  ? { animation: "var(--animate-letter-dance)", animationDelay: `${n++ * 32}ms` }
+                dancing && keyframes
+                  ? {
+                      animation: `${keyframes} ${cycleMs}ms linear infinite`,
+                      animationDelay: `${n++ * staggerMs}ms`,
+                    }
                   : undefined
               }
             >
