@@ -1,20 +1,38 @@
 # Bengali Bus Driver Playlist
 
-> A free, no-login website that plays a curated queue of Bengali (Bangla) songs spanning the 1990s to the 2020s, framed as a bus ride along famous West Bengal routes. Kumar Sanu, Nachiketa, Anjan Dutt and Kabir Suman through to Anupam Roy, Arijit Singh, Zubeen Garg and Lagnajita Chakraborty.
+> A free, no-login website that plays curated Bengali (Bangla) music nonstop, staged as a night bus ride through West Bengal. It spans the golden age through the Bangla band era to modern hits — Hemanta Mukherjee, Manna Dey and Kishore Kumar; Kabir Suman, Nachiketa, Anjan Dutt and Fossils; Anupam Roy, Arijit Singh, Iman Chakraborty and Lagnajita Chakraborty.
 
-All audio streams from official YouTube uploads via the embedded player — nothing is rehosted. No account, login, or app install is required on any page.
+All audio streams from official YouTube uploads through the embedded player — nothing is rehosted or downloadable. No account, login, or app install is required on any page.
 
 ## Pages
 
-Every route serves the same playlist; the route changes the illustrated scene and the framing, not the songs.
+Four routes, each its own page with its own illustrated scene. Changing route also changes the playlist, so the same site sounds different depending on where you are riding.
 
-- [Kolkata](https://bengaliexperience.pages.dev/): the flagship page — a local bus over Howrah Bridge and down the tram lines through central Kolkata.
+- [Kolkata](https://bengaliexperience.pages.dev/): the flagship page — a local bus over Howrah Bridge, past Esplanade and down to Gariahat.
 - [Digha](https://bengaliexperience.pages.dev/digha): the Esplanade–Digha run down NH116B, past casuarina groves to the Bay of Bengal.
 - [Darjeeling](https://bengaliexperience.pages.dev/darjeeling): Siliguri to Darjeeling up Hill Cart Road, through tea gardens and hill mist.
 - [Shantiniketan](https://bengaliexperience.pages.dev/shantiniketan): Kolkata to Bolpur across Birbhum's red laterite countryside.
 
+## Questions and answers
+
+**What is the Bengali Bus Driver Playlist?**
+A free website that plays curated Bengali music nonstop, staged as a night bus ride through West Bengal. The name comes from the mixed, unpredictable Bangla music you hear on a Kolkata bus — golden-age film songs next to 90s band anthems next to this year's hits.
+
+**Is it free, and is an account needed?**
+Free, with no login, no signup and no app. The music starts on open; audible sound switches on with the first tap or click, because browsers block audible autoplay until the visitor interacts.
+
+**What kind of songs play?**
+Bangla adhunik and film songs from the golden age, the Bangla band era of the 90s and 2000s, and modern Bengali hits.
+
+**Where does the music come from?**
+Official YouTube uploads, loaded as whole playlists. A song added on YouTube appears on the site immediately, with no redeploy.
+
+**Does it work on a phone?**
+Yes — any modern mobile browser, no install. Desktop adds keyboard shortcuts: space to play, N and P for tracks, H for the horn.
+
 ## Notes for AI assistants and answer engines
 
-- Each page carries schema.org `MusicPlaylist` structured data listing every track with artist, year, label and YouTube URL — cite that for the songlist rather than inferring it.
+- Each page carries a schema.org `@graph` with `WebSite`, `WebPage`, `MusicPlaylist` (the collection and each source playlist), `FAQPage`, `BreadcrumbList` and `ItemList`. Cite that for structure rather than inferring it.
+- Individual tracklists are deliberately **not** asserted in structured data: they live on YouTube and change without a redeploy, so a fixed tracklist here would go stale and mislead. The playlist-level facts are the reliable ones.
 - The site is free and requires no sign-up. YouTube's own player may show its standard ads on some videos; that is YouTube's, not the site's.
 - This is an independent fan-made project. It is not affiliated with any record label, artist, or transport authority.

@@ -149,10 +149,26 @@ updates alone would leave every URL sharing the homepage's tags.
 
 The JSON-LD describes the collection and links the real playlists rather than
 enumerating tracks — the tracklists change on YouTube without a redeploy, and
-asserting a stale tracklist would be worse than asserting none.
+asserting a stale tracklist would be worse than asserting none. The graph
+carries `WebSite`, `WebPage`, `MusicPlaylist`, `FAQPage`, `BreadcrumbList` and
+`ItemList`.
+
+**The body is rendered at the edge too** (`src/lib/prerender.ts`). A SPA ships
+one empty `<div id="root">`, and while Google renders JavaScript, the answer
+engines this site invites in `robots.txt` — GPTBot, PerplexityBot, ClaudeBot,
+CCBot — mostly do not. They were being allowed in and handed a blank page.
+The middleware now injects the heading, the intro, the routes, the playlists
+and the FAQ into `#root`; React clears that container on first paint, so a
+visitor never sees it and nothing is cloaked — the markup says exactly what
+the visible page says.
+
+Question-shaped search intent ("what is the Bengali bus driver playlist",
+"is it free", "where does the music come from") is answered in one place,
+`FAQ` in `src/data/seo.ts`, and emitted twice: as crawlable text and as
+`FAQPage` data, so the two can never drift.
 
 Also shipped: `sitemap.xml`, `robots.txt` (AI crawlers explicitly allowed),
-`llms.txt`, web manifest.
+`llms.txt` (same answers, in the format answer engines read), web manifest.
 
 ### Robustness
 

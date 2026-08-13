@@ -1,7 +1,8 @@
 import { BRAND } from "../data/brand";
 import { PLAYLISTS, TOTAL_TRACKS } from "../data/playlists";
 import type { RouteDef, RouteId } from "../data/routes";
-import { ROUTE_PATH, ROUTE_SEO } from "../data/seo";
+import { ROUTES } from "../data/routes";
+import { FAQ, ROUTE_PATH, ROUTE_SEO } from "../data/seo";
 
 /**
  * schema.org @graph for a route page.
@@ -57,6 +58,39 @@ export function buildJsonLd(routeId: RouteId, route: RouteDef) {
           name: p.youtubeTitle,
           url: `https://www.youtube.com/playlist?list=${p.id}`,
           numTracks: p.approxTracks,
+        })),
+      },
+      // The questions people actually ask, in the form answer engines quote.
+      // Same text as the crawlable body, so the page and the markup agree.
+      {
+        "@type": "FAQPage",
+        "@id": `${url}#faq`,
+        mainEntity: FAQ.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: f.a },
+        })),
+      },
+      // Four sibling routes, not a hierarchy — the breadcrumb says where this
+      // page sits, and the ItemList tells a crawler the other three exist
+      // even before it follows a link.
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${url}#breadcrumb`,
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: BRAND.nameEn, item: BRAND.url },
+          { "@type": "ListItem", position: 2, name: route.name, item: url },
+        ],
+      },
+      {
+        "@type": "ItemList",
+        "@id": `${BRAND.url}/#routes`,
+        name: "Routes",
+        itemListElement: ROUTES.map((r, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          name: ROUTE_SEO[r.id].h1,
+          url: `${BRAND.url}${ROUTE_PATH[r.id]}`,
         })),
       },
     ],

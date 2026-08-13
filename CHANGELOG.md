@@ -47,6 +47,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   render even when the stylesheet did not load.
 - `npm run check:playlists` — one command that says which playlists the
   embedded player will actually accept, and why the others are refused.
+- **A crawlable page body.** The site is a SPA, so the HTML it served had
+  perfect meta tags wrapped around an empty `<div id="root">`. Google renders
+  JavaScript; the answer engines `robots.txt` explicitly invites — GPTBot,
+  PerplexityBot, ClaudeBot, CCBot — mostly do not, so they were being let in
+  and shown nothing. The edge middleware now injects the heading, intro,
+  route list, playlist list and FAQ into `#root`, which React clears on first
+  paint: invisible to visitors, quotable by machines, and identical in
+  substance to what the page shows.
+- **`FAQPage`, `BreadcrumbList` and `ItemList` structured data**, plus an `h1`
+  and standalone intro copy per route, all sourced from `src/data/seo.ts` so
+  the visible text, the JSON-LD and `llms.txt` cannot drift apart.
 - Clock now shows **seconds and AM/PM**, ticking every second.
 - Live listener count animates when the number changes.
 

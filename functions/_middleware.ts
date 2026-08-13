@@ -10,6 +10,7 @@
 import { PATH_TO_ROUTE, ROUTE_SEO } from "../src/data/seo";
 import { getRoute } from "../src/data/routes";
 import { buildJsonLd } from "../src/lib/jsonld";
+import { renderStaticBody } from "../src/lib/prerender";
 import { BRAND } from "../src/data/brand";
 
 export const onRequest: PagesFunction = async ({ request, next }) => {
@@ -40,6 +41,12 @@ export const onRequest: PagesFunction = async ({ request, next }) => {
     .on('link[rel="canonical"]', setAttr("href", canonical))
     .on("#ld-json", {
       element: (el) => { el.setInnerContent(JSON.stringify(jsonLd), { html: false }); },
+    })
+    // The body a JS-less crawler gets. React wipes #root on first render, so
+    // this is invisible to visitors — see src/lib/prerender.ts for why it has
+    // to exist at all.
+    .on("#root", {
+      element: (el) => { el.setInnerContent(renderStaticBody(routeId), { html: true }); },
     })
     .transform(response);
 };
