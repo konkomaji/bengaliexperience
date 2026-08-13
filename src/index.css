@@ -131,57 +131,6 @@
     0%, 100% { opacity: 0.16; }
     50%      { opacity: 0.30; }
   }
-  /* ── Horn motion ──────────────────────────────────────────────────────
-     Three pairs, one per recording, each looping on that horn's own measured
-     burst rate (see HORNS in src/hooks/useHorn.ts). They loop at constant
-     amplitude rather than decaying, because a single settling shake would be
-     over before an eight-second horn had got going, and they are stopped a
-     second before the audio ends. */
-
-  /* horn-1: five hard taps, instant attack. Hit and hold still. */
-  @keyframes shake-jolt {
-    0%       { transform: translate3d(0, 0, 0) rotate(0deg); }
-    4%       { transform: translate3d(-9px, 2px, 0) rotate(-0.7deg); }
-    9%       { transform: translate3d(8px, -2px, 0) rotate(0.6deg); }
-    15%      { transform: translate3d(-4px, 1px, 0) rotate(-0.3deg); }
-    22%      { transform: translate3d(2px, 0, 0) rotate(0.12deg); }
-    30%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
-  }
-  @keyframes letter-jolt {
-    0%       { transform: translateY(0) rotate(0deg) scale(1); }
-    6%       { transform: translateY(-40%) rotate(-11deg) scale(1.16); }
-    16%      { transform: translateY(6%) rotate(5deg) scale(0.96); }
-    26%      { transform: translateY(-8%) rotate(-2deg) scale(1.03); }
-    36%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
-  }
-
-  /* horn-2: 38 short taps with real gaps. Small, fast, mostly at rest. */
-  @keyframes shake-stutter {
-    0%       { transform: translate3d(0, 0, 0); }
-    12%      { transform: translate3d(-3px, 1px, 0); }
-    28%      { transform: translate3d(3px, -1px, 0); }
-    44%, 100% { transform: translate3d(0, 0, 0); }
-  }
-  @keyframes letter-stutter {
-    0%       { transform: translateY(0) rotate(0deg); }
-    14%      { transform: translateY(-16%) rotate(-4deg); }
-    32%      { transform: translateY(4%) rotate(3deg); }
-    50%, 100% { transform: translateY(0) rotate(0deg); }
-  }
-
-  /* horn-3: long sustained blares. Heavy, smooth, never sharp. */
-  @keyframes shake-sway {
-    0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
-    25%      { transform: translate3d(-7px, 2px, 0) rotate(-0.45deg); }
-    50%      { transform: translate3d(0, -2px, 0) rotate(0deg); }
-    75%      { transform: translate3d(7px, 2px, 0) rotate(0.45deg); }
-  }
-  @keyframes letter-sway {
-    0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
-    25%      { transform: translateY(-22%) rotate(-6deg) scale(1.07); }
-    50%      { transform: translateY(0) rotate(0deg) scale(1); }
-    75%      { transform: translateY(14%) rotate(6deg) scale(0.95); }
-  }
   /* aboard count changed — the new number swaps in vertically */
   @keyframes board {
     0%       { opacity: 0; transform: translateY(8px) scale(0.96); }
@@ -195,6 +144,58 @@
     100%     { opacity: 0; transform: translateY(-6px) scale(0.98); }
   }
 
+}
+
+/* ── Horn motion ──────────────────────────────────────────────────────
+   Three pairs, one per recording, each looping on that horn's own measured
+   burst rate (see HORNS in src/hooks/useHorn.ts). They loop at constant
+   amplitude rather than decaying, because a single settling shake would be
+   over before an eight-second horn had got going, and they are stopped a
+   second before the audio ends. */
+
+/* horn-1: five hard taps, instant attack. Hit and hold still. */
+@keyframes shake-jolt {
+  0%       { transform: translate3d(0, 0, 0) rotate(0deg); }
+  4%       { transform: translate3d(-9px, 2px, 0) rotate(-0.7deg); }
+  9%       { transform: translate3d(8px, -2px, 0) rotate(0.6deg); }
+  15%      { transform: translate3d(-4px, 1px, 0) rotate(-0.3deg); }
+  22%      { transform: translate3d(2px, 0, 0) rotate(0.12deg); }
+  30%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+}
+@keyframes letter-jolt {
+  0%       { transform: translateY(0) rotate(0deg) scale(1); }
+  6%       { transform: translateY(-40%) rotate(-11deg) scale(1.16); }
+  16%      { transform: translateY(6%) rotate(5deg) scale(0.96); }
+  26%      { transform: translateY(-8%) rotate(-2deg) scale(1.03); }
+  36%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+}
+
+/* horn-2: 38 short taps with real gaps. Small, fast, mostly at rest. */
+@keyframes shake-stutter {
+  0%       { transform: translate3d(0, 0, 0); }
+  12%      { transform: translate3d(-3px, 1px, 0); }
+  28%      { transform: translate3d(3px, -1px, 0); }
+  44%, 100% { transform: translate3d(0, 0, 0); }
+}
+@keyframes letter-stutter {
+  0%       { transform: translateY(0) rotate(0deg); }
+  14%      { transform: translateY(-16%) rotate(-4deg); }
+  32%      { transform: translateY(4%) rotate(3deg); }
+  50%, 100% { transform: translateY(0) rotate(0deg); }
+}
+
+/* horn-3: long sustained blares. Heavy, smooth, never sharp. */
+@keyframes shake-sway {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  25%      { transform: translate3d(-7px, 2px, 0) rotate(-0.45deg); }
+  50%      { transform: translate3d(0, -2px, 0) rotate(0deg); }
+  75%      { transform: translate3d(7px, 2px, 0) rotate(0.45deg); }
+}
+@keyframes letter-sway {
+  0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+  25%      { transform: translateY(-22%) rotate(-6deg) scale(1.07); }
+  50%      { transform: translateY(0) rotate(0deg) scale(1); }
+  75%      { transform: translateY(14%) rotate(6deg) scale(0.95); }
 }
 
 @layer base {
