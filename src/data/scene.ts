@@ -32,7 +32,7 @@ export interface Scene {
 export const SCENE: Scene = {
   name: "Kolkata",
   ticker: "Howrah · Esplanade · Gariahat",
-  punchline: "ALL NIGHT IN THE CITY",
+  punchline: "ALL THE WAY THROUGH THE CITY",
   tagline: "Over Howrah Bridge and down the tram lines, through the heart of the city",
   distanceKm: 18,
   hero: "/hero/hero-kolkata.jpg",

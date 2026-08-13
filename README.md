@@ -5,9 +5,9 @@ single Bengali thing for as long as you want to stay. Not articles about the
 culture and not photo galleries of it, but the thing itself, running in a
 browser tab.
 
-One is built. The bus driver playlist, at `/busdriver`: a night bus across
-Kolkata with nine curated YouTube playlists behind it, shuffled fresh on every
-visit so no two people board the same bus. Three more are named and being
+One is built. The bus driver playlist, at `/busdriver`: nonstop Bangla bangers
+from the 90s to the 20s, shuffled fresh and started at a random point on every
+visit, so no two people board the same bus. Three more are named and being
 worked on: Mahalaya listening, Durga Puja pandal hopping, and the Bengali
 Sunday afternoon.
 
@@ -125,19 +125,43 @@ spinning vinyl record stands in for it visually.
 
 ### The horn
 
-`useHorn` synthesizes an air horn rather than shipping an audio file: two
-fundamentals a minor third apart, each doubled and detuned so the voices beat,
-through a lowpass and a compressor. It holds for 3.4s like a real bus, and
-**the music ducks under it**, down to 12% in 240ms, back up over 700ms, via
-`engine.setDucked`. The visitor's own volume is never overwritten; ducking
+`useHorn` synthesizes the horn rather than shipping an audio file. The two
+tones are not invented: Indian commercial vehicles run ARAI-certified
+dual-tone horns, and the standard pairing is **420 Hz and 560 Hz**, a perfect
+fourth apart. That interval is why the sound is instantly placeable. An
+earlier version used a minor third, which sat dark and mournful, more foghorn
+than bus. Each tone is doubled and detuned so the voices beat the way two real
+trumpets never quite agree, through a lowpass and a compressor.
+
+It holds for **1.2s**, because a driver taps the horn rather than leaning on
+it. The first version held for 3.4 seconds, which was impressive once and
+tiring twice.
+
+**The music ducks under it**, down to 12% in ~180ms and back up over ~420ms,
+via `engine.setDucked`. The visitor's own volume is never overwritten; ducking
 works below it. That contrast, not raw gain, is what makes the horn read as
 loud.
 
+### Autoplay and shuffle
+
+Playback starts on its own and starts **somewhere random in the list**, every
+visit, for everyone.
+
+The random start is set through the `index` player variable when the player is
+constructed, and that placement is the whole trick. `setShuffle(true)` only
+governs where *next* goes, and `playVideoAt()` issued during startup is quietly
+ignored, so an earlier version that shuffled and jumped on `onReady` left every
+single visitor on track one while looking, in code, exactly like it was
+working. `setShuffle` is still called, but only once `getPlaylist()` answers,
+since it is a silent no-op before the tracklist arrives.
+
 ### How the bus chooses what to play
 
-`src/lib/selection.ts`. Plain `Math.random()` ignores that this is explicitly
-a *night bus in Kolkata*, and lets a returning visitor land on the same list
-every time. Instead:
+`src/lib/selection.ts`. There is one playlist right now, so the weighting below
+is dormant rather than gone: it resolves to "the only list" and starts
+mattering again the moment a second is added. Plain `Math.random()` ignores
+that this is explicitly a *bus in Kolkata*, and lets a returning visitor land
+on the same list every time. Instead:
 
 1. **Time-of-day weighting.** Each playlist declares which IST hours it suits.
    At 2am the mellow lists are far likelier; at 6pm it inverts. The bus knows
@@ -312,24 +336,28 @@ curl -s -o /dev/null -w "%{http_code}\n" \
 # 200 = the embed will take it · 401 = it will not
 ```
 
-Status at the time of writing. The seven made in YouTube Music are all
-silently unplayable:
+This is why there is one playlist. The site shipped with nine, seven of them
+made in YouTube Music, which meant seven were silently unplayable and the ride
+was really running on two. Advertising nine and playing two is a lie the
+visitor can hear, so the shelf is honest instead:
 
-| Site label | YouTube title | Made in | Embeds |
+| Site label | YouTube title | Tracks | Embeds |
 |---|---|---|---|
-| Bengali Experience | bengaliexperience | YouTube | yes |
-| Life | জীবনমুখী গান | YouTube | yes |
-| 20's Bangers | 20's Bangla Bangers | YT Music | **no** |
-| Aesthetics | Bengali Aesthetics | YT Music | **no** |
-| To You | To You | YT Music | **no** |
-| Sleeping Pills | Sleeping pills (Bengali) | YT Music | **no** |
-| Band Era | Era of Bangla Bands | YT Music | **no** |
-| (G)old Classics | (G)old Bengali Classics | YT Music | **no** |
-| Evergreen | Bengali Evergreen | YT Music | **no** |
+| OG Kumar Sanu | KUMAR SANU SPECIAL BENGALI SONGS | 93 | yes |
 
-The app survives either way. It pre-flights each list, marks a refused one
-dead and rolls to a playable one. But the ride is only as varied as the lists
-that actually embed.
+More are being added. Everything around `PLAYLISTS` keeps working unchanged at
+any length: the weighted opening pick, roll-on-death, the queue chips. Adding
+an entry to the array is the whole job.
+
+**With one list, "the list is dead" needs care.** The 8s watchdog used to mark
+a slow-starting list unplayable and roll on, which is right when there is
+somewhere to roll to and fatal when there is not: the only list gets written
+off over a slow network and the player sits on "Boarding…" forever with
+nothing left to try. `abandonCurrentPlaylist` now checks whether an
+alternative exists at all, and when none does it reloads the same list from a
+different point, up to three times, before admitting defeat. The same applies
+at the end of the list: nothing to roll into is not a breakdown, so it
+reshuffles and keeps driving.
 
 ---
 

@@ -72,14 +72,14 @@ export function buildJsonLd(pageId: PageId) {
     inLanguage: "en-IN",
     primaryImageOfPage: { "@id": `${url}#primaryimage` },
     breadcrumb: { "@id": `${url}#breadcrumb` },
-    // "Free, no login" is the central claim of every page here and the thing
-    // people search for. Saying it in the field built for it is worth more
-    // than saying it again in prose.
+    // Everything here is free, and it is worth saying in the field built for
+    // it rather than in the prose, where it would push the actual subject of
+    // the page down the paragraph.
     isAccessibleForFree: true,
     mainEntity: { "@id": isHome ? `${BRAND.url}/#experiences` : `${BRAND.url}/#collection` },
     about: {
       "@type": "Thing",
-      name: isHome ? "Bengali culture and nostalgia" : "Bengali music and the Kolkata night bus",
+      name: isHome ? "Bengali culture and nostalgia" : "Bengali bus driver music in West Bengal",
     },
   };
 
@@ -128,7 +128,7 @@ export function buildJsonLd(pageId: PageId) {
     "@id": `${BRAND.url}/#collection`,
     name: "Bengali Bus Driver Playlist",
     description:
-      "A rotating collection of curated Bengali playlists spanning the golden age, the Bangla band era and modern hits, shuffled fresh on every visit.",
+      "Nonstop Bangla bangers from the 90s to the 20s, the songs a West Bengal bus driver actually plays, shuffled fresh on every visit.",
     url: BRAND.url + PAGE_PATH.busdriver,
     genre: ["Bengali music", "Bangla adhunik", "Bengali film music", "Bangla band"],
     inLanguage: ["bn-IN", "en-IN"],

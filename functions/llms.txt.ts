@@ -55,7 +55,11 @@ ${PAGE_SEO.busdriver.intro}
 
 ${SCENE.tagline}. ${PAGE_SEO.busdriver.facts.map((f) => `- ${f}`).join("\n")}
 
-${PLAYLISTS.length} curated Bengali playlists sit behind it, roughly ${TOTAL_TRACKS} tracks in total, loaded whole from YouTube and reshuffled on every visit:
+${
+    PLAYLISTS.length === 1
+      ? `One curated Bengali playlist sits behind it, ${TOTAL_TRACKS} tracks, loaded whole from YouTube and reshuffled on every visit. More are being added.`
+      : `${PLAYLISTS.length} curated Bengali playlists sit behind it, roughly ${TOTAL_TRACKS} tracks in total, loaded whole from YouTube and reshuffled on every visit:`
+  }
 
 ${lists}
 

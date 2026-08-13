@@ -4,7 +4,7 @@ import { PLAYLISTS, type PlaylistDef } from "../data/playlists";
  * How the bus decides what to play.
  *
  * Plain `Math.random()` shuffle has two problems on a site like this: it
- * ignores that the site is explicitly a *night bus in Kolkata*, and it lets
+ * ignores that the site is explicitly a *bus in Kolkata*, and it lets
  * the same visitor land on the same opener repeatedly. This does three things
  * instead — all cheap, all client-side, no tracking:
  *
@@ -28,20 +28,16 @@ import { PLAYLISTS, type PlaylistDef } from "../data/playlists";
 const HISTORY_KEY = "be:recentPlaylists";
 const HISTORY_LEN = 3;
 
-/** Hours (IST, 0–23) each playlist suits best. */
-const AFFINITY: Record<string, number[]> = {
-  // late night / small hours — quiet, wistful
-  "PLnQRIdwY8diBEpkTck_TeBRNS4Li6KDre": [0, 1, 2, 3, 4, 5, 23], // Sleeping Pills
-  "PLnQRIdwY8diDj2qzl00YUcMQinJPTzzFs": [0, 1, 2, 3, 22, 23], // Evergreen
-  "PLnQRIdwY8diBdGXo-oIe3PVpnhc17-YhS": [0, 1, 5, 6, 7, 22, 23], // (G)old Classics
-  // daytime — reflective, everyday
-  "PL4IRGlqSrXU7ivggI5cW7DgvX2q8v-wUs": [7, 8, 9, 10, 11, 12, 13, 14], // Life
-  "PLnQRIdwY8diCMRCkSXI1EGwQzt5uya1J1": [9, 10, 11, 12, 13, 14, 15, 16], // Aesthetics
-  // evening — the commute home, then the night out
-  "PLnQRIdwY8diA0LxQeemuQWFhItFix_ejO": [16, 17, 18, 19, 20, 21], // To You
-  "PLnQRIdwY8diBYtMHUxRUzYD7AK2yUe3y4": [17, 18, 19, 20, 21, 22], // Band Era
-  "PLnQRIdwY8diCFEi6ekCSm1u1EJ1J7-TTZ": [18, 19, 20, 21, 22, 23], // 20's Bangers
-};
+/**
+ * Hours (IST, 0-23) each playlist suits best.
+ *
+ * Empty while there is one list, because there is nothing to weigh it
+ * against. The entries for the nine-playlist version were removed with those
+ * playlists rather than left behind pointing at ids the app no longer has:
+ * dead config reads as intent and quietly rots. Add an id back here when a
+ * second list arrives, and the weighting starts mattering again on its own.
+ */
+const AFFINITY: Record<string, number[]> = {};
 
 function currentISTHour(): number {
   try {

@@ -73,7 +73,7 @@ export const PAGE_SEO: Record<PageId, PageSeo> = {
   home: {
     title: BRAND.seoTitle,
     description:
-      "Bengali Experience is a free collection of small websites that let you live one Bengali thing at a time. A night bus through Kolkata with the driver's playlist on is the first. Mahalaya, pandal hopping and the Sunday afternoon are coming. No login, no app.",
+      "A digital collection of the small, ordinary things a Bengali grows up inside. The driver's music on the bus, the radio at four in the morning on Mahalaya, Sunday's mangsho bhaat and the sleep after it. Rebuilt to sit inside again, from anywhere.",
     keywords: [
       "bengali experience",
       "bengali culture website",
@@ -88,11 +88,11 @@ export const PAGE_SEO: Record<PageId, PageSeo> = {
     ],
     h1: "Bengali Experience",
     intro:
-      "Bengali Experience is a free collection of small websites, each one putting you inside a single Bengali thing for as long as you want to stay. Not an article about the culture and not a photo gallery of it, but the thing itself, running in a browser tab. The first is a night bus through Kolkata with the driver's own playlist on.",
+      "Bengali Experience is a digital collection of the small, ordinary things a Bengali grows up inside. The driver's music on the bus to school. The radio at four in the morning that means the pujo has started. Sunday's mangsho bhaat, mutton and rice, and the long sleep after it. None of it is an occasion, and none of it was ever noticed until it was far away. Each one is rebuilt here to sit inside again, from anywhere.",
     facts: [
       "Free to use. No account, no app, no download, on every page.",
-      "One experience is live now: the Bengali bus driver playlist.",
-      "Three more are planned: Mahalaya listening, Durga Puja pandal hopping, and the Bengali Sunday afternoon.",
+      "One experience is open now: the Bengali bus driver playlist.",
+      "Three more are being built: Mahalaya listening, Durga Puja pandal hopping, and the Bengali Sunday afternoon.",
       "Everything is in English, so it works whether or not you read Bengali script.",
       "Made by one person in Kolkata, independent of any label, brand or institution.",
     ],
@@ -100,28 +100,29 @@ export const PAGE_SEO: Record<PageId, PageSeo> = {
   busdriver: {
     title: "Bengali Bus Driver Playlist: Bangla Bangers from the 90s to the 20s",
     description:
-      "Press play on the Bengali bus driver playlist. Nonstop Bangla songs from the 90s to the 20s, Kumar Sanu and Nachiketa through to Anupam Roy and Arijit, on a night bus across Kolkata. Free, no login.",
+      "Press play on the Bengali bus driver playlist. Nonstop Bangla bangers from the 90s to the 20s, the songs a West Bengal bus driver actually plays, shuffled fresh on every visit. Part of Bengali Experience.",
     keywords: [
       "bengali bus driver playlist",
+      "bus driver playlist bengali",
       "bangla gaan playlist",
       "bengali songs 90s",
+      "bangla bangers 90s to 20s",
       "bangla hit songs nonstop",
-      "kumar sanu bengali songs",
-      "anupam roy songs",
-      "arijit singh bengali songs",
-      "kolkata bus playlist",
-      "bangla band songs",
-      "nonstop bengali music free",
+      "kolkata bus songs",
+      "west bengal bus music",
+      "bengali nonstop songs online",
+      "bangla old songs playlist",
     ],
     h1: "Bengali Bus Driver Playlist",
     intro:
-      "The Bengali Bus Driver Playlist is a free, no-login site that plays Bengali music nonstop while you ride a night bus across Kolkata. It runs the way a bus driver's own playlist runs, golden age film songs next to 90s band anthems next to this year's hits, shuffled fresh on every visit so no two rides are alike.",
+      "The Bengali Bus Driver Playlist puts you on a West Bengal bus with the driver's music on: nonstop Bangla bangers from the 90s to the 20s, playing the way they do on a real route. Every bus has a driver with a playlist, running off a phone at the front, loud through worn speakers for the whole journey whether anyone asked for it or not. Open the page and it is already going, shuffled fresh, the way it would be if you had just got on.",
     facts: [
+      "Bangla bangers spanning the 90s to the 20s, playing nonstop.",
+      "The songs actually heard on Kolkata and West Bengal buses.",
+      "Shuffled on every visit, so no two people start on the same song.",
       "Free to use, with no account, no app and no download.",
-      "Nonstop Bengali songs spanning the 1950s golden age to the 2020s.",
-      "Nine curated YouTube playlists, picked between on every visit.",
-      "The route runs Howrah Bridge to Esplanade to Gariahat, at night.",
       "Every track streams from its official upload on YouTube. Nothing is rehosted.",
+      "One of the experiences on Bengali Experience, with more playlists being added.",
     ],
   },
 };
@@ -142,7 +143,7 @@ export const PAGE_FAQ: Record<PageId, QA[]> = {
   home: [
     {
       q: "What is Bengali Experience?",
-      a: "Bengali Experience is a free collection of small websites, each built around one Bengali thing you would otherwise have to be in Bengal to have. Each one is an experience rather than a description of it: you open a page and the thing is already happening. The first is a night bus through Kolkata with the driver's playlist playing.",
+      a: "Bengali Experience is a digital collection of the small, everyday things a Bengali grows up inside, rebuilt one at a time as small websites. Each one is the experience rather than a description of it: you open a page and the thing is already happening. The first is a West Bengal bus with the driver's music playing.",
     },
     {
       q: "Is it free, and do I need an account?",
@@ -150,7 +151,7 @@ export const PAGE_FAQ: Record<PageId, QA[]> = {
     },
     {
       q: "What can I do on it right now?",
-      a: "One experience is live: the Bengali Bus Driver Playlist, which puts you on a night bus across Kolkata with nonstop Bangla music from the 1950s to the 2020s. Three more are being built.",
+      a: "One experience is open: the Bengali Bus Driver Playlist, which puts you on a West Bengal bus with the driver's music playing, the Bangla songs that actually come out of the speakers on a Kolkata route. Three more are being built.",
     },
     {
       q: "What is coming next?",
@@ -162,7 +163,7 @@ export const PAGE_FAQ: Record<PageId, QA[]> = {
     },
     {
       q: "Why does this exist?",
-      a: "Because most of Bengali culture online is documentation: articles about the festivals, photo essays about the city, recipe posts about the food. Very little of it lets you actually sit inside any of it for an hour. These are attempts to rebuild the feeling of a thing rather than the record of it, for anyone who is far from home or was never there to begin with.",
+      a: "Because Bengali culture online is almost all documentation: articles about the festivals, photo essays about the city, recipe posts about the food. The record survives and the feeling does not. And it was never the festivals that people miss most, it was the ordinary hours around them, which nobody thinks to write down because nobody thinks they are going anywhere. These rebuild the feeling rather than the record, for anyone far from home or never there in the first place.",
     },
     {
       q: "Who makes it?",
@@ -172,23 +173,35 @@ export const PAGE_FAQ: Record<PageId, QA[]> = {
   busdriver: [
     {
       q: "What is the Bengali Bus Driver Playlist?",
-      a: "It is a free website that plays curated Bengali music nonstop, staged as a night bus ride across Kolkata. It borrows its name from the mixed, unpredictable Bangla music you hear on a Kolkata bus, where golden age film songs sit next to 90s band anthems next to this year's hits.",
+      a: "It is a website that puts you on a West Bengal bus with the driver's music playing: nonstop Bangla bangers from the 90s to the 20s, shuffled fresh on every visit. It is named after the real thing, the playlist that runs off a phone or a USB stick at the front of the bus for the whole route, whether the passengers asked for it or not.",
+    },
+    {
+      q: "What kind of Bengali songs does it play?",
+      a: "Bangla bangers from the 90s through to the 20s. The film and adhunik songs that get played to death on buses, the ones everyone knows the chorus of without ever having chosen to learn it, rather than a considered best-of list.",
+    },
+    {
+      q: "Why is the bus driver playlist a thing?",
+      a: "Because for most people in India the bus is where film music is actually heard. The driver picks it, it plays loud through worn speakers for the length of the journey, and a whole generation learned the same few hundred songs that way without ever choosing them. It became an internet genre in the 2020s, first for Hindi film songs and then in every regional language, because the sound is so specific that people recognise it instantly.",
+    },
+    {
+      q: "How does it fit with Bengali Experience?",
+      a: "It is the first of them. Bengali Experience is a digital collection of the small, ordinary things a Bengali grows up inside, and the driver's music on a bus is one of those things: nobody chooses it, everybody knows it, and it is the sound of getting somewhere. Mahalaya listening, Durga Puja pandal hopping and the Sunday afternoon are being built alongside it.",
     },
     {
       q: "Is it free, and do I need an account?",
       a: "It is completely free and needs no login, no signup and no app. Open the page and the music starts. The sound switches on with your first tap or click, because browsers block audible autoplay until you interact with the page.",
     },
     {
-      q: "What kind of Bengali songs does it play?",
-      a: "Bangla adhunik and film songs from the golden age, the Bangla band era of the 90s and 2000s, and modern Bengali hits. That covers Hemanta Mukherjee, Manna Dey and Kishore Kumar, through Kabir Suman, Nachiketa, Anjan Dutt and Fossils, to Anupam Roy, Arijit Singh and Iman Chakraborty.",
+      q: "Does the same music play every time?",
+      a: "No. The playlist is shuffled on every visit and playback starts at a random point in it, so two people opening the site in the same minute begin on different songs, and coming back tomorrow does not replay today.",
     },
     {
       q: "Where does the music come from?",
-      a: "Every track streams from its official upload on YouTube. Nothing is rehosted or downloadable, and the playlists update themselves, so a song added on YouTube appears on the site immediately.",
+      a: "Every track streams from its official upload on YouTube. Nothing is rehosted or downloadable, and the playlist updates itself, so a song added on YouTube appears on the site immediately.",
     },
     {
-      q: "Does the same music play every time?",
-      a: "No. Nine curated playlists sit behind the bus and one is chosen on each visit, weighted by the hour in Kolkata and biased away from the last few you were given. Two people opening the site in the same minute get different rides.",
+      q: "Will there be more playlists?",
+      a: "Yes. There is one right now and more are being added. The site is built to hold several and pick between them, so new lists appear in the ride without anything else changing.",
     },
     {
       q: "Does it work on a phone?",

@@ -47,7 +47,7 @@ export function HomePage() {
           className="pt-10 sm:pt-16"
         >
           <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-primary/90 sm:text-xs">
-            Bengal, on purpose
+            The ordinary hours, kept
           </p>
           <h1 className="font-display mt-2 text-4xl font-extrabold leading-[0.95] text-on-surface sm:text-6xl">
             {BRAND.nameEn}
@@ -56,22 +56,6 @@ export function HomePage() {
             {seo.intro}
           </p>
         </motion.header>
-
-        <motion.ul
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.15 }}
-          className="mt-7 flex flex-wrap gap-x-5 gap-y-2 text-[11px] text-on-surface-muted/80 sm:text-xs"
-        >
-          {["Free, no login", "No app to install", "Written in English", "Made in Kolkata"].map(
-            (f) => (
-              <li key={f} className="flex items-center gap-2">
-                <span className="size-1 rounded-full bg-primary/80" />
-                {f}
-              </li>
-            ),
-          )}
-        </motion.ul>
 
         <section aria-labelledby="experiences" className="mt-14">
           <h2

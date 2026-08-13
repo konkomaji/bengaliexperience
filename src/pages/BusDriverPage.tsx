@@ -1,7 +1,6 @@
 import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import { TOTAL_TRACKS } from "../data/playlists";
-import { SCENE } from "../data/scene";
 import { PAGE_PATH, PAGE_SEO } from "../data/seo";
 import { BRAND } from "../data/brand";
 import { buildJsonLd } from "../lib/jsonld";
@@ -19,7 +18,7 @@ import { TicketSheet } from "../components/TicketSheet";
 import { JsonLd } from "../components/JsonLd";
 
 /**
- * The bus. One scene, one night, nine playlists behind it.
+ * The bus. One scene, and the driver's playlist running behind it.
  *
  * This used to be four near-identical pages with a route chooser on top, and
  * switching route rerolled the playlist. Both are gone: there is one place
@@ -70,13 +69,6 @@ export function BusDriverPage() {
 
         <main className="flex flex-1 flex-col items-center px-4 pb-4 pt-32 sm:pt-28">
           <Hero trackCount={TOTAL_TRACKS} onHonk={honk} />
-
-          <p
-            className="pointer-events-none mt-3 max-w-md text-center font-display text-xs text-white/75 sm:text-sm"
-            style={{ textShadow: "0 1px 10px rgba(0,0,0,0.85)" }}
-          >
-            {SCENE.tagline}
-          </p>
 
           <div className="flex-1" />
 

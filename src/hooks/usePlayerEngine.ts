@@ -7,6 +7,19 @@ import { loadYouTubeApi } from "./useYouTubeApi";
 export const PLAYER_MOUNT_ID = "yt-audio-mount";
 const VOLUME_KEY = "be:volume";
 
+/**
+ * Where in a list to start.
+ *
+ * Taken from the declared track count rather than the loaded tracklist,
+ * because this has to be decided before the player exists. If the count is
+ * stale and the index overshoots, YouTube falls back to the first track,
+ * which is exactly the behaviour this replaces, so a wrong guess costs
+ * nothing.
+ */
+function randomStartIndex(p: PlaylistDef): number {
+  return Math.floor(Math.random() * Math.max(1, Math.floor(p.approxTracks)));
+}
+
 export interface Track {
   videoId: string;
   title: string;
@@ -151,14 +164,58 @@ export function usePlayerEngine() {
     [sync],
   );
 
+  /**
+   * Turn shuffle on, once there is a list to shuffle.
+   *
+   * `setShuffle(true)` is a silent no-op if the tracklist has not arrived yet,
+   * which is exactly how a "shuffled" playlist ends up opening on track one
+   * for every visitor forever. So this waits for `getPlaylist()` to answer.
+   *
+   * Shuffle only governs where *next* goes. Where the session *starts* is
+   * handled by `randomStartIndex` at load time, because that is the part
+   * YouTube will not let you change once the player is running.
+   */
+  const enableShuffleRef = useRef<(attempt?: number) => void>(() => {});
+  const enableShuffle = useCallback((attempt = 0) => {
+    const player = playerRef.current;
+    if (!player) return;
+    const list = player.getPlaylist?.();
+    if (!Array.isArray(list) || list.length === 0) {
+      // ~5s of patience in 250ms steps. Beyond that the list is not coming and
+      // verifyLoaded / onError own the failure.
+      if (attempt < 20) window.setTimeout(() => enableShuffleRef.current(attempt + 1), 250);
+      return;
+    }
+    player.setShuffle(true);
+  }, []);
+  enableShuffleRef.current = enableShuffle;
+
   const loadPlaylistInto = useCallback((p: PlaylistDef) => {
     const player = playerRef.current;
     if (!player) return;
     const before = player.getPlaylist?.() ?? null;
-    player.loadPlaylist({ list: p.id, listType: "playlist", index: 0 });
-    player.setShuffle(true);
+    player.loadPlaylist({ list: p.id, listType: "playlist", index: randomStartIndex(p) });
+    enableShuffle();
     verifyLoaded(p, before);
-  }, [verifyLoaded]);
+  }, [verifyLoaded, enableShuffle]);
+
+  /**
+   * Reshuffle and keep going on the list we already have.
+   *
+   * With a single playlist there is nothing to roll to, so "the list ended"
+   * must not mean "the bus is over". Reshuffling and restarting at a random
+   * point is what a driver with one cassette does: flip it and keep driving.
+   */
+  const restartShuffled = useCallback(() => {
+    const player = playerRef.current;
+    if (!player) return false;
+    const list = player.getPlaylist?.();
+    if (!Array.isArray(list) || list.length === 0) return false;
+    player.setShuffle(true);
+    player.playVideoAt(Math.floor(Math.random() * list.length));
+    player.playVideo();
+    return true;
+  }, []);
 
   const rollToNextPlaylist = useCallback(async () => {
     // ask oEmbed first: a refused list is skipped in ~100ms instead of costing
@@ -177,15 +234,44 @@ export function usePlayerEngine() {
       loadPlaylistInto(next);
       return;
     }
+    // Nothing to roll to. If the list we are on is still playable, that is not
+    // a breakdown, it is just the end of the tape: reshuffle it and carry on.
+    // Only a list that cannot play at all is worth stopping for.
+    if (!deadRef.current.has(playlistRef.current.id) && restartShuffled()) return;
     setStalled(true);
-  }, [loadPlaylistInto]);
+  }, [loadPlaylistInto, restartShuffled]);
   rollRef.current = rollToNextPlaylist;
 
-  /** mark the current list unplayable and move on */
+  /**
+   * Mark the current list unplayable and move on.
+   *
+   * Except when there is nowhere to move to. With a single playlist, writing
+   * it off over what is usually just a slow start ends the ride permanently:
+   * the watchdog fires at 8s, the only list is declared dead, and the player
+   * sits on "Boarding…" forever with nothing left to try. So when there is no
+   * alternative, reload the same list from a different point and only give up
+   * after a few honest attempts.
+   */
+  const soloRetriesRef = useRef(0);
   const abandonCurrentPlaylist = useCallback(() => {
-    deadRef.current.add(playlistRef.current.id);
+    const current = playlistRef.current;
+    const hasAlternative = PLAYLISTS.some(
+      (p) => p.id !== current.id && !deadRef.current.has(p.id),
+    );
+
+    if (!hasAlternative) {
+      if (soloRetriesRef.current < 3) {
+        soloRetriesRef.current += 1;
+        loadPlaylistInto(current);
+        return;
+      }
+      setStalled(true);
+      return;
+    }
+
+    deadRef.current.add(current.id);
     rollToNextPlaylist();
-  }, [rollToNextPlaylist]);
+  }, [loadPlaylistInto, rollToNextPlaylist]);
 
   // create the player once
   useEffect(() => {
@@ -210,6 +296,11 @@ export function usePlayerEngine() {
         playerVars: {
           listType: "playlist",
           list: playlistRef.current.id,
+          // Where the ride starts. Set here because it is the only place it
+          // takes: once the player is running, YouTube ignores a jump issued
+          // during startup, which is why every visitor used to open on the
+          // same first track no matter what shuffle said.
+          index: randomStartIndex(playlistRef.current),
           autoplay: 1,
           // muted at load, not just in onReady — Chrome decides whether to
           // honour autoplay when the iframe loads, before onReady ever fires
@@ -225,8 +316,12 @@ export function usePlayerEngine() {
           onReady: (e) => {
             e.target.setVolume(volumeRef.current);
             e.target.mute(); // required for autoplay to be allowed
-            e.target.setShuffle(true);
             e.target.playVideo();
+            // Shuffle governs what comes next. The opening track is already
+            // random via the `index` playerVar, which is the only way to
+            // choose it: playVideoAt during startup is quietly ignored, so
+            // asking for a random track here left everyone on track one.
+            enableShuffleRef.current();
             // they already clicked something while we were loading — spend
             // that gesture now rather than making them find the mute button
             if (wantsSoundRef.current) {
@@ -243,6 +338,7 @@ export function usePlayerEngine() {
             if (e.data === S.PLAYING) {
               setIsPlaying(true);
               errorRunRef.current = 0;
+              soloRetriesRef.current = 0; // it started; the retry budget resets
               sync();
             } else if (e.data === S.PAUSED) {
               setIsPlaying(false);
@@ -326,7 +422,10 @@ export function usePlayerEngine() {
 
     const from = p.getVolume?.() ?? volumeRef.current;
     const to = ducked ? Math.round(volumeRef.current * 0.12) : volumeRef.current;
-    const steps = ducked ? 8 : 22; // fast out, slow back in
+    // Fast out, slower back in. The return was 22 steps when the horn held for
+    // 3.4s; against a 1.2s stab that left the music crawling back up long
+    // after the horn had stopped, which read as a bug rather than a duck.
+    const steps = ducked ? 6 : 14;
     let n = 0;
 
     duckTimerRef.current = window.setInterval(() => {

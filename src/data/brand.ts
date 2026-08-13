@@ -14,7 +14,7 @@ export const BRAND = {
   nameEn: "Bengali Experience",
   seoTitle: "Bengali Experience: Bengal, Bangla Culture and Nostalgia, Free",
   tagline:
-    "Small free experiences that put you inside something Bengali for a while. A night bus through Kolkata with the radio on, and more to come.",
+    "A digital collection of the small, ordinary things a Bengali grows up inside, rebuilt to sit inside again from anywhere. The music off a West Bengal bus is the first.",
   /**
    * Canonical origin. Every absolute URL the site emits, canonical links,
    * og:url, JSON-LD @ids, the sitemap, is built from this, so it is the only

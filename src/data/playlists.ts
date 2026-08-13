@@ -1,20 +1,24 @@
 /**
- * The source playlists — curated on YouTube, loaded natively by the player.
+ * The source playlists, curated on YouTube and loaded natively by the player.
  *
  * Nothing is copied into this repo but the ids: the player loads each list
  * with `listType: "playlist"`, so adding a song on YouTube shows up on the
  * site immediately with no redeploy.
  *
- * There is deliberately NO route→playlist mapping. On every page load a
- * playlist is picked at random and shuffled, so two people opening the site
- * at the same moment hear different things.
+ * **There is one list right now.** There were nine, and seven of them were
+ * made in YouTube Music, which means the IFrame player silently refuses them
+ * (see below). A site that advertises nine playlists and can actually play two
+ * is lying to its visitors, so the shelf is honest instead: one list that
+ * definitely works, shuffled fresh on every visit. The array shape stays
+ * because more will be added back, and every piece of machinery around it,
+ * weighted opening pick, roll-on-death, the queue chips, keeps working
+ * unchanged whether there is one entry or nine.
  *
  * Each list must be **Public** on YouTube. Unlisted opens fine from a share
- * link, so it looks correct — but the IFrame player refuses an unlisted list
+ * link, so it looks correct, but the IFrame player refuses an unlisted list
  * with error 150 and loads no tracks at all. `usePlayerEngine` detects that
- * and rolls to another list, so the site keeps playing, but an unlisted
- * playlist is dead weight. See the README's "Playlist visibility" section for
- * the one-line curl check.
+ * and rolls to another list, so the site keeps playing. See the README's
+ * "Playlist visibility" section for the one-line curl check.
  */
 export interface PlaylistDef {
   id: string;
@@ -26,25 +30,21 @@ export interface PlaylistDef {
   approxTracks: number;
   /**
    * Where the list was made. A list created in YouTube Music has an ordinary
-   * `PL…` id and opens fine on youtube.com, but the IFrame player refuses it
-   * — so this is the first thing to check when one never plays.
+   * `PL…` id and opens fine on youtube.com, but the IFrame player refuses it,
+   * so this is the first thing to check when one never plays.
    * `npm run check:playlists` tells you which are which.
    */
   source: "youtube" | "ytmusic";
 }
 
 export const PLAYLISTS: PlaylistDef[] = [
-  { id: "PLWzyF_ApjghE", label: "Bengali Experience", youtubeTitle: "bengaliexperience", approxTracks: 1, source: "youtube" },
-  { id: "PL4IRGlqSrXU7ivggI5cW7DgvX2q8v-wUs", label: "Life", youtubeTitle: "জীবনমুখী গান", approxTracks: 200, source: "youtube" },
-  // Made in YouTube Music — these do not embed. Recreating each one as a
-  // public playlist on youtube.com is what brings them back.
-  { id: "PLnQRIdwY8diCFEi6ekCSm1u1EJ1J7-TTZ", label: "20's Bangers", youtubeTitle: "20's Bangla Bangers", approxTracks: 55, source: "ytmusic" },
-  { id: "PLnQRIdwY8diCMRCkSXI1EGwQzt5uya1J1", label: "Aesthetics", youtubeTitle: "Bengali Aesthetics", approxTracks: 100, source: "ytmusic" },
-  { id: "PLnQRIdwY8diA0LxQeemuQWFhItFix_ejO", label: "To You", youtubeTitle: "To You", approxTracks: 98, source: "ytmusic" },
-  { id: "PLnQRIdwY8diBEpkTck_TeBRNS4Li6KDre", label: "Sleeping Pills", youtubeTitle: "Sleeping pills (Bengali)", approxTracks: 27, source: "ytmusic" },
-  { id: "PLnQRIdwY8diBYtMHUxRUzYD7AK2yUe3y4", label: "Band Era", youtubeTitle: "Era of Bangla Bands", approxTracks: 54, source: "ytmusic" },
-  { id: "PLnQRIdwY8diBdGXo-oIe3PVpnhc17-YhS", label: "(G)old Classics", youtubeTitle: "(G)old Bengali Classics", approxTracks: 43, source: "ytmusic" },
-  { id: "PLnQRIdwY8diDj2qzl00YUcMQinJPTzzFs", label: "Evergreen", youtubeTitle: "Bengali Evergreen", approxTracks: 48, source: "ytmusic" },
+  {
+    id: "PLSM1cw8guacZUvwhGL6F651j1skSEdjKw",
+    label: "OG Kumar Sanu",
+    youtubeTitle: "KUMAR SANU SPECIAL BENGALI SONGS",
+    approxTracks: 93,
+    source: "youtube",
+  },
 ];
 
 export const TOTAL_TRACKS = PLAYLISTS.reduce((n, p) => n + p.approxTracks, 0);

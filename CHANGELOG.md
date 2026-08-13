@@ -75,6 +75,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Live listener count animates when the number changes.
 
 ### Changed
+- **One playlist, honestly, instead of nine that mostly did not work.** Seven
+  of the nine were made in YouTube Music, which the IFrame player silently
+  refuses, so the site advertised nine and was really running on two. They are
+  all gone, replaced by one list that definitely plays: **OG Kumar Sanu**, 93
+  tracks. More will be added; nothing around `PLAYLISTS` cares how long the
+  array is.
+- **A random start on every visit, for everyone.** Shuffle was being set on
+  `onReady` and a random track requested with `playVideoAt`, and both were
+  silently ignored during startup, so every visitor opened on track one while
+  the code read as though it were working. The opening position is now set
+  through the `index` player variable when the player is built, which is the
+  only moment YouTube honours it. `setShuffle` still runs, but only once
+  `getPlaylist()` answers, since it is a no-op before the tracklist lands.
+- **The horn is a bus horn now.** Indian commercial vehicles run
+  ARAI-certified dual-tone horns at 420 Hz and 560 Hz, a perfect fourth apart,
+  and that interval is what makes the sound placeable. It was a minor third,
+  which read as a foghorn. The blast is **1.2s** rather than 3.4s, because a
+  driver taps the horn instead of leaning on it, with a faster attack, a
+  shorter release, and the lowpass opened from 2.6kHz to 4.2kHz because the
+  brightness is the part that carries. Ducking was retimed to match.
 - **Four routes became one.** Digha, Darjeeling and Shantiniketan are gone,
   along with the route pills and the reroll-on-route-change. The chooser was a
   menu sitting in front of an experience whose whole point is that you do not
@@ -121,6 +141,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   structured data and search.
 
 ### Fixed
+- **A single slow start could end the ride permanently.** The 8s watchdog
+  marked a playlist unplayable and rolled on, which is correct with nine lists
+  and fatal with one: the only list got written off over a slow network and the
+  player sat on "Boarding…" with nothing left to try. It now checks whether an
+  alternative exists before declaring anything dead, and reloads the same list
+  from a different point up to three times when none does. Reaching the end of
+  the last list reshuffles instead of stalling.
 - **`/kolkata` declared itself canonical.** It is an alias that the router
   redirects to `/`, but the edge built the canonical link from the requested
   path, so the alias pointed at itself and competed with the page it aliases —
@@ -165,9 +192,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The `H` horn shortcut appeared in the on-screen legend but was never wired up.
 
 ### To do
-- Recreate the seven YouTube Music playlists as public playlists **on
-  youtube.com** — until then the site rides on two lists. Verify with
-  `npm run check:playlists`.
+- Add more playlists. There is one, which is honest but thin for a site whose
+  whole pitch is that no two rides are alike. Any new list must be made **on
+  youtube.com**, not in YouTube Music, or the embed will refuse it silently;
+  verify with `npm run check:playlists` before adding it to `PLAYLISTS`.
 - Verify layout on real mobile hardware (narrow-viewport rendering has not yet
   been visually confirmed — see Known issues).
 - Submit `https://bengaliexperience.wtf/sitemap.xml` to Google Search Console

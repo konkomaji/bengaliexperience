@@ -34,9 +34,9 @@ export const EXPERIENCES: Experience[] = [
     id: "busdriver",
     name: "Bus Driver",
     path: "/busdriver",
-    occasion: "Any night, any hour",
+    occasion: "Any day, any hour",
     blurb:
-      "Ride a night bus through Kolkata with the driver's own playlist on, Bangla songs from the golden age to this year, shuffled fresh so no two rides sound alike.",
+      "The music that actually plays on a West Bengal bus, running nonstop while the city goes past. Shuffled fresh on every visit, so no two rides start the same.",
     status: "live",
   },
   {
@@ -44,7 +44,7 @@ export const EXPERIENCES: Experience[] = [
     name: "Mahalaya Listening",
     occasion: "Dawn on Mahalaya, a week before the pujo",
     blurb:
-      "Sit with the broadcast the way Bengal has since the 1930s: Mahishasuramardini at four in the morning, Birendra Krishna Bhadra reading the Chandi while the sky is still dark.",
+      "Sit with the broadcast the way Bengal has since the 1930s. Mahishasuramardini at four in the morning, Birendra Krishna Bhadra reading the Chandi while the sky is still dark.",
     status: "planned",
   },
   {
@@ -60,7 +60,7 @@ export const EXPERIENCES: Experience[] = [
     name: "Sunday Afternoon",
     occasion: "Every Sunday, roughly two o'clock",
     blurb:
-      "Mangshor jhol and rice, the fan turning, a Bangla natok on the radio, and the long bhaat-ghum that follows. The slowest hour in the Bengali week, kept exactly as slow.",
+      "Mangsho bhaat, mutton and rice, the fan turning, a Bangla natok on the radio, and the long bhaat-ghum that follows. The slowest hour in the Bengali week, kept exactly as slow.",
     status: "planned",
   },
 ];

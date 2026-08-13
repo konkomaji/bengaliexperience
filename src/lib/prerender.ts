@@ -79,7 +79,9 @@ function busBody(): string[] {
     `<p>${escape(SCENE.tagline)}. ${escape(SCENE.heroAlt)}</p>`,
     `<h2>What plays</h2>`,
     `<p>${escape(
-      `${PLAYLISTS.length} curated Bengali playlists, roughly ${TOTAL_TRACKS} tracks in total, streamed from their official YouTube uploads and reshuffled on every visit.`,
+      PLAYLISTS.length === 1
+        ? `One curated Bengali playlist, ${TOTAL_TRACKS} tracks, streamed from their official YouTube uploads and reshuffled on every visit. More playlists are being added.`
+        : `${PLAYLISTS.length} curated Bengali playlists, roughly ${TOTAL_TRACKS} tracks in total, streamed from their official YouTube uploads and reshuffled on every visit.`,
     )}</p>`,
     `<ul>${lists}</ul>`,
     `<p><a href="${PAGE_PATH.home}">${escape(
