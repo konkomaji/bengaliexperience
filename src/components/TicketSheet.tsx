@@ -1,35 +1,38 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import type { RouteDef } from "../data/routes";
+import { SCENE } from "../data/scene";
 import { BRAND } from "../data/brand";
+import { PAGE_PATH, PAGE_SEO } from "../data/seo";
 
 /**
- * The share affordance, dressed as a real bus ticket — cream stock, punched
+ * The share affordance, dressed as a real bus ticket: cream stock, punched
  * perforation, tear-off counterfoil with a barcode. Sharing a "ticket" is a
  * lot more fun to send someone than a bare link, which is the entire point.
+ *
+ * The link it shares is the bus page rather than the site root, so whoever
+ * opens it lands on the thing they were sent, not on the shelf it sits on.
  */
 export function TicketSheet({
-  open, onClose, route, song, seatNo,
+  open, onClose, song, seatNo,
 }: {
   open: boolean;
   onClose: () => void;
-  route: RouteDef;
   song: { title: string; artist: string } | undefined;
   /** position in the current playlist, printed as the seat number */
   seatNo: number;
 }) {
   const [copied, setCopied] = useState(false);
 
-  const shareUrl = BRAND.url;
+  const shareUrl = BRAND.url + PAGE_PATH.busdriver;
   const shareText = song
-    ? `"${song.title}" — ${song.artist}. Aboard the ${route.name} bus.`
-    : BRAND.seoTitle;
-  const seat = `${route.id.slice(0, 2).toUpperCase()}-${String(seatNo).padStart(2, "0")}`;
+    ? `"${song.title}" by ${song.artist}. Aboard the ${SCENE.name} bus.`
+    : PAGE_SEO.busdriver.title;
+  const seat = `${SCENE.name.slice(0, 2).toUpperCase()}-${String(seatNo).padStart(2, "0")}`;
 
   async function share() {
     if (navigator.share) {
       try {
-        await navigator.share({ title: BRAND.seoTitle, text: shareText, url: shareUrl });
+        await navigator.share({ title: PAGE_SEO.busdriver.title, text: shareText, url: shareUrl });
         return;
       } catch {
         /* dismissed — fall through to clipboard */
@@ -72,7 +75,7 @@ export function TicketSheet({
                 <div className="flex items-start justify-between">
                   <div>
                     <p className="text-[8px] uppercase tracking-[0.28em] text-[#2a1f14]/50">Passenger copy</p>
-                    <p className="font-display text-lg font-extrabold leading-tight">{route.name}</p>
+                    <p className="font-display text-lg font-extrabold leading-tight">{SCENE.name}</p>
                   </div>
                   <span className="rounded-full border-2 border-[#b23a1f] px-2 py-1 text-[8px] font-black tracking-widest text-[#b23a1f]"
                     style={{ transform: "rotate(-8deg)" }}>
@@ -80,7 +83,7 @@ export function TicketSheet({
                   </span>
                 </div>
 
-                <p className="mt-1 text-[10px] text-[#2a1f14]/60">{route.ticker}</p>
+                <p className="mt-1 text-[10px] text-[#2a1f14]/60">{SCENE.ticker}</p>
 
                 <div className="mt-3 border-t border-dashed border-[#2a1f14]/25 pt-2">
                   <p className="text-[8px] uppercase tracking-[0.22em] text-[#2a1f14]/50">Now playing</p>

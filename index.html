@@ -11,56 +11,63 @@
     <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="Bus Driver" />
+    <meta name="apple-mobile-web-app-title" content="Bengali Experience" />
 
-    <title>Bengali Bus Driver Playlist — Bangers from 90s to 20s</title>
+    <!--
+      One HTML shell for the whole site. Everything below that names a page
+      rather than the project is a default for the front page, and is rewritten
+      per URL at the edge before the response ships: see
+      functions/_middleware.ts. HTMLRewriter edits elements, it cannot invent
+      ones the document never had, so every tag it needs to touch has to exist
+      here first.
+    -->
+    <title>Bengali Experience: Bengal, Bangla Culture and Nostalgia, Free</title>
     <meta
       name="description"
-      content="Press play on the Bengali bus driver playlist — nonstop Bangla bangers from the 90s to the 20s, Kumar Sanu and Nachiketa to Anupam Roy and Arijit. Free, no login, straight through Kolkata at night."
+      content="Bengali Experience is a free collection of small websites that let you live one Bengali thing at a time. A night bus through Kolkata with the driver's playlist on is the first. Mahalaya, pandal hopping and the Sunday afternoon are coming. No login, no app."
     />
     <meta
       name="keywords"
-      content="bengali bus driver playlist,bangla gaan playlist,bengali songs 90s,bangla hit songs nonstop,kumar sanu bengali songs,anupam roy songs,arijit singh bengali songs,kolkata bus playlist,বাংলা গান প্লেলিস্ট"
+      content="bengali experience,bengali culture website,bangla culture online,bengali nostalgia,kolkata nostalgia,bengali culture for the diaspora,durga puja online experience,mahalaya online,bangla adda,bengali interactive website"
     />
     <meta name="robots" content="index, follow" />
     <meta name="googlebot" content="index, follow, max-image-preview:large" />
-    <meta name="category" content="music" />
+    <meta name="category" content="culture" />
     <link rel="canonical" href="https://bengaliexperience.wtf/" />
 
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Bengali Bus Driver Playlist" />
+    <meta property="og:site_name" content="Bengali Experience" />
     <meta property="og:locale" content="en_IN" />
-    <meta property="og:title" content="Bengali Bus Driver Playlist — Bangers from 90s to 20s" />
+    <meta property="og:title" content="Bengali Experience: Bengal, Bangla Culture and Nostalgia, Free" />
     <meta
       property="og:description"
-      content="Nonstop Bangla bangers from the 90s to the 20s — Kumar Sanu to Arijit. Free, no login."
+      content="Small free experiences that put you inside something Bengali for a while. A night bus through Kolkata with the radio on, and more to come."
     />
     <meta property="og:url" content="https://bengaliexperience.wtf/" />
     <!--
-      Social card. These defaults are the Kolkata (home) route; every other
-      route swaps in its own card at the edge — see functions/_middleware.ts.
-      The *:image:alt tags have to exist here for HTMLRewriter to rewrite them:
-      it edits elements, it cannot invent ones the document never had.
+      One social card for the whole site. There is one illustration in the
+      project and both pages are about the same thing, so a second near
+      identical crop would be duplication dressed up as thoroughness.
     -->
-    <meta property="og:image" content="https://bengaliexperience.wtf/og/og-kolkata.jpg" />
+    <meta property="og:image" content="https://bengaliexperience.wtf/opengraph.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:type" content="image/jpeg" />
     <meta
       property="og:image:alt"
-      content="A yellow and red Kolkata bus with luggage roped to its roof, stopped on wet tram lines at dusk with the Howrah Bridge and an Ambassador taxi behind it."
+      content="A yellow and red Kolkata bus with luggage roped to its roof, stopped on wet tram lines at dusk, with the Howrah Bridge and an Ambassador taxi behind it."
     />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Bengali Bus Driver Playlist — Bangers from 90s to 20s" />
+    <meta name="twitter:title" content="Bengali Experience: Bengal, Bangla Culture and Nostalgia, Free" />
     <meta
       name="twitter:description"
-      content="Nonstop Bangla bangers from the 90s to the 20s — Kumar Sanu to Arijit. Free, no login."
+      content="Small free experiences that put you inside something Bengali for a while. A night bus through Kolkata with the radio on, and more to come."
     />
-    <meta name="twitter:image" content="https://bengaliexperience.wtf/og/og-kolkata.jpg" />
+    <meta name="twitter:image" content="https://bengaliexperience.wtf/opengraph.jpg" />
     <meta
       name="twitter:image:alt"
-      content="A yellow and red Kolkata bus with luggage roped to its roof, stopped on wet tram lines at dusk with the Howrah Bridge and an Ambassador taxi behind it."
+      content="A yellow and red Kolkata bus with luggage roped to its roof, stopped on wet tram lines at dusk, with the Howrah Bridge and an Ambassador taxi behind it."
     />
 
     <link rel="preconnect" href="https://www.youtube.com" />

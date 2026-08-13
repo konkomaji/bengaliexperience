@@ -1,6 +1,5 @@
 import { useState } from "react";
-import type { RouteDef } from "../data/routes";
-import { ROUTE_SEO } from "../data/seo";
+import { SCENE } from "../data/scene";
 
 /**
  * The scene behind everything.
@@ -19,7 +18,7 @@ import { ROUTE_SEO } from "../data/seo";
  *   3  legibility washes — top and bottom darkened so header/player text reads
  *   4  film grain
  */
-export function HeroScene({ route, honking = false }: { route: RouteDef; honking?: boolean }) {
+export function HeroScene({ honking = false }: { honking?: boolean }) {
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
 
@@ -50,11 +49,11 @@ export function HeroScene({ route, honking = false }: { route: RouteDef; honking
           style={{ animation: loaded ? "var(--animate-engine-bob)" : undefined }}
         >
           <img
-            src={route.hero}
+            src={SCENE.hero}
             // Not decorative: this illustration is the entire visual content
-            // of the page, so it gets the same description the social card
-            // and the structured data use.
-            alt={ROUTE_SEO[route.id].imageAlt}
+            // of the page, so it gets the same description the structured
+            // data uses.
+            alt={SCENE.heroAlt}
             fetchPriority="high"
             decoding="async"
             onLoad={() => setLoaded(true)}

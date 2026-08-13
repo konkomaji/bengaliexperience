@@ -8,6 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **The site is a collection now, and the bus is one thing in it.** `/` is a
+  front page for Bengali Experience itself: what the project is, why it
+  exists, and what is on the shelf. `src/data/experiences.ts` is that shelf,
+  with the bus live and three more named and in progress: Mahalaya listening,
+  Durga Puja pandal hopping, and the Bengali Sunday afternoon. Planned entries
+  carry no URL anywhere, including in the structured data, because a stub page
+  with no experience behind it is a thin page and thin pages cost more than
+  they return.
+- **The bus moved to `/busdriver`.** The two pages chase different searches.
+  The front page answers "what is this", which is brand and culture intent;
+  the bus page carries "bengali bus driver playlist", the highest-volume
+  phrase here, and now gets a page that is only about it. Neither has to
+  compromise its title for the other.
 - **The player runs on YouTube playlists, not a hardcoded tracklist.** The
   45-track array in `src/data/songs.ts` is gone; the engine loads nine real
   playlists natively (`listType: "playlist"`), so adding a song on YouTube
@@ -62,6 +75,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Live listener count animates when the number changes.
 
 ### Changed
+- **Four routes became one.** Digha, Darjeeling and Shantiniketan are gone,
+  along with the route pills and the reroll-on-route-change. The chooser was a
+  menu sitting in front of an experience whose whole point is that you do not
+  choose, you get on, and four near-identical pages were competing for one
+  search intent. `/kolkata`, `/digha`, `/darjeeling` and `/shantiniketan` all
+  301 to `/busdriver`. Everything else the bus does is untouched: nine
+  playlists, weighted opener selection, the horn and its ducking, the queue,
+  the ticket, the aboard counter, the scene motion.
+- **One social card instead of four.** With one illustration left in the
+  project, per-page crops of it would have been duplication dressed up as
+  thoroughness. `public/opengraph.jpg` serves both pages, and
+  `scripts/make-og-images.mjs` is gone with the routes it existed for.
+- **No em dashes in any visible copy.** Commas, full stops and colons only.
+  Code comments are unaffected.
 - **`sitemap.xml` and `llms.txt` are generated, not maintained.** Both were
   static files that repeated the route list, the domain and the whole FAQ, so
   every one of those facts existed twice and could quietly disagree with the
@@ -144,7 +171,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Verify layout on real mobile hardware (narrow-viewport rendering has not yet
   been visually confirmed — see Known issues).
 - Submit `https://bengaliexperience.wtf/sitemap.xml` to Google Search Console
-  and Bing Webmaster Tools.
+  and Bing Webmaster Tools, and re-submit after the move to `/busdriver` so
+  the four retired paths are recrawled and the 301s are seen.
+- Build the three planned experiences. Until one of them ships, the front page
+  is promising more than the site delivers, which is fine for a month and not
+  fine for a year.
 - Optional `clouds.png` overlay asset (the scene currently falls back to an
   inline haze, which looks fine).
 

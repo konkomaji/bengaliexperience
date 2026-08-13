@@ -1,136 +1,166 @@
 import { BRAND, DRIVER } from "../data/brand";
+import { EXPERIENCES } from "../data/experiences";
 import { PLAYLISTS, TOTAL_TRACKS } from "../data/playlists";
-import type { RouteDef, RouteId } from "../data/routes";
-import { DEFAULT_ROUTE, ROUTES } from "../data/routes";
-import { FAQ, ROUTE_PATH, ROUTE_SEO } from "../data/seo";
+import { SCENE } from "../data/scene";
+import { PAGE_FAQ, PAGE_PATH, PAGE_SEO, type PageId } from "../data/seo";
 
 /**
- * schema.org @graph for a route page.
+ * schema.org @graph, per page.
  *
- * The tracklists live on YouTube and change without a redeploy, so this no
- * longer enumerates individual recordings — asserting a fixed tracklist that
- * may already be stale would be worse than not asserting one. Instead it
- * describes the collection honestly and points at the real playlists, which
- * is both accurate and still citable by answer engines.
+ * Both pages share the entities that describe the project itself: the site,
+ * the person behind it, the social card. What differs is what the page is
+ * about. The home page's subject is the collection of experiences, so it
+ * carries an ItemList of them. The bus page's subject is the music, so it
+ * carries the MusicPlaylist.
+ *
+ * Tracklists are deliberately not enumerated. They live on YouTube and change
+ * without a redeploy, so asserting a fixed one would mean asserting something
+ * that is already going stale. The playlist-level facts are the ones that
+ * stay true.
  *
  * Used at the edge by functions/_middleware.ts for crawlers, and re-applied
- * client-side on navigation.
+ * client side on navigation.
  */
-export function buildJsonLd(routeId: RouteId, route: RouteDef) {
-  const seo = ROUTE_SEO[routeId];
-  const url = `${BRAND.url}${ROUTE_PATH[routeId]}`;
-  const image = `${BRAND.url}${route.og}`;
+export function buildJsonLd(pageId: PageId) {
+  const seo = PAGE_SEO[pageId];
+  const path = PAGE_PATH[pageId];
+  const url = BRAND.url + path;
+  const image = BRAND.url + BRAND.ogImage;
+  const isHome = pageId === "home";
+
+  /** One named human behind the site. An answer engine asked "who made this"
+   *  should not have to guess, and an attributed page is a stronger thing to
+   *  cite than an anonymous one. Person rather than Organization, because
+   *  that is what this actually is. */
+  const curator = {
+    "@type": "Person",
+    "@id": `${BRAND.url}/#curator`,
+    name: DRIVER.name,
+    description: DRIVER.bio,
+    url: BRAND.url,
+    sameAs: [DRIVER.href],
+  };
+
+  const website = {
+    "@type": "WebSite",
+    "@id": `${BRAND.url}/#website`,
+    url: BRAND.url,
+    name: BRAND.nameEn,
+    alternateName: [BRAND.seoTitle, "Bengali Experience"],
+    description: BRAND.tagline,
+    inLanguage: ["en-IN", "bn-IN"],
+    publisher: { "@id": `${BRAND.url}/#curator` },
+  };
+
+  const primaryImage = {
+    "@type": "ImageObject",
+    "@id": `${url}#primaryimage`,
+    url: image,
+    contentUrl: image,
+    width: 1200,
+    height: 630,
+    caption: BRAND.ogImageAlt,
+  };
+
+  const webPage = {
+    "@type": "WebPage",
+    "@id": `${url}#webpage`,
+    url,
+    name: seo.title,
+    description: seo.description,
+    isPartOf: { "@id": `${BRAND.url}/#website` },
+    inLanguage: "en-IN",
+    primaryImageOfPage: { "@id": `${url}#primaryimage` },
+    breadcrumb: { "@id": `${url}#breadcrumb` },
+    // "Free, no login" is the central claim of every page here and the thing
+    // people search for. Saying it in the field built for it is worth more
+    // than saying it again in prose.
+    isAccessibleForFree: true,
+    mainEntity: { "@id": isHome ? `${BRAND.url}/#experiences` : `${BRAND.url}/#collection` },
+    about: {
+      "@type": "Thing",
+      name: isHome ? "Bengali culture and nostalgia" : "Bengali music and the Kolkata night bus",
+    },
+  };
+
+  const faq = {
+    "@type": "FAQPage",
+    "@id": `${url}#faq`,
+    mainEntity: PAGE_FAQ[pageId].map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
+
+  // The home page is the top of the site, so its trail is one item. Listing
+  // the site and then the same URL again as its own child is a loop dressed
+  // up as a hierarchy.
+  const breadcrumb = {
+    "@type": "BreadcrumbList",
+    "@id": `${url}#breadcrumb`,
+    itemListElement: isHome
+      ? [{ "@type": "ListItem", position: 1, name: BRAND.nameEn, item: url }]
+      : [
+          { "@type": "ListItem", position: 1, name: BRAND.nameEn, item: `${BRAND.url}/` },
+          { "@type": "ListItem", position: 2, name: seo.h1, item: url },
+        ],
+  };
+
+  /** The shelf. Planned entries are listed without a URL, which is the honest
+   *  way to say "this is real and not built yet" in structured data. */
+  const experiences = {
+    "@type": "ItemList",
+    "@id": `${BRAND.url}/#experiences`,
+    name: "Bengali Experience: the collection",
+    numberOfItems: EXPERIENCES.length,
+    itemListElement: EXPERIENCES.map((e, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: e.name,
+      description: e.blurb,
+      ...(e.path ? { url: BRAND.url + e.path } : {}),
+    })),
+  };
+
+  const collection = {
+    "@type": "MusicPlaylist",
+    "@id": `${BRAND.url}/#collection`,
+    name: "Bengali Bus Driver Playlist",
+    description:
+      "A rotating collection of curated Bengali playlists spanning the golden age, the Bangla band era and modern hits, shuffled fresh on every visit.",
+    url: BRAND.url + PAGE_PATH.busdriver,
+    genre: ["Bengali music", "Bangla adhunik", "Bengali film music", "Bangla band"],
+    inLanguage: ["bn-IN", "en-IN"],
+    numTracks: TOTAL_TRACKS,
+    isAccessibleForFree: true,
+    creator: { "@id": `${BRAND.url}/#curator` },
+    hasPart: PLAYLISTS.map((p) => ({
+      "@type": "MusicPlaylist",
+      name: p.youtubeTitle,
+      url: `https://www.youtube.com/playlist?list=${p.id}`,
+      numTracks: p.approxTracks,
+    })),
+  };
+
+  const busImage = {
+    "@type": "ImageObject",
+    "@id": `${BRAND.url}${PAGE_PATH.busdriver}#scene`,
+    url: BRAND.url + SCENE.hero,
+    contentUrl: BRAND.url + SCENE.hero,
+    caption: SCENE.heroAlt,
+  };
 
   return {
     "@context": "https://schema.org",
     "@graph": [
-      // One named human behind the site. An answer engine asked "who made
-      // this?" should not have to guess, and an unattributed page is a weaker
-      // thing to cite than an attributed one. Person, not Organization,
-      // because that is what this actually is.
-      {
-        "@type": "Person",
-        "@id": `${BRAND.url}/#curator`,
-        name: DRIVER.name,
-        description: DRIVER.bio,
-        url: BRAND.url,
-        sameAs: [DRIVER.href],
-      },
-      {
-        "@type": "WebSite",
-        "@id": `${BRAND.url}/#website`,
-        url: BRAND.url,
-        name: BRAND.nameEn,
-        alternateName: [BRAND.seoTitle, "Bengali Bus Driver Playlist"],
-        description: BRAND.tagline,
-        inLanguage: ["en-IN", "bn-IN"],
-        publisher: { "@id": `${BRAND.url}/#curator` },
-      },
-      {
-        "@type": "ImageObject",
-        "@id": `${url}#primaryimage`,
-        url: image,
-        contentUrl: image,
-        width: 1200,
-        height: 630,
-        caption: seo.imageAlt,
-      },
-      {
-        "@type": "WebPage",
-        "@id": `${url}#webpage`,
-        url,
-        name: seo.title,
-        description: seo.description,
-        isPartOf: { "@id": `${BRAND.url}/#website` },
-        inLanguage: "en-IN",
-        about: { "@type": "Thing", name: `${route.name} bus route, West Bengal` },
-        mainEntity: { "@id": `${BRAND.url}/#collection` },
-        primaryImageOfPage: { "@id": `${url}#primaryimage` },
-        breadcrumb: { "@id": `${url}#breadcrumb` },
-        // "Free, no login" is the site's central claim and the thing people
-        // search for. Saying it in a field built for it is worth more than
-        // saying it again in prose.
-        isAccessibleForFree: true,
-      },
-      {
-        "@type": "MusicPlaylist",
-        "@id": `${BRAND.url}/#collection`,
-        name: `${BRAND.nameEn} — Bengali music collection`,
-        description:
-          "A rotating collection of curated Bengali playlists spanning the golden age, the Bangla band era, and modern hits — shuffled fresh on every visit.",
-        url: BRAND.url,
-        genre: ["Bengali music", "Bangla adhunik", "Bengali film music", "Bangla band"],
-        inLanguage: ["bn-IN", "en-IN"],
-        numTracks: TOTAL_TRACKS,
-        isAccessibleForFree: true,
-        creator: { "@id": `${BRAND.url}/#curator` },
-        hasPart: PLAYLISTS.map((p) => ({
-          "@type": "MusicPlaylist",
-          name: p.youtubeTitle,
-          url: `https://www.youtube.com/playlist?list=${p.id}`,
-          numTracks: p.approxTracks,
-        })),
-      },
-      // The questions people actually ask, in the form answer engines quote.
-      // Same text as the crawlable body, so the page and the markup agree.
-      {
-        "@type": "FAQPage",
-        "@id": `${url}#faq`,
-        mainEntity: FAQ.map((f) => ({
-          "@type": "Question",
-          name: f.q,
-          acceptedAnswer: { "@type": "Answer", text: f.a },
-        })),
-      },
-      // Four sibling routes, not a hierarchy — the breadcrumb says where this
-      // page sits, and the ItemList tells a crawler the other three exist
-      // even before it follows a link.
-      //
-      // The flagship route IS the home page, so it gets a one-item trail. The
-      // old two-item version listed the site and then the same URL again as
-      // its own child, which is a loop dressed up as a hierarchy.
-      {
-        "@type": "BreadcrumbList",
-        "@id": `${url}#breadcrumb`,
-        itemListElement:
-          routeId === DEFAULT_ROUTE
-            ? [{ "@type": "ListItem", position: 1, name: BRAND.nameEn, item: url }]
-            : [
-                { "@type": "ListItem", position: 1, name: BRAND.nameEn, item: `${BRAND.url}/` },
-                { "@type": "ListItem", position: 2, name: route.name, item: url },
-              ],
-      },
-      {
-        "@type": "ItemList",
-        "@id": `${BRAND.url}/#routes`,
-        name: "Routes",
-        itemListElement: ROUTES.map((r, i) => ({
-          "@type": "ListItem",
-          position: i + 1,
-          name: ROUTE_SEO[r.id].h1,
-          url: `${BRAND.url}${ROUTE_PATH[r.id]}`,
-        })),
-      },
+      curator,
+      website,
+      primaryImage,
+      webPage,
+      faq,
+      breadcrumb,
+      ...(isHome ? [experiences] : [collection, busImage]),
     ],
   };
 }

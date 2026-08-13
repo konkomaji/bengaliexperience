@@ -1,7 +1,7 @@
 {
-  "name": "Bengali Bus Driver Playlist",
-  "short_name": "Bus Driver",
-  "description": "Nonstop Bangla bangers from the 90s to the 20s, on famous West Bengal bus routes.",
+  "name": "Bengali Experience",
+  "short_name": "Bengali Exp",
+  "description": "Small free experiences that put you inside something Bengali for a while. A night bus through Kolkata with the radio on, and more to come.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

@@ -1,11 +1,10 @@
 /**
- * /sitemap.xml — generated from src/data/seo.ts, not hand-written.
+ * /sitemap.xml, generated from src/data/seo.ts rather than hand-written.
  *
- * It used to be a static file in public/, which meant the four URLs and the
- * domain were spelled out a second time and could quietly disagree with the
- * app. Now the route list has exactly one source, the same one the router and
- * the edge rewriter read, so a new route cannot be added without appearing
- * here.
+ * It used to be a static file, which meant the page list and the domain were
+ * spelled out a second time and could quietly disagree with the app. Now
+ * there is exactly one source, the same one the router and the edge rewriter
+ * read, so a new experience cannot go live without appearing here.
  *
  * Only `<loc>` and `<lastmod>` are emitted. Google has said outright that it
  * ignores `<changefreq>` and `<priority>`, and Bing treats them as hints at
@@ -13,20 +12,24 @@
  * cannot back up. `<lastmod>` comes from git (see scripts/stamp-lastmod.mjs)
  * and is omitted rather than faked when the build has no history to read.
  *
- * `/kolkata` is deliberately absent: it is an alias that canonicalises to `/`,
- * and listing both would ask the crawler to index the same page twice.
+ * Planned experiences have no URL and so no row. The old four-route paths are
+ * absent for the same reason: they are 301s now, and listing a redirect is
+ * asking a crawler to spend its budget learning something it can be told.
  */
 import { BRAND } from "../src/data/brand";
 import { LAST_MODIFIED } from "../src/data/lastmod";
-import { ROUTES } from "../src/data/routes";
-import { ROUTE_PATH } from "../src/data/seo";
+import { PAGE_PATH, type PageId } from "../src/data/seo";
 
 export const onRequest: PagesFunction = () => {
-  const urls = ROUTES.map((r) => {
-    const loc = `${BRAND.url}${ROUTE_PATH[r.id]}`;
-    const lastmod = LAST_MODIFIED[r.id];
-    return `  <url><loc>${loc}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ""}</url>`;
-  }).join("\n");
+  const pages = Object.keys(PAGE_PATH) as PageId[];
+
+  const urls = pages
+    .map((id) => {
+      const loc = `${BRAND.url}${PAGE_PATH[id]}`;
+      const lastmod = LAST_MODIFIED[id];
+      return `  <url><loc>${loc}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ""}</url>`;
+    })
+    .join("\n");
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

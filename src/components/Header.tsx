@@ -2,12 +2,20 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { BRAND } from "../data/brand";
-import { ROUTES, type RouteDef, type RouteId } from "../data/routes";
-import { ROUTE_PATH } from "../data/seo";
+import { SCENE } from "../data/scene";
+import { PAGE_PATH } from "../data/seo";
 import { useISTClock } from "../hooks/useISTClock";
 import { DriverCard } from "./DriverCard";
 
-export function Header({ route, aboard }: { route: RouteDef; aboard: number | null }) {
+/**
+ * The fixed top bar on the bus page: the brand, the route it is running, the
+ * Kolkata clock, how many people are listening, and the curator card.
+ *
+ * The wordmark is a link home. It is the only route out of the experience and
+ * back to the rest of the project, which matters more now that the project is
+ * a collection rather than a single site.
+ */
+export function Header({ aboard }: { aboard: number | null }) {
   const clock = useISTClock();
 
   return (
@@ -17,14 +25,16 @@ export function Header({ route, aboard }: { route: RouteDef; aboard: number | nu
         <motion.div
           initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="flex min-w-0 flex-col leading-none"
+          className="pointer-events-auto flex min-w-0 flex-col leading-none"
         >
-          <span className="font-display truncate text-base font-extrabold text-on-surface sm:text-xl"
-            style={{ textShadow: "0 1px 12px rgba(0,0,0,0.8)" }} >
-            {BRAND.nameEn}
-          </span>
+          <Link to={PAGE_PATH.home} className="min-w-0">
+            <span className="font-display block truncate text-base font-extrabold text-on-surface sm:text-xl"
+              style={{ textShadow: "0 1px 12px rgba(0,0,0,0.8)" }} >
+              {BRAND.nameEn}
+            </span>
+          </Link>
           <span className="mt-1 truncate text-[8px] uppercase tracking-[0.26em] text-white/50 sm:text-[9px]">
-            {route.ticker}
+            {SCENE.ticker}
           </span>
         </motion.div>
 
@@ -47,13 +57,6 @@ export function Header({ route, aboard }: { route: RouteDef; aboard: number | nu
         </div>
       </div>
 
-      {/* route pills — real links, so each experience is crawlable and shareable */}
-      <nav aria-label="Choose a route"
-        className="pointer-events-auto flex gap-1.5 self-start overflow-x-auto rounded-full border border-white/10 bg-black/30 p-1 backdrop-blur-md [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {ROUTES.map((r) => (
-          <RoutePill key={r.id} id={r.id} label={r.name} active={r.id === route.id} />
-        ))}
-      </nav>
     </header>
   );
 }
@@ -91,17 +94,3 @@ function AboardCount({ count }: { count: number | null }) {
   );
 }
 
-function RoutePill({ id, label, active }: { id: RouteId; label: string; active: boolean }) {
-  return (
-    <Link to={ROUTE_PATH[id]} aria-current={active ? "page" : undefined}
-      className="relative shrink-0 rounded-full px-3 py-1.5 text-[11px] font-semibold tracking-wide text-white/70 transition-colors sm:text-xs">
-      {active && (
-        <motion.span layoutId="route-pill" className="absolute inset-0 rounded-full bg-primary"
-          transition={{ type: "spring", stiffness: 500, damping: 34 }} />
-      )}
-      <span className={`relative z-10 flex items-center gap-1.5 whitespace-nowrap ${active ? "text-on-primary" : ""}`}>
-        {label}
-      </span>
-    </Link>
-  );
-}

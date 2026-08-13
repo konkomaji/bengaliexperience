@@ -1,16 +1,18 @@
 import { motion } from "framer-motion";
-import type { RouteDef } from "../data/routes";
-import { BRAND } from "../data/brand";
+import { SCENE } from "../data/scene";
+import { PAGE_SEO } from "../data/seo";
 import { HornIcon } from "./icons";
 
 /**
- * The big title block: track count, oversized wordmark, ruled punchline, and
- * the horn. Sits high so the illustrated bus below it stays visible.
+ * The big title block: track count, oversized page heading, ruled punchline,
+ * and the horn. Sits high so the illustrated bus below it stays visible.
+ *
+ * The heading is the page's h1 rather than the site wordmark. This page is
+ * the bus, not the project, and the brand sits above it in the header.
  */
 export function Hero({
-  route, trackCount, onHonk,
+  trackCount, onHonk,
 }: {
-  route: RouteDef;
   trackCount: number;
   onHonk: () => void;
 }) {
@@ -25,14 +27,16 @@ export function Hero({
         {trackCount} tracks · non-stop
       </p>
 
-      <h1 className="font-display mt-1 text-4xl font-extrabold leading-[0.95] text-on-surface sm:text-6xl md:text-7xl"
+      {/* Sized smaller than the old one-word wordmark it replaced: this
+          heading is four words and has to survive a narrow phone. */}
+      <h1 className="font-display mt-1 max-w-[11ch] text-4xl font-extrabold leading-[0.92] text-on-surface sm:max-w-none sm:text-5xl md:text-6xl"
         style={{ textShadow: "0 4px 28px rgba(0,0,0,0.7)" }} >
-        {BRAND.nameEn}
+        {PAGE_SEO.busdriver.h1}
       </h1>
 
       <div className="mt-3 flex items-center gap-3 text-[9px] font-semibold uppercase tracking-[0.28em] text-white/55 sm:text-[11px]">
         <span className="h-px w-6 bg-white/25 sm:w-10" />
-        {route.punchline}
+        {SCENE.punchline}
         <span className="h-px w-6 bg-white/25 sm:w-10" />
       </div>
 
