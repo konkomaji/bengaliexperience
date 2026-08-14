@@ -19,6 +19,7 @@ import { MOVED_PATHS, PAGE_PATH, PAGE_SEO, PATH_TO_PAGE } from "../src/data/seo"
 import { buildJsonLd } from "../src/lib/jsonld";
 import { renderStaticBody } from "../src/lib/prerender";
 import { BRAND } from "../src/data/brand";
+import { SCENE_VERSION } from "../src/data/sceneGeometry";
 
 /**
  * The Pages project keeps answering on its own `*.pages.dev` host even after a
@@ -107,8 +108,8 @@ export const onRequest: PagesFunction = async ({ request, next }) => {
     rewriter.on("head", {
       element: (el) => {
         el.append(
-          '<link rel="preload" as="image" fetchpriority="high" href="/scene/bus.webp">' +
-            '<link rel="preload" as="image" href="/scene/road.webp">',
+          `<link rel="preload" as="image" fetchpriority="high" href="/scene/bus.webp?v=${SCENE_VERSION}">` +
+            `<link rel="preload" as="image" href="/scene/road.webp?v=${SCENE_VERSION}">`,
           { html: true },
         );
       },

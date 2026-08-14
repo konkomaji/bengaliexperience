@@ -13,10 +13,11 @@
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
-# The driving scene. Stable names, so cache a day and revalidate; keep serving
-# the old bytes while the new ones are fetched rather than blocking on them.
+# The driving scene. The app appends a content version to every scene URL
+# (?v=<hash>, from prepare-scene.mjs), so a changed layer is a new URL and the
+# files can be held forever: the browser only refetches when the art changes.
 /scene/*
-  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+  Cache-Control: public, max-age=31536000, immutable
 
 # Horn samples, the social card and the favicon: same deal.
 /horns/*

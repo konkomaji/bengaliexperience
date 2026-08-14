@@ -37,7 +37,8 @@
  *     it about its own middle. All three are skipped cleanly if absent, so the
  *     main scene still builds before the optional art has been delivered.
  */
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 
@@ -358,8 +359,9 @@ async function trimSprite(file, out, { square = false } = {}) {
 
 const sprites = {};
 for (const [file, out, opts] of [
-  ["traffic-taxi.png", "taxi", {}],
-  ["traffic-truck.png", "truck", {}],
+  // The overtaking taxi and lorry were dropped from the scene; only the
+  // exhaust puff is still cut. Their source art stays in design/source, so
+  // re-adding a line here brings either back.
   ["exhaust-puff.png", "exhaust", { square: true }],
 ]) {
   if (!existsSync(SRC(file))) continue;
@@ -390,6 +392,19 @@ const geometry = {
 
 writeFileSync(`${OUT}geometry.json`, `${JSON.stringify(geometry, null, 2)}\n`);
 
+// A content fingerprint of everything the scene ships. The files keep stable
+// names — bus.webp, road.webp — so the app appends `?v=<this>` to each URL: a
+// changed layer changes the hash and so busts its own cached copy, which lets
+// the CDN and the browser cache the art forever instead of re-checking it on
+// every visit. Deterministic from the bytes, so a rebuild with no art change
+// keeps the same version and nobody re-downloads anything.
+const hash = createHash("sha1");
+for (const f of readdirSync(OUT).filter((f) => f.endsWith(".webp")).sort()) {
+  hash.update(readFileSync(`${OUT}${f}`));
+}
+hash.update(JSON.stringify(geometry));
+const version = hash.digest("hex").slice(0, 8);
+
 // The engine needs these at build time, not over the wire: they decide layout
 // on the very first frame, and fetching them would mean a frame of the bus in
 // the wrong place.
@@ -401,6 +416,10 @@ writeFileSync(
 // Measured off the delivered art: the bus sprite after its background was cut
 // away and trimmed, the axle centres read from its own wheel arches, and each
 // scrolling layer's size after the tiling seam was closed.
+
+/** Content fingerprint of the scene art, appended to each asset URL as ?v= so
+ *  the files can be cached immutably yet still update the moment they change. */
+export const SCENE_VERSION = "${version}";
 
 export const SCENE_GEOMETRY = {
   bus: { w: ${busW}, h: ${busH} },
@@ -423,5 +442,6 @@ console.log(`[scene] baseline y=${baseline}, arches found: ${arches.length}`);
 for (const a of geometry.axles) console.log(`[scene]   axle x=${a.x} y=${a.y} r=${a.r}`);
 console.log(`[scene] wheel    ${wheelSize}x${wheelSize}`);
 for (const l of layers) console.log(`[scene] ${l.file.padEnd(8)} ${l.from} -> ${l.to} (blended ${l.blended}px)`);
+console.log(`[scene] version  ${version}`);
 for (const [k, v] of Object.entries(sprites)) console.log(`[scene] ${k.padEnd(8)} ${v.w}x${v.h}`);
 if (!Object.keys(sprites).length) console.log("[scene] no optional sprites present");
