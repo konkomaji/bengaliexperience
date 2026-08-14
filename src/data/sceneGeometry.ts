@@ -4,21 +4,23 @@
 // away and trimmed, the axle centres read from its own wheel arches, and each
 // scrolling layer's size after the tiling seam was closed.
 
+/** Content fingerprint of the scene art, appended to each asset URL as ?v= so
+ *  the files can be cached immutably yet still update the moment they change. */
+export const SCENE_VERSION = "38acb11d";
+
 export const SCENE_GEOMETRY = {
   bus: { w: 1740, h: 675 },
   /** axle centres in the bus sprite's pixel space, and the arch radius */
   axles: [{"x":412,"y":662,"r":111},{"x":1483,"y":651,"r":102}],
   wheel: { size: 1220 },
   layers: {
-    "road": { w: 1561, h: 312 },
+    "road": { w: 1561, h: 887 },
     "bg-far": { w: 1897, h: 729 },
-    "bg-mid": { w: 1911, h: 724 },
+    "bg-mid": { w: 1843, h: 751 },
     "bg-near": { w: 1851, h: 748 },
   },
   /** optional overtaking traffic and the exhaust puff, in their own pixels */
   sprites: {
-    "taxi": { w: 1602, h: 673 },
-    "truck": { w: 1727, h: 806 },
     "exhaust": { w: 1196, h: 1196 },
   },
 } as const;

@@ -1,6 +1,11 @@
 import { useEffect, useRef } from "react";
 import { SCENE } from "../data/scene";
-import { SCENE_GEOMETRY as G } from "../data/sceneGeometry";
+import { SCENE_GEOMETRY as G, SCENE_VERSION } from "../data/sceneGeometry";
+
+/** Every scene file keeps a stable name, so the content version is carried in
+ *  the query string: a changed layer changes the URL and defeats a stale cache
+ *  without renaming anything or giving up immutable caching. */
+const asset = (path: string) => `${path}?v=${SCENE_VERSION}`;
 
 /**
  * The bus, driving.
@@ -81,26 +86,6 @@ const SPRING_D = 15;
  *  30Hz one travel the same distance in the same wall-clock time. */
 const STEP = 1 / 120;
 
-/**
- * Overtaking traffic, in a lane behind the bus.
- *
- * Each vehicle crosses left-to-right — the same direction the bus faces, only
- * faster, so it reads as overtaking rather than oncoming. Sized and seated in
- * bus heights and cycled in sprite pixels, exactly like everything else, so a
- * pass looks the same on a phone as on a desktop. `seat` is where the sprite's
- * bottom sits above the road line, in bus heights — small and near the bus's
- * own contact so the wheels land on the asphalt, not the kerb or the air.
- * `cycle` is how much road (sprite px) one full appear-and-vanish takes;
- * `cross` is the slice of that spent on screen, the rest being the gap before
- * the next one. Only vehicles whose art is actually present are kept.
- */
-const TRAFFIC = (
-  [
-    { key: "taxi", h: 0.52, seat: -0.04, cycle: 4200, cross: 0.5, phase: 0.15 },
-    { key: "truck", h: 0.72, seat: -0.08, cycle: 6200, cross: 0.5, phase: 0.62 },
-  ] as const
-).filter((t) => t.key in (G.sprites ?? {}));
-
 /** Diesel puffs off the tailpipe. Emitted as a function of distance, so a
  *  faster bus smokes harder, and frozen with the scene when it is paused. */
 const PUFFS = 5;
@@ -117,7 +102,6 @@ export function RoadScene({ honking = false, paused = false }: { honking?: boole
   const roadRef = useRef<HTMLDivElement | null>(null);
   const bodyRef = useRef<HTMLDivElement | null>(null);
   const wheelRefs = useRef<(HTMLImageElement | null)[]>([]);
-  const trafficRefs = useRef<(HTMLImageElement | null)[]>([]);
   const puffRefs = useRef<(HTMLImageElement | null)[]>([]);
 
   // Read by the loop without restarting it.
@@ -230,30 +214,10 @@ export function RoadScene({ honking = false, paused = false }: { honking?: boole
         w.style.transform = `rotate(${spin.toFixed(2)}deg)`;
       }
 
-      // Overtaking traffic. Position is a function of distance in sprite space,
-      // so a pass takes the same road on any screen. Off screen during the gap,
-      // it is simply faded out and parked rather than kept moving.
-      const laneW = el.clientWidth;
-      const road = dist / scale; // sprite px travelled, screen-size invariant
-      for (let i = 0; i < TRAFFIC.length; i++) {
-        const node = trafficRefs.current[i];
-        if (!node) continue;
-        const t = TRAFFIC[i];
-        const phase = ((road / t.cycle) % 1 + 1) % 1;
-        if (phase < t.cross) {
-          const vw = node.clientWidth || 0;
-          const k = phase / t.cross; // 0 off the left, 1 off the right
-          const x = -vw - 48 + k * (laneW + 2 * vw + 96);
-          node.style.transform = `translate3d(${px(x)}, 0, 0)`;
-          node.style.opacity = "1";
-        } else {
-          node.style.opacity = "0";
-        }
-      }
-
       // Exhaust. Each puff drifts back and up from the tailpipe, growing and
       // fading, on a distance clock so it stalls when the bus does. Measured in
       // rendered bus heights so it sits with the sprite at any size.
+      const road = dist / scale; // sprite px travelled, screen-size invariant
       const bh = scale * G.bus.h;
       for (let i = 0; i < puffRefs.current.length; i++) {
         const node = puffRefs.current[i];
@@ -301,9 +265,9 @@ export function RoadScene({ honking = false, paused = false }: { honking?: boole
         }}
       />
 
-      <Layer refEl={farRef} src="/scene/bg-far.webp" bottom={0.16} height={1.15} heightFloor={42} opacity={0.72} />
-      <Layer refEl={midRef} src="/scene/bg-mid.webp" bottom={0.07} height={1.18} heightFloor={43} opacity={0.9} />
-      <Layer refEl={nearRef} src="/scene/bg-near.webp" bottom={-0.02} height={1.17} heightFloor={43} />
+      <Layer refEl={farRef} src={asset("/scene/bg-far.webp")} bottom={0.16} height={1.15} heightFloor={42} opacity={0.72} />
+      <Layer refEl={midRef} src={asset("/scene/bg-mid.webp")} bottom={0.07} height={1.18} heightFloor={43} opacity={0.9} />
+      <Layer refEl={nearRef} src={asset("/scene/bg-near.webp")} bottom={0.28} height={1.17} heightFloor={43} />
 
       {/* road */}
       <div
@@ -314,33 +278,12 @@ export function RoadScene({ honking = false, paused = false }: { honking?: boole
           ref={roadRef}
           className="absolute inset-y-0 left-0 w-[300%] will-change-transform"
           style={{
-            backgroundImage: "url(/scene/road.webp)",
+            backgroundImage: `url(${asset("/scene/road.webp")})`,
             backgroundRepeat: "repeat-x",
             backgroundSize: "auto 100%",
           }}
         />
       </div>
-
-      {/* overtaking traffic, a lane behind the bus so the bus stays the hero */}
-      {TRAFFIC.map((t, i) => {
-        const sp = G.sprites[t.key as "taxi" | "truck"];
-        return (
-          <img
-            key={t.key}
-            ref={(n) => { trafficRefs.current[i] = n; }}
-            src={`/scene/${t.key}.webp`}
-            alt=""
-            aria-hidden="true"
-            className="absolute left-0 will-change-transform"
-            style={{
-              bottom: `calc(var(--road-y) + var(--bus-h) * ${t.seat})`,
-              height: `calc(var(--bus-h) * ${t.h})`,
-              aspectRatio: `${sp.w} / ${sp.h}`,
-              opacity: 0,
-            }}
-          />
-        );
-      })}
 
       {/* the bus, sitting on the road */}
       <div
@@ -361,7 +304,7 @@ export function RoadScene({ honking = false, paused = false }: { honking?: boole
             <img
               key={`puff-${i}`}
               ref={(n) => { puffRefs.current[i] = n; }}
-              src="/scene/exhaust.webp"
+              src={asset("/scene/exhaust.webp")}
               alt=""
               aria-hidden="true"
               className="absolute will-change-transform"
@@ -382,7 +325,7 @@ export function RoadScene({ honking = false, paused = false }: { honking?: boole
             <img
               key={a.x}
               ref={(n) => { wheelRefs.current[i] = n; }}
-              src="/scene/wheel.webp"
+              src={asset("/scene/wheel.webp")}
               alt=""
               className="absolute will-change-transform"
               style={{
@@ -396,7 +339,7 @@ export function RoadScene({ honking = false, paused = false }: { honking?: boole
           );
         })}
 
-        <img src="/scene/bus.webp" alt={SCENE.heroAlt} className="absolute inset-0 size-full" />
+        <img src={asset("/scene/bus.webp")} alt={SCENE.heroAlt} className="absolute inset-0 size-full" />
       </div>
 
       {/* legibility washes, unchanged in spirit from the still scene */}
