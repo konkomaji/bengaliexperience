@@ -154,7 +154,7 @@ function ExperienceCard({ experience: e, index }: { experience: Experience; inde
         <Link to={e.path} className={shell}>
           {inner}
           <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-primary">
-            Get on the bus
+            {e.cta ?? "Open"}
             <span aria-hidden>&rarr;</span>
           </span>
         </Link>

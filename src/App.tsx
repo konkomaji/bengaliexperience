@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { HomePage } from "./pages/HomePage";
 import { BusDriverPage } from "./pages/BusDriverPage";
+import { MahalayaPage } from "./pages/MahalayaPage";
 import { BreakdownScreen } from "./components/BreakdownScreen";
 import { MOVED_PATHS, PAGE_PATH } from "./data/seo";
 
@@ -18,6 +19,7 @@ export default function App() {
       <Routes>
         <Route path={PAGE_PATH.home} element={<HomePage />} />
         <Route path={PAGE_PATH.busdriver} element={<BusDriverPage />} />
+        <Route path={PAGE_PATH.mahalaya} element={<MahalayaPage />} />
 
         {Object.entries(MOVED_PATHS).map(([from, to]) => (
           <Route key={from} path={from} element={<Navigate to={to} replace />} />

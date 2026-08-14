@@ -1,4 +1,5 @@
 import { BRAND } from "../data/brand";
+import { BROADCAST } from "../data/broadcast";
 import { EXPERIENCES } from "../data/experiences";
 import { PLAYLISTS, TOTAL_TRACKS } from "../data/playlists";
 import { SCENE } from "../data/scene";
@@ -40,7 +41,7 @@ export function renderStaticBody(pageId: PageId): string {
 
   const head = [`<h1>${escape(seo.h1)}</h1>`, `<p>${escape(seo.intro)}</p>`, facts(seo.facts)];
 
-  const body = pageId === "home" ? homeBody() : busBody();
+  const body = pageId === "home" ? homeBody() : pageId === "mahalaya" ? mahalayaBody() : busBody();
 
   // Wrapped and identified so index.html can hide it the instant JavaScript
   // is known to be running. React clears #root on first paint, but "first
@@ -94,5 +95,19 @@ function busBody(): string[] {
     `<p><a href="${PAGE_PATH.home}">${escape(
       `More from ${BRAND.nameEn}`,
     )}</a></p>`,
+  ];
+}
+
+function mahalayaBody(): string[] {
+  return [
+    `<h2>The broadcast</h2>`,
+    `<p>${escape(
+      `${BROADCAST.title}, the Mahalaya dawn broadcast: ${BROADCAST.reader} reading the Chandi between Bengali devotional songs and orchestral pieces, first carried by ${BROADCAST.broadcaster} in the 1930s and heard every Mahalaya since. It runs about an hour and a half and plays from the start rather than shuffled.`,
+    )}</p>`,
+    `<h2>The morning</h2>`,
+    `<p>${escape(
+      "It is heard at four in the morning, in the dark, and the scene follows the real sky: night full of stars at the start, blue hour through the middle, and the sun cresting the far bank of the river as the reading closes.",
+    )}</p>`,
+    `<p><a href="${PAGE_PATH.home}">${escape(`More from ${BRAND.nameEn}`)}</a></p>`,
   ];
 }

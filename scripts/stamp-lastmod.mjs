@@ -26,7 +26,8 @@ const SHARED = ["src/data/seo.ts", "src/lib/prerender.ts"];
 
 const PAGES = {
   home: [...SHARED, "src/data/experiences.ts", "src/pages/HomePage.tsx"],
-  busdriver: [...SHARED, "src/data/scene.ts", "src/data/playlists.ts", "public/hero/hero-kolkata.jpg"],
+  busdriver: [...SHARED, "src/data/scene.ts", "src/data/playlists.ts", "src/components/RoadScene.tsx"],
+  mahalaya: [...SHARED, "src/data/broadcast.ts", "src/pages/MahalayaPage.tsx", "src/components/DawnScene.tsx"],
 };
 
 /** ISO-8601 date of the newest commit touching any of `files`, or null. */

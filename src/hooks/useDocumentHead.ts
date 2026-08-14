@@ -23,6 +23,14 @@ export function useDocumentHead(seo: PageSeo, canonicalPath: string) {
     setMeta('meta[name="twitter:description"]', seo.description);
     const link = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
     if (link) link.href = BRAND.url + canonicalPath;
+
+    // Per-page tab icon. A page can carry its own (the Mahalaya radio); every
+    // other page restores the default, so the icon never sticks after leaving.
+    const icon = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
+    if (icon) {
+      icon.type = seo.favicon ? "image/svg+xml" : "image/png";
+      icon.href = seo.favicon ?? "/favicon-32.png";
+    }
   }, [seo, canonicalPath]);
 }
 
