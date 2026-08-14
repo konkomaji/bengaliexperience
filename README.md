@@ -136,8 +136,6 @@ design/source/         master art PNGs (gitignored); the pipeline turns them int
 
 <div align="center">
 
-Built by one person in Kolkata, independent of any label or institution.
-
 **[bengaliexperience.wtf](https://bengaliexperience.wtf)**
 
 </div>
