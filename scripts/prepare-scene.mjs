@@ -28,8 +28,16 @@
  *     honestly. bg-near does not, by roughly nine times a normal column join.
  *     Each layer gets a wrap blend: the tail is crossfaded over the head and
  *     the overlap is cropped off, so the new edges are guaranteed to meet.
+ *
+ *  5. **Trim the optional extras.** The overtaking taxi and lorry and the
+ *     exhaust puff each get cropped to their own alpha bounding box so the
+ *     sprite carries no dead margin. Traffic keeps its wheels attached — it
+ *     passes too fast to read a slip — so it needs none of the axle work. The
+ *     puff is squared and centred like the bus wheel, because the scene scales
+ *     it about its own middle. All three are skipped cleanly if absent, so the
+ *     main scene still builds before the optional art has been delivered.
  */
-import { mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 
@@ -162,11 +170,35 @@ function findAxles(bg, W, H) {
 }
 
 /** Crossfade the tail over the head, then crop the overlap off, so the two
- *  new edges are the same pixels and the strip repeats forever. */
-async function makeSeamless(file, out, blendFraction = 0.12) {
+ *  new edges are the same pixels and the strip repeats forever.
+ *
+ *  `trimVertical` also crops the empty top and bottom away, down to the rows
+ *  that actually carry paint. The road is delivered floating in a much taller
+ *  frame — kerb and asphalt in a band, blank above and below — and the scene
+ *  treats this strip as solid ground laid at the foot of the screen, so that
+ *  blank has to go or it shows as a dead gap under the bus. The parallax
+ *  layers keep their transparent margins on purpose, so they never pass this. */
+async function makeSeamless(file, out, { blendFraction = 0.12, trimVertical = false } = {}) {
   const img = sharp(SRC(file)).ensureAlpha();
   const { data, info } = await img.raw().toBuffer({ resolveWithObject: true });
   const { width: W, height: H, channels: C } = info;
+
+  // Rows that carry paint: opaque and not the near-white the art floats on.
+  let top = 0, bot = H - 1;
+  if (trimVertical) {
+    const painted = (y) => {
+      let n = 0;
+      for (let x = 0; x < W; x++) {
+        const p = (y * W + x) * C;
+        const r = data[p], g = data[p + 1], b = data[p + 2];
+        if (data[p + 3] > 30 && !(r > 235 && g > 235 && b > 235)) n++;
+      }
+      return n > W * 0.02;
+    };
+    let t = H, b = -1;
+    for (let y = 0; y < H; y++) if (painted(y)) { if (y < t) t = y; if (y > b) b = y; }
+    if (b >= t) { top = t; bot = b; }
+  }
 
   const B = Math.round(W * blendFraction);
   const newW = W - B;
@@ -188,11 +220,13 @@ async function makeSeamless(file, out, blendFraction = 0.12) {
     }
   }
 
+  const outH = bot - top + 1;
   await sharp(outBuf, { raw: { width: newW, height: H, channels: C } })
+    .extract({ left: 0, top, width: newW, height: outH })
     .webp({ quality: 86, alphaQuality: 90, effort: 5 })
     .toFile(`${OUT}${out}.webp`);
 
-  return { file: out, from: `${W}x${H}`, to: `${newW}x${H}`, blended: B };
+  return { file: out, from: `${W}x${H}`, to: `${newW}x${outH}`, blended: B };
 }
 
 // ── 1. the bus ────────────────────────────────────────────────────────────
@@ -279,15 +313,69 @@ await sharp(SRC("bus-wheel.png"))
   .webp({ quality: 92, alphaQuality: 100, effort: 5 })
   .toFile(`${OUT}wheel.webp`);
 
+// ── 2b. optional traffic and exhaust sprites ──────────────────────────────
+/**
+ * Crop a sprite to its own alpha bounding box.
+ *
+ * `square` re-crops around the centre of that box instead, for anything the
+ * scene rotates or scales about its middle: an off-centre puff would drift as
+ * it grows, the same wobble the bus wheel is centred to avoid.
+ */
+async function trimSprite(file, out, { square = false } = {}) {
+  const { data, info } = await sharp(SRC(file)).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const { width: W, height: H } = info;
+
+  let minX = W, minY = H, maxX = 0, maxY = 0;
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      if (data[(y * W + x) * 4 + 3] > 40) {
+        if (x < minX) minX = x; if (x > maxX) maxX = x;
+        if (y < minY) minY = y; if (y > maxY) maxY = y;
+      }
+    }
+  }
+
+  let left = minX, top = minY, w = maxX - minX + 1, h = maxY - minY + 1;
+  if (square) {
+    const s = Math.max(w, h);
+    left = Math.round((minX + maxX) / 2 - s / 2);
+    top = Math.round((minY + maxY) / 2 - s / 2);
+    w = h = s;
+  }
+  // Clamp inside the source: a bounding box that reaches an edge could push a
+  // squared crop off it, and sharp treats that as an error rather than padding.
+  left = Math.max(0, Math.min(left, W - w));
+  top = Math.max(0, Math.min(top, H - h));
+
+  await sharp(SRC(file))
+    .ensureAlpha()
+    .extract({ left, top, width: w, height: h })
+    .webp({ quality: 90, alphaQuality: 100, effort: 5 })
+    .toFile(`${OUT}${out}.webp`);
+
+  return { file: out, w, h };
+}
+
+const sprites = {};
+for (const [file, out, opts] of [
+  ["traffic-taxi.png", "taxi", {}],
+  ["traffic-truck.png", "truck", {}],
+  ["exhaust-puff.png", "exhaust", { square: true }],
+]) {
+  if (!existsSync(SRC(file))) continue;
+  const s = await trimSprite(file, out, opts);
+  sprites[out] = { w: s.w, h: s.h };
+}
+
 // ── 3. the scrolling layers ───────────────────────────────────────────────
 const layers = [];
-for (const [file, out] of [
-  ["road.png", "road"],
-  ["bg-far.png", "bg-far"],
-  ["bg-mid.png", "bg-mid"],
-  ["bg-near.png", "bg-near"],
+for (const [file, out, opts] of [
+  ["road.png", "road", { trimVertical: true }],
+  ["bg-far.png", "bg-far", {}],
+  ["bg-mid.png", "bg-mid", {}],
+  ["bg-near.png", "bg-near", {}],
 ]) {
-  layers.push(await makeSeamless(file, out));
+  layers.push(await makeSeamless(file, out, opts));
 }
 
 // ── 4. what the engine needs to know ──────────────────────────────────────
@@ -297,6 +385,7 @@ const geometry = {
   axles: arches.map((a) => ({ x: a.x - minX, y: a.y - minY, r: a.r })),
   wheel: { size: wheelSize },
   layers: Object.fromEntries(layers.map((l) => [l.file, l.to])),
+  sprites,
 };
 
 writeFileSync(`${OUT}geometry.json`, `${JSON.stringify(geometry, null, 2)}\n`);
@@ -321,6 +410,10 @@ export const SCENE_GEOMETRY = {
   layers: {
 ${layers.map((l) => `    "${l.file}": { w: ${dims(l.to).w}, h: ${dims(l.to).h} },`).join("\n")}
   },
+  /** optional overtaking traffic and the exhaust puff, in their own pixels */
+  sprites: {
+${Object.entries(sprites).map(([k, v]) => `    "${k}": { w: ${v.w}, h: ${v.h} },`).join("\n")}
+  },
 } as const;
 `,
 );
@@ -330,3 +423,5 @@ console.log(`[scene] baseline y=${baseline}, arches found: ${arches.length}`);
 for (const a of geometry.axles) console.log(`[scene]   axle x=${a.x} y=${a.y} r=${a.r}`);
 console.log(`[scene] wheel    ${wheelSize}x${wheelSize}`);
 for (const l of layers) console.log(`[scene] ${l.file.padEnd(8)} ${l.from} -> ${l.to} (blended ${l.blended}px)`);
+for (const [k, v] of Object.entries(sprites)) console.log(`[scene] ${k.padEnd(8)} ${v.w}x${v.h}`);
+if (!Object.keys(sprites).length) console.log("[scene] no optional sprites present");

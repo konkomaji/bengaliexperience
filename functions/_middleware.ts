@@ -16,7 +16,6 @@
  *   4. real content      per-page head, JSON-LD and a crawlable body
  */
 import { MOVED_PATHS, PAGE_PATH, PAGE_SEO, PATH_TO_PAGE } from "../src/data/seo";
-import { SCENE } from "../src/data/scene";
 import { buildJsonLd } from "../src/lib/jsonld";
 import { renderStaticBody } from "../src/lib/prerender";
 import { BRAND } from "../src/data/brand";
@@ -98,14 +97,18 @@ export const onRequest: PagesFunction = async ({ request, next }) => {
     });
 
   if (pageId === "busdriver") {
-    // The hero illustration is that page's LCP element, and React renders it,
-    // so without this the browser cannot even discover it until the bundle
-    // has downloaded, parsed and run. Preloading starts the fetch while the
-    // HTML is still being parsed. Only on the page that has a hero.
+    // The driving scene is that page's first paint, and React renders it, so
+    // without this the browser cannot discover its art until the bundle has
+    // downloaded, parsed and run. Preload the two layers on screen from the
+    // first frame — the bus and the road under it — while the HTML is still
+    // being parsed. The parallax backgrounds, traffic and exhaust are left to
+    // load normally so they do not compete with these two. Scoped to this
+    // page: it is the only one that mounts the scene.
     rewriter.on("head", {
       element: (el) => {
         el.append(
-          `<link rel="preload" as="image" fetchpriority="high" href="${SCENE.hero}">`,
+          '<link rel="preload" as="image" fetchpriority="high" href="/scene/bus.webp">' +
+            '<link rel="preload" as="image" href="/scene/road.webp">',
           { html: true },
         );
       },

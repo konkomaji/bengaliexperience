@@ -81,6 +81,34 @@ const SPRING_D = 15;
  *  30Hz one travel the same distance in the same wall-clock time. */
 const STEP = 1 / 120;
 
+/**
+ * Overtaking traffic, in a lane behind the bus.
+ *
+ * Each vehicle crosses left-to-right — the same direction the bus faces, only
+ * faster, so it reads as overtaking rather than oncoming. Sized and seated in
+ * bus heights and cycled in sprite pixels, exactly like everything else, so a
+ * pass looks the same on a phone as on a desktop. `seat` is where the sprite's
+ * bottom sits above the road line, in bus heights — small and near the bus's
+ * own contact so the wheels land on the asphalt, not the kerb or the air.
+ * `cycle` is how much road (sprite px) one full appear-and-vanish takes;
+ * `cross` is the slice of that spent on screen, the rest being the gap before
+ * the next one. Only vehicles whose art is actually present are kept.
+ */
+const TRAFFIC = (
+  [
+    { key: "taxi", h: 0.52, seat: -0.04, cycle: 4200, cross: 0.5, phase: 0.15 },
+    { key: "truck", h: 0.72, seat: -0.08, cycle: 6200, cross: 0.5, phase: 0.62 },
+  ] as const
+).filter((t) => t.key in (G.sprites ?? {}));
+
+/** Diesel puffs off the tailpipe. Emitted as a function of distance, so a
+ *  faster bus smokes harder, and frozen with the scene when it is paused. */
+const PUFFS = 5;
+/** Road (sprite px) one puff lives across, from tailpipe to faded-out. */
+const PUFF_LIFE = 560;
+/** Only smoke if the puff art was delivered. */
+const HAS_EXHAUST = "exhaust" in (G.sprites ?? {});
+
 export function RoadScene({ honking = false, paused = false }: { honking?: boolean; paused?: boolean }) {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const farRef = useRef<HTMLDivElement | null>(null);
@@ -89,6 +117,8 @@ export function RoadScene({ honking = false, paused = false }: { honking?: boole
   const roadRef = useRef<HTMLDivElement | null>(null);
   const bodyRef = useRef<HTMLDivElement | null>(null);
   const wheelRefs = useRef<(HTMLImageElement | null)[]>([]);
+  const trafficRefs = useRef<(HTMLImageElement | null)[]>([]);
+  const puffRefs = useRef<(HTMLImageElement | null)[]>([]);
 
   // Read by the loop without restarting it.
   const hornRef = useRef(honking);
@@ -187,16 +217,52 @@ export function RoadScene({ honking = false, paused = false }: { honking?: boole
 
       // ω = v / r. The one relationship that has to be exact.
       //
-      // The radius is measured off the wheel as actually laid out, not
-      // recomputed from the geometry. Deriving it independently meant two
-      // expressions had to agree about how a percentage height resolves, and
-      // they did not: the tyre was drawn 36% larger than the radius being spun,
-      // so it turned too fast for its own size. Reading the DOM cannot drift.
-      const wheelEl = wheelRefs.current[0];
-      const wheelR = (wheelEl?.clientWidth ?? 0) / 2 || G.axles[0].r * 1.06 * scale;
-      const spin = (dist / wheelR) * (180 / Math.PI);
-      for (const w of wheelRefs.current) {
-        if (w) w.style.transform = `rotate(${(spin % 360).toFixed(2)}deg)`;
+      // Each wheel is spun by its OWN radius, read off the wheel as actually
+      // laid out. The two axles are drawn at different sizes — the front arch
+      // is larger than the rear — so a single shared radius turned the smaller
+      // tyre at the wrong rate and it visibly slipped. Reading each wheel's own
+      // width cannot drift from how it renders.
+      for (let i = 0; i < wheelRefs.current.length; i++) {
+        const w = wheelRefs.current[i];
+        if (!w) continue;
+        const r = w.clientWidth / 2 || (G.axles[i] ?? G.axles[0]).r * 1.06 * scale;
+        const spin = ((dist / r) * (180 / Math.PI)) % 360;
+        w.style.transform = `rotate(${spin.toFixed(2)}deg)`;
+      }
+
+      // Overtaking traffic. Position is a function of distance in sprite space,
+      // so a pass takes the same road on any screen. Off screen during the gap,
+      // it is simply faded out and parked rather than kept moving.
+      const laneW = el.clientWidth;
+      const road = dist / scale; // sprite px travelled, screen-size invariant
+      for (let i = 0; i < TRAFFIC.length; i++) {
+        const node = trafficRefs.current[i];
+        if (!node) continue;
+        const t = TRAFFIC[i];
+        const phase = ((road / t.cycle) % 1 + 1) % 1;
+        if (phase < t.cross) {
+          const vw = node.clientWidth || 0;
+          const k = phase / t.cross; // 0 off the left, 1 off the right
+          const x = -vw - 48 + k * (laneW + 2 * vw + 96);
+          node.style.transform = `translate3d(${px(x)}, 0, 0)`;
+          node.style.opacity = "1";
+        } else {
+          node.style.opacity = "0";
+        }
+      }
+
+      // Exhaust. Each puff drifts back and up from the tailpipe, growing and
+      // fading, on a distance clock so it stalls when the bus does. Measured in
+      // rendered bus heights so it sits with the sprite at any size.
+      const bh = scale * G.bus.h;
+      for (let i = 0; i < puffRefs.current.length; i++) {
+        const node = puffRefs.current[i];
+        if (!node) continue;
+        const q = ((road / PUFF_LIFE + i / PUFFS) % 1 + 1) % 1;
+        const s = 0.45 + q * 1.15;
+        const opacity = (q < 0.12 ? q / 0.12 : Math.max(0, 1 - q)) * 0.5;
+        node.style.transform = `translate3d(${px(-q * 0.55 * bh)}, ${px(-q * 0.8 * bh)}, 0) scale(${s.toFixed(3)})`;
+        node.style.opacity = opacity.toFixed(3);
       }
     };
 
@@ -255,6 +321,27 @@ export function RoadScene({ honking = false, paused = false }: { honking?: boole
         />
       </div>
 
+      {/* overtaking traffic, a lane behind the bus so the bus stays the hero */}
+      {TRAFFIC.map((t, i) => {
+        const sp = G.sprites[t.key as "taxi" | "truck"];
+        return (
+          <img
+            key={t.key}
+            ref={(n) => { trafficRefs.current[i] = n; }}
+            src={`/scene/${t.key}.webp`}
+            alt=""
+            aria-hidden="true"
+            className="absolute left-0 will-change-transform"
+            style={{
+              bottom: `calc(var(--road-y) + var(--bus-h) * ${t.seat})`,
+              height: `calc(var(--bus-h) * ${t.h})`,
+              aspectRatio: `${sp.w} / ${sp.h}`,
+              opacity: 0,
+            }}
+          />
+        );
+      })}
+
       {/* the bus, sitting on the road */}
       <div
         ref={bodyRef}
@@ -268,6 +355,27 @@ export function RoadScene({ honking = false, paused = false }: { honking?: boole
           transformOrigin: "50% 100%",
         }}
       >
+        {/* exhaust off the tailpipe, behind the wheels and the body */}
+        {HAS_EXHAUST &&
+          Array.from({ length: PUFFS }).map((_, i) => (
+            <img
+              key={`puff-${i}`}
+              ref={(n) => { puffRefs.current[i] = n; }}
+              src="/scene/exhaust.webp"
+              alt=""
+              aria-hidden="true"
+              className="absolute will-change-transform"
+              style={{
+                left: "-3%",
+                bottom: "5%",
+                width: "calc(var(--bus-h) * 0.26)",
+                aspectRatio: "1 / 1",
+                transformOrigin: "center center",
+                opacity: 0,
+              }}
+            />
+          ))}
+
         {G.axles.map((a, i) => {
           const d = (a.r * 2 * 1.06) / G.bus.h; // tyre a touch larger than its arch
           return (

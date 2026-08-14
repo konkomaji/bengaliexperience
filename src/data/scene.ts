@@ -24,12 +24,11 @@ export interface Scene {
   punchline: string;
   tagline: string;
   distanceKm: number;
-  /** hero illustration in /public/hero/ */
-  hero: string;
   /**
-   * What the illustration shows. Not decorative alt text: this image is the
-   * entire visual content of the page, so the same sentence serves the screen
-   * reader, the social card and the ImageObject in the structured data.
+   * What the bus scene shows. Not decorative alt text: it labels the bus sprite
+   * for a screen reader and captions the ImageObject in the structured data.
+   * The static hero illustration it once described is gone — the scene is the
+   * driving bus now — but the sentence still describes what is on the page.
    */
   heroAlt: string;
 }
@@ -39,7 +38,6 @@ export const SCENE: Scene = {
   punchline: "ALL THE WAY THROUGH CALCUTTA",
   tagline: "Over Howrah Bridge and down the tram lines, through the heart of the city",
   distanceKm: 18,
-  hero: "/hero/hero-kolkata.jpg",
   heroAlt:
     "A yellow and red Kolkata bus with luggage roped to its roof, stopped on wet tram lines at dusk, with the Howrah Bridge and an Ambassador taxi behind it.",
 };

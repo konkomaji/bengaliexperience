@@ -1,0 +1,27 @@
+# Cloudflare Pages response headers.
+#
+# Pages already serves everything in /public from its CDN edge; what was
+# missing was caching, so a returning visitor refetched the scene art every
+# time and a slow leg of that fetch showed as a layer popping in late. These
+# rules let the browser and the edge hold onto the art instead.
+#
+# A new deployment gives every file a fresh ETag, so a long max-age never
+# pins a stale asset past a redeploy: the browser revalidates and the edge
+# already has the new bytes.
+
+# Fingerprinted build output (Vite hashes the name): safe to keep forever.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# The driving scene. Stable names, so cache a day and revalidate; keep serving
+# the old bytes while the new ones are fetched rather than blocking on them.
+/scene/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+# Horn samples, the social card and the favicon: same deal.
+/horns/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/opengraph.jpg
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/*.png
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
