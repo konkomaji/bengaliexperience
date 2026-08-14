@@ -143,11 +143,14 @@ export function buildJsonLd(pageId: PageId) {
     })),
   };
 
+  // The old standalone hero illustration is gone; the driving scene is the
+  // page's image now and the social card stands in for it, so this points at
+  // the same file as the primary image, keeping its own caption of the bus.
   const busImage = {
     "@type": "ImageObject",
     "@id": `${BRAND.url}${PAGE_PATH.busdriver}#scene`,
-    url: BRAND.url + SCENE.hero,
-    contentUrl: BRAND.url + SCENE.hero,
+    url: image,
+    contentUrl: image,
     caption: SCENE.heroAlt,
   };
 
