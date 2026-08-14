@@ -20,12 +20,12 @@
 
 Most "culture" sites hand you a gallery or an essay and leave you outside, looking in. This one tries the opposite: one ordinary Bengali moment per site, rebuilt as something you can sit inside for as long as you like, from anywhere.
 
-One stop is open, three are being built:
+Two stops are open, two are being built:
 
 | | Experience | State |
 |---|---|---|
 | 🚌 | **Bengali Bus Driver Playlist** — a West Bengal night bus with the driver's music on | **live** |
-| 📻 | **Mahalaya Listening** — the Mahishasuramardini broadcast at dawn | building |
+| 📻 | **Mahalaya Listening** — the Mahishasuramardini broadcast at dawn | **live** |
 | 🪔 | **Pandal Hopping** — a night walk through Durga Puja pandals | building |
 | 😴 | **Sunday Afternoon** — mangshor jhol, a ceiling fan, and the nap after | building |
 
@@ -36,6 +36,14 @@ One stop is open, three are being built:
 Board a Kolkata bus at dusk. It drives — the road scrolls, the city slides past in parallax, the wheels turn, the body rides on its springs, and diesel trails off the tailpipe. Press the horn and the whole scene lurches. Behind it plays a nonstop stream of Bangla bangers from the 90s to the 20s, **shuffled fresh and dropped in at a random point on every visit**, so no two people board the same bus.
 
 No account. No paywall. Nothing to install.
+
+---
+
+## What's live — Mahalaya
+
+A 1990s Kolkata room in the dark before dawn, an old valve radio on the barred windowsill, and the city and sky beyond it. **Press the radio** and the original *Mahishasuramardini* broadcast plays from the start — Birendra Krishna Bhadra reciting the Chandi — and across its hour and a half the sky in the window lifts from an Amavasya night to the sun cresting the South Kolkata rooftops, the way the real morning arrives while it is read. **মা আসছেন** glows in as it plays, over a live countdown to Durga Puja.
+
+Drag the radio's tuning knob to scrub, and the dawn turns with it — because the sky is driven by how far through the broadcast you are.
 
 ---
 
@@ -56,6 +64,14 @@ One number drives everything: **ground speed**. Every other motion is *derived* 
 - **Speed itself** is measured in the bus sprite's own pixels, not screen pixels, so the ride plays at the same apparent speed — and hits the same bumps in the same places — on a phone and a desktop alike.
 
 The art arrives as flat PNGs; a build-time pipeline (`scripts/prepare-scene.mjs`, using `sharp`) turns it into the layers the engine runs on. It flood-fills the bus off its background, **reads the axle positions straight off the wheel arches** so the separate wheels land exactly in them, re-centres the wheel sprite, and closes the tiling seams on the scrolling layers. It emits the measured geometry and a content hash as generated TypeScript, so layout is correct on the very first painted frame.
+
+### The Mahalaya window is painted art plus a coded dawn
+
+The Mahalaya scene (`src/components/DawnScene.tsx`) composites delivered art with a dawn drawn entirely in code. One number runs it — how far through the ~90-minute broadcast you are — and the sky in the window is lerped from an Amavasya (moonless) night to the sun cresting the rooftops across its whole length; the sky gradient, the rising sun, a drifting cloud, twinkling stars, a CSS South Kolkata skyline, the light through the bars, the dust and a tungsten-bulb flicker are all code.
+
+Its pipeline (`scripts/prepare-mahalaya.mjs`) does the one thing the art can't arrive with: the room is delivered flattened, its window filled with a painted grey checkerboard, so it **keys that back to real transparency** — only the light, neutral pixels inside the window, so the dark iron bars survive — and records the window's bounding box. The scene reproduces the room's `object-fit: cover` crop from that geometry, so the sky behind the glass and the click-target on the radio land exactly on the paint at any size (verified pixel-exact against the browser's own cover math).
+
+**The radio is the control.** Click it to play or pause; drag its tuning knob to scrub — and because the dawn is driven by broadcast position, turning the knob turns the sky. The broadcast plays linearly from the start (`src/hooks/useBroadcast.ts`), because it is a ritual you sit through, not a playlist. মা আসছেন floats in the corner and glows in as it plays, over a live countdown to Durga Puja.
 
 ### Playback with no tracklist
 
@@ -122,14 +138,14 @@ Pushing to `main` deploys, via the connected Cloudflare Pages project.
 ```
 index.html              one HTML shell; its head + body are rewritten per page at the edge
 src/
-├─ components/          RoadScene (the driving engine), Player, Header, Hero, sheets…
-├─ hooks/              usePlayerEngine, useHorn, useISTClock, useAboardCount…
-├─ data/               all content + config, no logic (brand, scene, playlists, seo)
-├─ lib/                selection, jsonld, prerender, title parsing — shared by client + edge
-└─ pages/              HomePage · BusDriverPage
+├─ components/          RoadScene (the bus engine), DawnScene (the Mahalaya window), Player, Header…
+├─ hooks/              usePlayerEngine, useBroadcast, useHorn, useCountdown, useISTClock, useViewport…
+├─ data/               all content + config, no logic (brand, scene, playlists, broadcast, seo)
+├─ lib/                selection, jsonld, prerender, mahalayaLayout — shared by client + edge
+└─ pages/              HomePage · BusDriverPage · MahalayaPage
 functions/             Cloudflare Pages Functions (_middleware, sitemap, llms.txt, api/aboard)
-scripts/               prepare-scene (art → scene layers + geometry), check-playlists, stamp-lastmod
-design/source/         master art PNGs (gitignored); the pipeline turns them into public/scene/*
+scripts/               prepare-scene + prepare-mahalaya (art → layers + geometry), check-playlists, stamp-lastmod
+design/source/         master art PNGs (gitignored); the pipelines turn them into public/scene/*
 ```
 
 ---

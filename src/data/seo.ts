@@ -20,17 +20,19 @@ import { EXPERIENCES } from "./experiences";
  * every FAQ answer is written to be lifted whole rather than summarised.
  */
 
-export type PageId = "home" | "busdriver";
+export type PageId = "home" | "busdriver" | "mahalaya";
 
 export const PAGE_PATH: Record<PageId, string> = {
   home: "/",
   busdriver: "/busdriver",
+  mahalaya: "/mahalaya",
 };
 
 /** every servable path -> page */
 export const PATH_TO_PAGE: Record<string, PageId> = {
   "/": "home",
   "/busdriver": "busdriver",
+  "/mahalaya": "mahalaya",
 };
 
 /**
@@ -62,6 +64,8 @@ export interface PageSeo {
   intro: string;
   /** short factual lines, one claim each, the shape LLMs lift most readily */
   facts: string[];
+  /** optional per-page tab icon (SVG), swapped in on this page only */
+  favicon?: string;
 }
 
 export interface QA {
@@ -91,8 +95,8 @@ export const PAGE_SEO: Record<PageId, PageSeo> = {
       "Bengali Experience is a digital collection of the small, ordinary things a Bengali grows up inside. The driver's music on the bus to school. The radio at four in the morning that means the pujo has started. Sunday's mangsho bhaat, mutton and rice, and the long sleep after it. None of it is an occasion, and none of it was ever noticed until it was far away. Each one is rebuilt here to sit inside again, from anywhere.",
     facts: [
       "Free to use. No account, no app, no download, on every page.",
-      "One experience is open now: the Bengali bus driver playlist.",
-      "Three more are being built: Mahalaya listening, Durga Puja pandal hopping, and the Bengali Sunday afternoon.",
+      "Two experiences are open now: the Bengali bus driver playlist, and Mahalaya listening.",
+      "Two more are being built: Durga Puja pandal hopping, and the Bengali Sunday afternoon.",
       "Everything is in English, so it works whether or not you read Bengali script.",
       "Made by one person in Kolkata, independent of any label, brand or institution.",
     ],
@@ -125,6 +129,52 @@ export const PAGE_SEO: Record<PageId, PageSeo> = {
       "One of the experiences on Bengali Experience, with more playlists being added.",
     ],
   },
+  mahalaya: {
+    title: "Mahalaya | Bengali Experience",
+    description:
+      "Listen to Mahishasuramardini, the original Mahalaya dawn broadcast, the way Bengal has since the 1930s: Birendra Krishna Bhadra reciting the Chandi in the dark while the sky slowly lightens to first light, on the new-moon morning that begins Durga Puja. Free, no login, with a live countdown to the pujo. Part of Bengali Experience.",
+    keywords: [
+      "mahalaya",
+      "mahalaya 2026",
+      "shubho mahalaya",
+      "mahishasuramardini",
+      "mahishasuramardini full audio",
+      "mahishasuramardini original recording",
+      "birendra krishna bhadra",
+      "birendra krishna bhadra mahishasuramardini",
+      "mahalaya birendra krishna bhadra original",
+      "mahalaya listen online",
+      "mahalaya radio online",
+      "listen mahishasuramardini online",
+      "chandipath mahalaya",
+      "chandi path birendra krishna bhadra",
+      "mahalaya song",
+      "mahalaya amavasya",
+      "mahalaya devi paksha",
+      "akashvani mahalaya",
+      "all india radio mahalaya",
+      "durga puja 2026",
+      "durga puja 2026 date",
+      "when is durga puja 2026",
+      "durga puja countdown",
+      "maa aschen",
+    ],
+    favicon: "/mahalaya-radio.svg",
+    h1: "Mahalaya Listening",
+    intro:
+      "Mahalaya Listening sits you with Mahishasuramardini, the ninety-minute Akashvani broadcast that has opened Mahalaya since the 1930s: Birendra Krishna Bhadra reading the Chandi in the dark before dawn, between Bengali devotional songs and orchestral pieces. It is the sound that tells Bengal the pujo has begun, heard at four in the morning with the lights off. Press play and the sky over the scene slowly lightens from night to first dawn across the length of the broadcast, the way the real morning does.",
+    facts: [
+      "Mahishasuramardini, the Mahalaya dawn broadcast, played from the start rather than shuffled.",
+      "Birendra Krishna Bhadra reading the Chandi, with songs and orchestral pieces between.",
+      "First aired on Akashvani, All India Radio, in the 1930s, and heard every Mahalaya since.",
+      "Mahalaya marks Devi Paksha, the fortnight that ends in Durga Puja, roughly a week before the pujo.",
+      "The scene's sky lightens from night to dawn across the full length of the broadcast.",
+      "Mahalaya 2026 falls on Saturday, 10 October, and Durga Puja begins with Maha Shashthi on Friday, 16 October 2026.",
+      "A live countdown on the page ticks down the days, hours, minutes and seconds to Durga Puja 2026.",
+      "Free to use, with no account, no app and no download.",
+      "The audio streams from its upload on YouTube. Nothing is rehosted.",
+    ],
+  },
 };
 
 /**
@@ -151,11 +201,11 @@ export const PAGE_FAQ: Record<PageId, QA[]> = {
     },
     {
       q: "What can I do on it right now?",
-      a: "One experience is open: the Bengali Bus Driver Playlist, which puts you on a West Bengal bus with the driver's music playing, the Bangla songs that actually come out of the speakers on a Kolkata route. Three more are being built.",
+      a: "Two experiences are open. The Bengali Bus Driver Playlist puts you on a West Bengal bus with the driver's music playing, the Bangla songs that actually come out of the speakers on a Kolkata route. Mahalaya Listening sits you with the Mahishasuramardini dawn broadcast, Birendra Krishna Bhadra reading the Chandi while the sky slowly lightens. Two more are being built.",
     },
     {
       q: "What is coming next?",
-      a: "Three more experiences are planned. Mahalaya Listening, which sits with the Mahishasuramardini broadcast at dawn the way Bengal has since the 1930s. Pandal Hopping, a night walk through Durga Puja pandals across Kolkata. Sunday Afternoon, which is mangshor jhol, a ceiling fan, and the long nap that follows.",
+      a: "Two more experiences are planned. Pandal Hopping, a night walk through Durga Puja pandals across Kolkata. Sunday Afternoon, which is mangshor jhol, a ceiling fan, and the long nap that follows. Mahalaya Listening, the dawn broadcast, has just opened alongside the bus.",
     },
     {
       q: "Do I need to read Bengali to use it?",
@@ -181,7 +231,7 @@ export const PAGE_FAQ: Record<PageId, QA[]> = {
     },
     {
       q: "How does it fit with Bengali Experience?",
-      a: "It is the first of them. Bengali Experience is a digital collection of the small, ordinary things a Bengali grows up inside, and the driver's music on a bus is one of those things: nobody chooses it, everybody knows it, and it is the sound of getting somewhere. Mahalaya listening, Durga Puja pandal hopping and the Sunday afternoon are being built alongside it.",
+      a: "It is the first of them. Bengali Experience is a digital collection of the small, ordinary things a Bengali grows up inside, and the driver's music on a bus is one of those things: nobody chooses it, everybody knows it, and it is the sound of getting somewhere. Mahalaya listening, the Mahishasuramardini dawn broadcast, is open alongside it, with Durga Puja pandal hopping and the Sunday afternoon still being built.",
     },
     {
       q: "Is it free, and do I need an account?",
@@ -202,6 +252,56 @@ export const PAGE_FAQ: Record<PageId, QA[]> = {
     {
       q: "Does it work on a phone?",
       a: "Yes. It runs in any modern mobile browser with no install, and playback continues while you scroll. On desktop there are keyboard shortcuts: space to play, N and P for tracks, and H for the horn.",
+    },
+  ],
+  mahalaya: [
+    {
+      q: "What is Mahalaya Listening?",
+      a: "It is a website that sits you with Mahishasuramardini, the Mahalaya dawn broadcast, the way Bengal has since the 1930s. You press play and the ninety-minute programme runs from the start while the sky over the scene slowly lightens from night to first dawn, the way the real morning does. It is one of the experiences on Bengali Experience.",
+    },
+    {
+      q: "What is Mahishasuramardini?",
+      a: "Mahishasuramardini is the Akashvani, All India Radio, programme broadcast before dawn on Mahalaya: Birendra Krishna Bhadra reciting the Chandi, the Sanskrit invocation of the goddess Durga, woven through Bengali devotional songs and orchestral pieces. It has opened Mahalaya since the 1930s and is the sound that tells Bengal the pujo has begun.",
+    },
+    {
+      q: "What is Mahalaya?",
+      a: "Mahalaya is the day that marks the start of Devi Paksha, the fortnight that ends in Durga Puja, roughly a week before the pujo. By tradition Bengalis wake before dawn to hear the Mahishasuramardini broadcast, and it is the moment the countdown to Durga Puja really begins.",
+    },
+    {
+      q: "Who was Birendra Krishna Bhadra?",
+      a: "Birendra Krishna Bhadra was the radio broadcaster whose voice reading the Chandi became inseparable from Mahalaya. The recording most people know and listen for is his, and hearing anyone else read it is, for most Bengalis, not quite Mahalaya.",
+    },
+    {
+      q: "Is it free, and do I need an account?",
+      a: "It is completely free and needs no login, no signup and no app. Open the page, press play, and it starts. The sound switches on with your first tap or click, because browsers block audible autoplay until you interact with the page.",
+    },
+    {
+      q: "Where can I listen to the original Mahishasuramardini recording?",
+      a: "You can listen to it right here, free and from the start: this page plays the original Mahishasuramardini broadcast, Birendra Krishna Bhadra reciting the Chandi, streamed from its upload on YouTube. Press the radio and it begins. Nothing is rehosted or downloadable.",
+    },
+    {
+      q: "How long is the Mahishasuramardini broadcast?",
+      a: "The broadcast runs about an hour and a half, roughly 1 hour and 26 minutes. On this page the sky in the window lightens from night to sunrise across its full length, so the morning arrives as the reading closes.",
+    },
+    {
+      q: "Where does the audio come from?",
+      a: "The broadcast streams from its upload on YouTube. Nothing is rehosted or downloadable. It plays from the beginning rather than shuffled, because it is a ritual you sit through from the start, not a playlist.",
+    },
+    {
+      q: "When is Durga Puja 2026?",
+      a: "Durga Puja 2026 runs in mid-October: Maha Shashthi on Friday 16 October, Maha Saptami on Saturday 17 October, Maha Ashtami on Sunday 18 October, Maha Navami on Monday 19 October, and Vijaya Dashami on Wednesday 21 October 2026 (some regional calendars place Dashami on Tuesday 20 October). The page shows a live countdown to it.",
+    },
+    {
+      q: "When is Mahalaya 2026?",
+      a: "Mahalaya 2026 falls on Saturday, 10 October 2026, about a week before Durga Puja begins with Maha Shashthi on 16 October. It marks the start of Devi Paksha, and by tradition Bengalis wake before dawn to hear the Mahishasuramardini broadcast that morning.",
+    },
+    {
+      q: "What does Maa Aschen mean?",
+      a: "Maa Aschen (মা আসছেন) means 'the Mother is coming' in Bengali, said of the goddess Durga in the days before the pujo as she is believed to be returning to her parental home. It is the feeling Mahalaya begins: the countdown to her arrival.",
+    },
+    {
+      q: "How does it fit with Bengali Experience?",
+      a: "Bengali Experience is a digital collection of the small, ordinary things a Bengali grows up inside. The bus driver's music is one; the Mahalaya broadcast at dawn is another. Both are the thing itself rather than an article about it, rebuilt to sit inside again from anywhere.",
     },
   ],
 };

@@ -1,4 +1,5 @@
 import { BRAND, DRIVER } from "../data/brand";
+import { BROADCAST } from "../data/broadcast";
 import { EXPERIENCES } from "../data/experiences";
 import { PLAYLISTS, TOTAL_TRACKS } from "../data/playlists";
 import { SCENE } from "../data/scene";
@@ -27,6 +28,19 @@ export function buildJsonLd(pageId: PageId) {
   const url = BRAND.url + path;
   const image = BRAND.url + BRAND.ogImage;
   const isHome = pageId === "home";
+  const isBus = pageId === "busdriver";
+
+  // Each page's subject node id, and a plain-language topic for `about`.
+  const subjectId = isHome
+    ? `${BRAND.url}/#experiences`
+    : isBus
+      ? `${BRAND.url}/#collection`
+      : `${BRAND.url}/#broadcast`;
+  const aboutName = isHome
+    ? "Bengali culture and nostalgia"
+    : isBus
+      ? "Bengali bus driver music in West Bengal"
+      : "Mahalaya and the Mahishasuramardini dawn broadcast";
 
   /** One named human behind the site. An answer engine asked "who made this"
    *  should not have to guess, and an attributed page is a stronger thing to
@@ -76,11 +90,8 @@ export function buildJsonLd(pageId: PageId) {
     // it rather than in the prose, where it would push the actual subject of
     // the page down the paragraph.
     isAccessibleForFree: true,
-    mainEntity: { "@id": isHome ? `${BRAND.url}/#experiences` : `${BRAND.url}/#collection` },
-    about: {
-      "@type": "Thing",
-      name: isHome ? "Bengali culture and nostalgia" : "Bengali bus driver music in West Bengal",
-    },
+    mainEntity: { "@id": subjectId },
+    about: { "@type": "Thing", name: aboutName },
   };
 
   const faq = {
@@ -154,16 +165,30 @@ export function buildJsonLd(pageId: PageId) {
     caption: SCENE.heroAlt,
   };
 
+  /** The Mahalaya broadcast as a work: the recording, its reader and the
+   *  station that carried it. A radio episode, and an audio object, because it
+   *  is both a programme and a thing you can press play on. */
+  const broadcast = {
+    "@type": ["RadioEpisode", "AudioObject"],
+    "@id": `${BRAND.url}/#broadcast`,
+    name: BROADCAST.title,
+    alternateName: "Mahalaya broadcast",
+    description:
+      "Mahishasuramardini, the Akashvani (All India Radio) programme broadcast before dawn on Mahalaya: Birendra Krishna Bhadra reading the Chandi between Bengali devotional songs and orchestral pieces, heard every Mahalaya since the 1930s.",
+    url: BRAND.url + PAGE_PATH.mahalaya,
+    inLanguage: ["bn-IN", "sa"],
+    isAccessibleForFree: true,
+    datePublished: String(BROADCAST.year),
+    duration: "PT1H25M52S",
+    actor: { "@type": "Person", name: BROADCAST.reader },
+    productionCompany: { "@type": "Organization", name: BROADCAST.broadcaster },
+    about: { "@type": "Thing", name: "Mahalaya, Devi Paksha and the goddess Durga" },
+  };
+
+  const subject = isHome ? [experiences] : isBus ? [collection, busImage] : [broadcast];
+
   return {
     "@context": "https://schema.org",
-    "@graph": [
-      curator,
-      website,
-      primaryImage,
-      webPage,
-      faq,
-      breadcrumb,
-      ...(isHome ? [experiences] : [collection, busImage]),
-    ],
+    "@graph": [curator, website, primaryImage, webPage, faq, breadcrumb, ...subject],
   };
 }
