@@ -1,476 +1,143 @@
-# Bengali Experience
+<div align="center">
 
-A free, no-login collection of small websites, each one putting you inside a
-single Bengali thing for as long as you want to stay. Not articles about the
-culture and not photo galleries of it, but the thing itself, running in a
-browser tab.
+# 🚌 Bengali Experience
 
-One is built. The bus driver playlist, at `/busdriver`: nonstop Bangla bangers
-from the 90s to the 20s, shuffled fresh and started at a random point on every
-visit, so no two people board the same bus. Three more are named and being
-worked on: Mahalaya listening, Durga Puja pandal hopping, and the Bengali
-Sunday afternoon.
+**Small, free, no-login websites that put you *inside* a single Bengali thing — not an article about it, the thing itself, running in a browser tab.**
 
-Live at **https://bengaliexperience.wtf**.
+[**bengaliexperience.wtf →**](https://bengaliexperience.wtf)
 
-Vite · React · TypeScript · Tailwind v4 · Cloudflare Pages.
+![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind-v4-38BDF8?logo=tailwindcss&logoColor=white)
+![Cloudflare Pages](https://img.shields.io/badge/Cloudflare-Pages-F38020?logo=cloudflare&logoColor=white)
+
+</div>
 
 ---
 
-## Quick start
+## The idea
+
+Most "culture" sites hand you a gallery or an essay and leave you outside, looking in. This one tries the opposite: one ordinary Bengali moment per site, rebuilt as something you can sit inside for as long as you like, from anywhere.
+
+One stop is open, three are being built:
+
+| | Experience | State |
+|---|---|---|
+| 🚌 | **Bengali Bus Driver Playlist** — a West Bengal night bus with the driver's music on | **live** |
+| 📻 | **Mahalaya Listening** — the Mahishasuramardini broadcast at dawn | building |
+| 🪔 | **Pandal Hopping** — a night walk through Durga Puja pandals | building |
+| 😴 | **Sunday Afternoon** — mangshor jhol, a ceiling fan, and the nap after | building |
+
+---
+
+## What's live — the bus
+
+Board a Kolkata bus at dusk. It drives — the road scrolls, the city slides past in parallax, the wheels turn, the body rides on its springs, and diesel trails off the tailpipe. Press the horn and the whole scene lurches. Behind it plays a nonstop stream of Bangla bangers from the 90s to the 20s, **shuffled fresh and dropped in at a random point on every visit**, so no two people board the same bus.
+
+No account. No paywall. Nothing to install.
+
+---
+
+## Under the hood
+
+The interesting parts are all in *how* it's built.
+
+### The driving scene is real, not a video
+
+The bus is a proper little physics toy, drawn straight to the DOM inside one `requestAnimationFrame` loop (`src/components/RoadScene.tsx`). React renders it once and never touches it again — sixty state updates a second would cost more than the animation.
+
+One number drives everything: **ground speed**. Every other motion is *derived* from it rather than tuned by eye, so nothing can drift out of step:
+
+- **Wheels** spin at `ω = v / r`, each tyre off its own measured radius — get this wrong and the wheels visibly slip.
+- **Parallax** layers scroll at real depth ratios (far `0.16` → road `1.0`).
+- **Suspension** is a damped spring driven by a road-roughness function of *distance travelled*, so the same pothole always hits in the same place.
+- **Pitch** comes out of the spring's velocity, so the body noses down as it drops and lifts as it recovers.
+- **Speed itself** is measured in the bus sprite's own pixels, not screen pixels, so the ride plays at the same apparent speed — and hits the same bumps in the same places — on a phone and a desktop alike.
+
+The art arrives as flat PNGs; a build-time pipeline (`scripts/prepare-scene.mjs`, using `sharp`) turns it into the layers the engine runs on. It flood-fills the bus off its background, **reads the axle positions straight off the wheel arches** so the separate wheels land exactly in them, re-centres the wheel sprite, and closes the tiling seams on the scrolling layers. It emits the measured geometry and a content hash as generated TypeScript, so layout is correct on the very first painted frame.
+
+### Playback with no tracklist
+
+The player loads whole YouTube playlists natively (`listType: "playlist"`) instead of embedding a hardcoded list. **Add a song on YouTube and it appears on the site immediately, no redeploy.** The iframe is parked off-screen as a pure audio engine; a spinning vinyl record stands in for it.
+
+Two small tricks matter:
+- **The play button *is* the gesture.** Browsers refuse audible autoplay, so `play()` unmutes and starts audibly on the very first press — no "click again to enable sound."
+- **The ride starts somewhere random** in the list, for everyone, every visit — set through the player's `index` variable at construction, the one placement YouTube actually honours.
+
+When a list runs out the engine rolls straight into another, so the bus never reaches a dead end.
+
+### The horn is measured, not guessed
+
+Three real horn recordings live in `public/horns/`, one picked at random per press. Each was **decoded and analysed** — an RMS envelope, burst rate, attack time, brightness — and the page is animated on that horn's own rhythm: a sharp single blast jolts and holds, a stuttering one shivers fast. The music ducks for the exact length of the horn (driven off the audio's `ended` event, not a timer), and the picture settles one second *before* the sound does, the way a real horn fades off down the road.
+
+### Rendered at the edge
+
+It's a single-page app, but a Cloudflare Pages Function (`functions/_middleware.ts`) rewrites the response before it ships: one canonical host, one URL per page with real status codes, and — crucially — **the page body is rendered at the edge**, not just the `<head>`. Answer engines that don't run JavaScript get the heading, the direct answer, the facts and the FAQ as real markup instead of an empty `<div id="root">`. Every answer is written once in `src/data/seo.ts` and emitted three ways — crawlable HTML, `schema.org` structured data, and `llms.txt` — so they can't drift. The sitemap and `llms.txt` are generated from the same data, never hand-kept.
+
+### Built to not break
+
+- An **error boundary** falls to a themed "chai break" screen, styled with inline CSS so it renders even if the stylesheet failed to load.
+- Dead videos are stepped over; a dead *playlist* is told apart from a slow one and rolled past.
+- A **watchdog** catches silent playback refusals by asking the player what it *actually* loaded three seconds later.
+- The live "aboard" listener count is cached in KV so a read is one `kv.get`, not a full scan — and it hides itself rather than inventing a number when the endpoint is down.
+
+### Cached hard, updated instantly
+
+Scene files keep stable names, so the pipeline stamps a content hash and the app appends `?v=<hash>` to every asset URL. That lets `/scene/*` be served **`immutable`** at the edge while still updating the moment the art changes: a changed layer is a new URL, an unchanged one is cached forever.
+
+---
+
+## Tech stack
+
+| Layer | Choice |
+|---|---|
+| Build | **Vite 8**, **TypeScript 6**, **oxlint** |
+| UI | **React 19**, **React Router 7**, **Tailwind CSS v4**, **Framer Motion** |
+| Type | Baloo Da 2 · Hind Siliguri · Manrope (self-hosted via Fontsource) |
+| Edge | **Cloudflare Pages** + Pages Functions + **KV** (`wrangler`) |
+| Media | YouTube IFrame API (audio) · Web Audio (horn) · `sharp` (asset pipeline) |
+
+---
+
+## Run it locally
 
 ```bash
 npm install
-npm run dev            # http://localhost:5173
+npm run dev            # UI only, http://localhost:5173
 ```
 
-`vite dev` serves the UI only. The Cloudflare-specific pieces, per-page SEO
-rewriting at the edge, `/sitemap.xml`, `/llms.txt` and the `/api/aboard`
-counter, all need Wrangler:
+`vite dev` serves the front end. The edge pieces — per-page SEO rewriting, `/sitemap.xml`, `/llms.txt`, the live counter — need Wrangler:
 
 ```bash
 npm run cf:dev         # build + wrangler pages dev dist
 ```
 
+Pushing to `main` deploys, via the connected Cloudflare Pages project.
+
 ---
 
-## Architecture
+## Project layout
 
 ```
-index.html                 single HTML shell; its head is rewritten per page at the edge
-├─ src/
-│  ├─ main.tsx             mounts App inside the ErrorBoundary
-│  ├─ App.tsx              two pages, four legacy redirects, breakdown screen for the rest
-│  │
-│  ├─ data/                all content and configuration, no logic
-│  │  ├─ brand.ts          BRAND (name, canonical origin, social card) and DRIVER
-│  │  ├─ experiences.ts    the catalogue: what is live, what is being built
-│  │  ├─ scene.ts          SCENE, the one Kolkata illustration and its copy
-│  │  ├─ playlists.ts      the nine YouTube playlist ids
-│  │  └─ seo.ts            URL map + per-page copy, facts and FAQ
-│  │
-│  ├─ lib/
-│  │  ├─ selection.ts      which playlist opens the session (see below)
-│  │  ├─ embeddable.ts     oEmbed pre-flight: will the player accept this list?
-│  │  ├─ title.ts          turns messy YouTube titles into song + artist
-│  │  ├─ jsonld.ts         schema.org graph per page, shared by client and edge
-│  │  └─ prerender.ts      the crawlable body, shared by client and edge
-│  │
-│  ├─ hooks/
-│  │  ├─ usePlayerEngine   the player: playlists, transport, autoplay, recovery
-│  │  ├─ useYouTubeApi     loads the IFrame API exactly once
-│  │  ├─ useAboardCount    polls the live listener count
-│  │  ├─ useISTClock       Kolkata wall clock, ticking every second
-│  │  ├─ useHorn           Web Audio air horn, scene shake, music ducking
-│  │  └─ useDocumentHead   head sync for client-side navigation only
-│  │
-│  ├─ components/          HeroScene, Header, Hero, Player, QueueSheet,
-│  │                       TicketSheet, DriverCard, BreakdownScreen, ErrorBoundary
-│  └─ pages/
-│     ├─ HomePage.tsx      the collection: what this is, what is on the shelf
-│     └─ BusDriverPage.tsx the bus
-│
-├─ functions/              Cloudflare Pages Functions
-│  ├─ _middleware.ts       one host, one URL per page, real status codes, real content
-│  ├─ sitemap.xml.ts       sitemap, generated from src/data/seo.ts
-│  ├─ llms.txt.ts          the same answers, in the format answer engines read
-│  └─ api/aboard.ts        KV-backed live listener count
-│
-└─ scripts/
-   ├─ check-playlists.mjs  which playlists the embed will actually accept
-   └─ stamp-lastmod.mjs    reads git for each page's real last-modified date
-```
-
-### Two pages, on purpose
-
-`/` is the project and `/busdriver` is the experience, and they are chasing
-different searches. The front page answers "what is this", which is brand and
-culture intent. The bus page carries "bengali bus driver playlist", which is
-the highest-volume phrase here and deserves a page that is only about it.
-Splitting them means neither has to compromise its title.
-
-There used to be four bus pages, one per West Bengal route, with a chooser on
-top. It cost more than it earned: four URLs competing for one search intent,
-four illustrations to keep in step, and a menu sitting in front of an
-experience whose whole point is that you do not choose, you get on. Those
-paths now 301 to `/busdriver`.
-
-### The scene is an image, not code
-
-The background is **one pre-rendered illustration**. An earlier version drew
-the bus and landscape as animated SVG with parallax and it never looked
-convincing; a single good image nails it and costs nothing at runtime.
-
-Because the bus is painted into that image it cannot be moved on its own, so
-the scene moves around it: a slow Ken Burns push-in, an engine bob on the
-frame, blurred streaks rushing along the road, a warm light bloom, drifting
-clouds and film grain. Together they read as motion without the bus ever
-translating.
-
-`--hero-position` pans the focal point per breakpoint so the bus survives
-narrow phones, since the image is 21:9 and phones are not.
-
-### Playback
-
-The player loads whole YouTube playlists natively (`listType: "playlist"`)
-rather than embedding a hardcoded tracklist. **Add a song to the playlist on
-YouTube and it appears on the site immediately, with no redeploy.**
-
-The YouTube iframe is parked off-screen and used purely as an audio engine; a
-spinning vinyl record stands in for it visually.
-
-> **Every playlist must be Public on YouTube.** Unlisted is not enough: the
-> IFrame player refuses an unlisted list with error 150 and loads nothing.
-> See [Playlist visibility](#playlist-visibility).
-
-### The horn
-
-Three real recordings in `public/horns/`, one picked at random per press,
-never the same one twice running. Earlier versions synthesized it with Web
-Audio, two tones a fourth apart through a lowpass and a compressor, tuned to
-the ARAI dual-tone standard Indian commercial vehicles actually run. It was a
-decent imitation and it was still an imitation: real buses do not agree with
-each other. Recordings carry that for free.
-
-**Each horn moves the page to its own rhythm.** Not by taste: every file was
-decoded and measured, an RMS envelope in 30ms windows, counting bursts above
-28% of peak, plus attack time and zero-crossing rate as a brightness proxy.
-The animation cycle is that horn's own burst rate, so the page moves on the
-beat of whichever one is sounding.
-
-| File | Measured | Motion |
-|---|---|---|
-| `horn-1` | 3.2s, 5 bursts (~630ms), 0.03s attack, brightest at ~2.3kHz | `jolt`: hits hard on each tap, then holds still |
-| `horn-2` | 8.2s, 38 bursts (~215ms), sounds only 37% of the time | `stutter`: small, fast, mostly at rest |
-| `horn-3` | 8.4s, 7 bursts (~1.2s), sounds 89% of the time | `sway`: slow and heavy, nothing sharp |
-
-Matching 38 full-sized shakes to the stuttering one would be unbearable and
-would not look like the sound either; a sharp jolt held for eight seconds is
-just as wrong the other way. The keyframes live in `src/index.css`, the
-pairings in `HORNS` in `src/hooks/useHorn.ts`.
-
-**The recordings run from 3.2s to 8.4s**, so nothing timed can be a constant:
-
-- **The music ducks for the whole horn**, down to 12% and back up after, via
-  `engine.setDucked`. The release is driven by the audio element's own `ended`
-  event, not a timer hoping to match it. The visitor's own volume is never
-  overwritten; ducking works below it. That contrast, not raw gain, is what
-  makes a horn read as loud.
-- **The picture settles one second before the sound does.** The scene rattle
-  and the dancing heading stop at `duration - 1s`, which is what a real horn
-  looks like: the bus stops shuddering while the note is still fading off down
-  the road. Ending them exactly on the audio froze the whole page on the frame
-  the sound cut, which read as a glitch.
-- **The rattle loops** at constant amplitude instead of decaying once. A
-  single settling shake was over before most of these recordings had started.
-
-The heading is split one letter per span (`DancingText` in `Hero.tsx`) with an
-increasing per-letter delay, so the word ripples rather than jumping in
-unison. Words are `inline-block` so a letter-split heading still wraps at word
-boundaries on a phone, and the whole thing is `aria-hidden` behind the h1's
-`aria-label`, because a screen reader should hear the title and not
-twenty-four separate characters.
-
-There is no callout badge on press. A second thing to read, appearing at the
-exact moment the horn is meant to be felt, was working against the sound.
-
-### Nothing plays until you press play
-
-The page opens silent, with the playlist cued and the first track already
-named. Pressing play starts it **audibly, on the first press**.
-
-This is a deliberate reversal. Browsers refuse to start audible media before a
-user gesture, and the only way around that is to autoplay muted, which leaves
-two bad options: open silently while pretending to play, or nag for a second
-interaction to turn the sound on. The play button *is* the gesture, so
-pressing it can unmute and start in one move. `play()` therefore unmutes and
-resets the volume on every call rather than only calling `playVideo()`;
-spending the gesture on playback alone is exactly how a site ends up playing
-silently with no visible reason.
-
-One consequence worth knowing: the 8s watchdog cannot run before the first
-press. "Ready but not playing" is now the resting state, not a symptom, and a
-watchdog that could not tell the difference would declare the playlist dead 8
-seconds after every page load.
-
-### Where the ride starts
-
-Playback begins **somewhere random in the list**, every visit, for everyone.
-
-The random start is set through the `index` player variable when the player is
-constructed, and that placement is the whole trick. `setShuffle(true)` only
-governs where *next* goes, and `playVideoAt()` issued during startup is quietly
-ignored, so an earlier version that shuffled and jumped on `onReady` left every
-single visitor on track one while looking, in code, exactly like it was
-working. `setShuffle` is still called, but only once `getPlaylist()` answers,
-since it is a silent no-op before the tracklist arrives.
-
-### How the bus chooses what to play
-
-`src/lib/selection.ts`. There is one playlist right now, so the weighting below
-is dormant rather than gone: it resolves to "the only list" and starts
-mattering again the moment a second is added. Plain `Math.random()` ignores
-that this is explicitly a *bus in Kolkata*, and lets a returning visitor land
-on the same list every time. Instead:
-
-1. **Time-of-day weighting.** Each playlist declares which IST hours it suits.
-   At 2am the mellow lists are far likelier; at 6pm it inverts. The bus knows
-   what time it is because it shares a clock with the header.
-2. **Recency avoidance.** The last three openers are remembered in
-   `localStorage` and heavily penalised, so you get somewhere new.
-3. **Weighted random, never ranked.** The best-fitting list is the most
-   likely, not guaranteed. Two people opening the site in the same minute
-   still get different journeys.
-
-Every step degrades safely: no storage, or nonsense weights, falls back to a
-uniform random pick.
-
-When a playlist runs out the engine rolls straight into another one, so the
-bus never reaches a dead end.
-
----
-
-## SEO, AEO and GEO
-
-`functions/_middleware.ts` does four things, in order, before the response
-leaves Cloudflare.
-
-**One host.** A custom domain does not switch the `*.pages.dev` one off, so
-the same site answers at two origins and a crawler that finds the old one
-splits the ranking signal. `bengaliexperience.pages.dev` gets a 301. The match
-is exact, so preview deployments still resolve.
-
-**One URL per page.** The four retired route paths 301 to `/busdriver`, and
-canonical links are built from the page's own path rather than the requested
-one, so an alias can never declare itself canonical and compete with the page
-it stands in for.
-
-**Real status codes.** `_redirects` sends every unmatched path to `index.html`
-with a 200 so the router can show the breakdown screen. Right for a visitor,
-a soft 404 for a crawler: a 200 says "this URL is a real page", so typos and
-junk accumulate in the index as duplicates of the front page. Unmatched paths
-now return a real 404 and `noindex, follow`, and still render the breakdown
-screen. The existing robots tags are rewritten rather than a second appended,
-so the page never carries two contradicting directives.
-
-**Real content.** Title, meta, canonical and JSON-LD are rewritten per page,
-and **the body is rendered at the edge too** (`src/lib/prerender.ts`). A SPA
-ships one empty `<div id="root">`, and while Google renders JavaScript, the
-answer engines this site invites in `robots.txt`, GPTBot and PerplexityBot and
-ClaudeBot and CCBot, mostly do not. They were being allowed in and handed a
-blank page. The middleware injects the heading, the direct answer, the facts,
-the catalogue or the playlists, and the FAQ into `#root`. The markup says
-exactly what the visible page says, so nothing is cloaked.
-
-React clears `#root` on its first paint, but "first paint" is after ~130 kB of
-JavaScript has downloaded, parsed and run, and until then that fallback is on
-screen: a flash of unstyled headings and FAQ on every load, worse the slower
-the connection. It is wrapped in `#prerender` and hidden by a rule in
-`index.html` that only applies once a tiny inline script has added `.js` to
-the root element. That happens while the head is still parsing, before
-anything paints, so a browser with JavaScript never shows it for a frame,
-while a client that does not run scripts reads it normally.
-
-### Written to be quoted
-
-Answer engines synthesise rather than link, so the copy in `src/data/seo.ts`
-is shaped for extraction as much as for ranking:
-
-- every page's `intro` is a **self-contained direct answer** that still makes
-  sense with no page around it, and it sits at the top of both the visible
-  page and the crawlable body, before any scene setting
-- `facts` are one checkable claim per line
-- `FAQ` answers are written to be lifted whole rather than summarised, and
-  match question-shaped searches ("what is bengali experience", "is it free",
-  "where does the music come from")
-
-Each answer exists **once** and is emitted three ways: as crawlable text, as
-`FAQPage` structured data, and as `llms.txt` prose. They cannot drift.
-
-### Nothing is written down twice
-
-`sitemap.xml` and `llms.txt` are Pages Functions that read `src/data/seo.ts`,
-not static files kept in step by hand. A new experience cannot go live without
-appearing in both.
-
-The sitemap emits only `<loc>` and `<lastmod>`. Google has said outright that
-it ignores `<changefreq>` and `<priority>`, and it uses `<lastmod>` only while
-it stays truthful, so the date comes from `git log` at build time
-(`scripts/stamp-lastmod.mjs`) and is **omitted rather than invented** when the
-build has no history to read.
-
-### Structured data
-
-Both pages carry `WebSite`, `WebPage`, `Person`, `FAQPage`, `BreadcrumbList`
-and `ImageObject`. What differs is the subject: the front page's `mainEntity`
-is an `ItemList` of the experiences, the bus page's is the `MusicPlaylist`.
-
-`isAccessibleForFree` is set because "free, no login" is the central claim of
-every page here and there is a field built to say it. The curator is a real
-`Person` with a `sameAs` link, because an attributed page is a stronger thing
-to cite than an anonymous one. Planned experiences appear in the `ItemList`
-**without a URL**, which is the honest way to say "this is real and not built
-yet" in structured data.
-
-Tracklists are deliberately not enumerated. They live on YouTube and change
-without a redeploy, so asserting a fixed one would mean asserting something
-already going stale.
-
-### Performance
-
-The hero illustration is the bus page's LCP element and React renders it, so
-the browser could not discover it until the bundle had downloaded, parsed and
-run. The edge injects a `<link rel="preload" as="image">` for it, on that page
-only.
-
-Also shipped: `robots.txt` with AI crawlers explicitly allowed, and a web
-manifest.
-
----
-
-## Robustness
-
-- **Error boundary** leads to the themed breakdown screen, which is styled
-  with inline CSS and its own keyframes so it still renders if the stylesheet
-  or fonts failed to load.
-- **Dead videos** are stepped over automatically. A dead *list* is different:
-  `nextVideo()` on an empty playlist is a no-op, so an unplayable list used to
-  park the player on "Boarding…" forever. The engine now tells them apart by
-  whether a tracklist exists, marks the list dead and rolls to another one.
-- **A silent refusal is caught too.** `loadPlaylist` on a refused list does not
-  always raise `onError`. With something already playing, YouTube can keep
-  playing it while the app believes it switched, showing one playlist's name
-  over another's audio. Three seconds after every load the engine asks
-  `getPlaylistId()` what it actually has, and rolls on if the answer is wrong.
-- **A watchdog** rolls to another list if a freshly loaded one has not started
-  within 8s and the visitor did not pause it. When nothing is left, the player
-  reports `stalled` rather than pretending to load.
-- **The aboard counter is cached.** The obvious implementation, `kv.list()`
-  over every key per request, is O(n) per hit: invisible at ten listeners,
-  crippling at fifty thousand. The total is computed at most once every 10s
-  and cached under a single key, so reads are one `kv.get`. Scanning is capped
-  at 30 pages.
-- **The counter never invents a number.** If the endpoint is unavailable the
-  header hides it rather than showing something false.
-- **Queue titles load lazily** via IntersectionObserver and are cached, so
-  opening a 100-track playlist does not fire 100 requests.
-
----
-
-## Playlist visibility
-
-Not every playlist you can open in a browser tab can be embedded. Two kinds
-are refused with `onError` **150** and an empty tracklist, and neither is
-visible from the id:
-
-- **Playlists created in YouTube Music.** These get an ordinary `PL…` id and
-  open normally on youtube.com, but the IFrame player will not take them,
-  whatever their visibility says. Recreating the same songs as a playlist made
-  *on youtube.com* is the fix.
-- **Unlisted or Private playlists.** Only Public embeds.
-
-On top of that, individual videos can block embedding. Most label uploads
-(Saregama, T-Series) and "- Topic" art tracks do. Those are skipped at
-runtime, so a list plays around them.
-
-Check every list at once:
-
-```bash
-npm run check:playlists
-```
-
-or one by hand:
-
-```bash
-curl -s -o /dev/null -w "%{http_code}\n" \
-  "https://www.youtube.com/oembed?format=json&url=https://www.youtube.com/playlist?list=<LIST_ID>"
-# 200 = the embed will take it · 401 = it will not
-```
-
-This is why there is one playlist. The site shipped with nine, seven of them
-made in YouTube Music, which meant seven were silently unplayable and the ride
-was really running on two. Advertising nine and playing two is a lie the
-visitor can hear, so the shelf is honest instead:
-
-| Site label | YouTube title | Tracks | Embeds |
-|---|---|---|---|
-| OG Kumar Sanu | KUMAR SANU SPECIAL BENGALI SONGS | 93 | yes |
-
-More are being added. Everything around `PLAYLISTS` keeps working unchanged at
-any length: the weighted opening pick, roll-on-death, the queue chips. Adding
-an entry to the array is the whole job.
-
-**With one list, "the list is dead" needs care.** The 8s watchdog used to mark
-a slow-starting list unplayable and roll on, which is right when there is
-somewhere to roll to and fatal when there is not: the only list gets written
-off over a slow network and the player sits on "Boarding…" forever with
-nothing left to try. `abandonCurrentPlaylist` now checks whether an
-alternative exists at all, and when none does it reloads the same list from a
-different point, up to three times, before admitting defeat. The same applies
-at the end of the list: nothing to roll into is not a breakdown, so it
-reshuffles and keeps driving.
-
----
-
-## Assets
-
-| File | Size | Notes |
-|---|---|---|
-| `public/hero/hero-kolkata.jpg` | 1920×825 | 21:9, dark, bus centred in the middle band |
-| `public/hero/breakdown.jpg` | 16:9, night | the chai-break error / 404 screen |
-| `public/opengraph.jpg` | 1200×630 | the social card, shared by both pages |
-| `public/horns/horn-1…3.mp3` | 3.2s to 8.4s | the horn, one picked at random per press |
-
-Top and bottom ~25% of the hero sit under gradients and the player, so keep
-the subject in the middle band. No text in the images, since generators garble
-lettering.
-
-Source PNGs live in `design/source/` and are gitignored. Convert with:
-
-```bash
-node -e "require('sharp')('design/source/hero-x.png').resize(1920,825,{fit:'cover'}).jpeg({quality:82,mozjpeg:true}).toFile('public/hero/hero-kolkata.jpg')"
+index.html              one HTML shell; its head + body are rewritten per page at the edge
+src/
+├─ components/          RoadScene (the driving engine), Player, Header, Hero, sheets…
+├─ hooks/              usePlayerEngine, useHorn, useISTClock, useAboardCount…
+├─ data/               all content + config, no logic (brand, scene, playlists, seo)
+├─ lib/                selection, jsonld, prerender, title parsing — shared by client + edge
+└─ pages/              HomePage · BusDriverPage
+functions/             Cloudflare Pages Functions (_middleware, sitemap, llms.txt, api/aboard)
+scripts/               prepare-scene (art → scene layers + geometry), check-playlists, stamp-lastmod
+design/source/         master art PNGs (gitignored); the pipeline turns them into public/scene/*
 ```
 
 ---
 
-## Deploy
+<div align="center">
 
-The repo is connected to Cloudflare Pages, so **pushing to `main` deploys**.
-`npm run deploy` exists for a manual push but is redundant on a git-connected
-project and will simply produce a second identical deployment.
+Built by one person in Kolkata, independent of any label or institution.
 
-First-time setup:
+**[bengaliexperience.wtf](https://bengaliexperience.wtf)**
 
-```bash
-npx wrangler login
-npx wrangler kv namespace create ABOARD
-npx wrangler kv namespace create ABOARD --preview
-```
-
-Paste both ids into `wrangler.toml`, or connect the repo to Cloudflare Pages
-with build command `npm run build`, output directory `dist`, and an `ABOARD`
-KV binding under Settings → Functions.
-
-### Domain
-
-`BRAND.url` in `src/data/brand.ts` is the single source for every absolute URL
-the site emits. Only `index.html` and `public/robots.txt` spell the domain out
-separately, because they are static files no build step templates. A domain
-change means editing those three.
-
-After a deploy that changes URLs, submit
-`https://bengaliexperience.wtf/sitemap.xml` in Google Search Console and Bing
-Webmaster Tools.
-
----
-
-## Notes
-
-- Audio streams from YouTube. Nothing is rehosted.
-- YouTube may show its own pre-roll on some videos. That is YouTube's ad, not
-  the site's, and it is not controllable from an embed.
-- The queue and ticket sheets deliberately avoid `AnimatePresence`: under
-  framer-motion v13 with React 19 its exit never flushed on its own, leaving
-  modals stuck on screen until an unrelated re-render.
-- Visible copy contains no em dashes, on purpose. Commas, full stops and
-  colons only.
+</div>
