@@ -24,10 +24,36 @@ import { writeFileSync } from "node:fs";
  */
 const SHARED = ["src/data/seo.ts", "src/lib/prerender.ts"];
 
+const TARAKESWAR_SHARED = [
+  "src/data/tarakeswar/core.ts",
+  "src/data/tarakeswar/jsonld.ts",
+  "src/data/tarakeswar/prerender.ts",
+  "src/components/tarakeswar/TarakeswarLayout.tsx",
+  "src/components/tarakeswar/shared.tsx",
+];
+
 const PAGES = {
   home: [...SHARED, "src/data/experiences.ts", "src/pages/HomePage.tsx"],
   busdriver: [...SHARED, "src/data/scene.ts", "src/data/playlists.ts", "src/components/RoadScene.tsx"],
   mahalaya: [...SHARED, "src/data/broadcast.ts", "src/pages/MahalayaPage.tsx", "src/components/DawnScene.tsx"],
+  tarakeswar: [...SHARED, ...TARAKESWAR_SHARED, "src/pages/tarakeswar/TarakeswarHubPage.tsx"],
+  tarakeswarTemple: [...SHARED, ...TARAKESWAR_SHARED, "src/pages/tarakeswar/TarakeswarTemplePage.tsx"],
+  tarakeswarFood: [
+    ...SHARED,
+    ...TARAKESWAR_SHARED,
+    "src/data/tarakeswar/directory.ts",
+    "src/pages/tarakeswar/TarakeswarFoodPage.tsx",
+  ],
+  tarakeswarReach: [...SHARED, ...TARAKESWAR_SHARED, "src/pages/tarakeswar/TarakeswarReachPage.tsx"],
+  // The blog index's own lastmod; individual posts carry their own
+  // publishedDate/updatedDate in src/data/tarakeswar/blog.ts instead of a
+  // git-derived one, since sitemap.xml.ts reads those directly.
+  tarakeswarBlog: [
+    ...SHARED,
+    ...TARAKESWAR_SHARED,
+    "src/data/tarakeswar/blog.ts",
+    "src/pages/tarakeswar/TarakeswarBlogIndexPage.tsx",
+  ],
 };
 
 /** ISO-8601 date of the newest commit touching any of `files`, or null. */

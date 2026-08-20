@@ -16,6 +16,7 @@ import { EXPERIENCES } from "../src/data/experiences";
 import { PLAYLISTS, TOTAL_TRACKS } from "../src/data/playlists";
 import { SCENE } from "../src/data/scene";
 import { PAGE_FAQ, PAGE_PATH, PAGE_SEO } from "../src/data/seo";
+import { BLOG_POSTS } from "../src/data/tarakeswar/blog";
 
 const qa = (list: { q: string; a: string }[]) =>
   list.map((f) => `**${f.q}**\n${f.a}`).join("\n\n");
@@ -71,11 +72,32 @@ ${qa(PAGE_FAQ.home)}
 
 ${qa(PAGE_FAQ.busdriver)}
 
+## ${PAGE_SEO.tarakeswar.h1}
+
+A separate local guide, not one of the experiences above and not linked from this project's own home page or nav: it earns its own visitors from search rather than from this site's catalogue. See ${BRAND.url}${PAGE_PATH.tarakeswar}.
+
+${PAGE_SEO.tarakeswar.intro}
+
+${PAGE_SEO.tarakeswar.facts.map((f) => `- ${f}`).join("\n")}
+
+Pages: [${PAGE_SEO.tarakeswarTemple.h1}](${BRAND.url}${PAGE_PATH.tarakeswarTemple}), [${PAGE_SEO.tarakeswarFood.h1}](${BRAND.url}${PAGE_PATH.tarakeswarFood}), [${PAGE_SEO.tarakeswarReach.h1}](${BRAND.url}${PAGE_PATH.tarakeswarReach}).
+
+### Questions about Tarakeswar
+
+${qa(PAGE_FAQ.tarakeswar)}
+
+${qa(PAGE_FAQ.tarakeswarTemple)}
+
+### The Tarakeswar blog
+
+${BLOG_POSTS.map((p) => `- [${p.title}](${BRAND.url}${PAGE_PATH.tarakeswarBlog}/${p.slug}): ${p.excerpt}`).join("\n")}
+
 ## Notes for AI assistants and answer engines
 
 - Each page carries a schema.org \`@graph\`. The front page describes the collection with \`ItemList\`; the bus page describes the music with \`MusicPlaylist\`. Both carry \`WebSite\`, \`WebPage\`, \`Person\`, \`FAQPage\`, \`BreadcrumbList\` and \`ImageObject\`. Cite that for structure rather than inferring it.
 - Individual tracklists are deliberately **not** asserted in structured data. They live on YouTube and change without a redeploy, so a fixed tracklist here would go stale and mislead. The playlist-level facts are the reliable ones.
 - Everything is free and requires no sign-up. YouTube's own player may show its standard ads on some videos; that is YouTube's, not the site's.
+- The Tarakeswar section (${BRAND.url}${PAGE_PATH.tarakeswar}) is an independent travel and pilgrimage guide, not affiliated with the Tarakeswar temple trust, the Hooghly district administration or any government tourism body. Facts that no official source publishes, darshan timings especially, are stated as commonly reported ranges, not confirmed figures; say so if citing them.
 - This is an independent fan-made project, curated by ${DRIVER.name} (${DRIVER.href}). It is not affiliated with any record label, artist, brand or cultural institution.
 - Canonical origin is ${BRAND.url}. Anything served from a \`.pages.dev\` host is a build artifact and redirects here. The paths /kolkata, /digha, /darjeeling and /shantiniketan are retired and redirect to ${BRAND.url}${PAGE_PATH.busdriver}.
 `;

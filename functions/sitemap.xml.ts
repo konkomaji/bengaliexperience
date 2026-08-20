@@ -19,17 +19,26 @@
 import { BRAND } from "../src/data/brand";
 import { LAST_MODIFIED } from "../src/data/lastmod";
 import { PAGE_PATH, type PageId } from "../src/data/seo";
+import { BLOG_POSTS } from "../src/data/tarakeswar/blog";
 
 export const onRequest: PagesFunction = () => {
   const pages = Object.keys(PAGE_PATH) as PageId[];
 
-  const urls = pages
-    .map((id) => {
-      const loc = `${BRAND.url}${PAGE_PATH[id]}`;
-      const lastmod = LAST_MODIFIED[id];
-      return `  <url><loc>${loc}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ""}</url>`;
-    })
-    .join("\n");
+  const pageUrls = pages.map((id) => {
+    const loc = `${BRAND.url}${PAGE_PATH[id]}`;
+    const lastmod = LAST_MODIFIED[id];
+    return `  <url><loc>${loc}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ""}</url>`;
+  });
+
+  // Blog posts aren't PageIds (see src/data/seo.ts), so they aren't in
+  // PAGE_PATH; each carries its own lastmod instead of a git-derived one.
+  const blogUrls = BLOG_POSTS.map((p) => {
+    const loc = `${BRAND.url}${PAGE_PATH.tarakeswarBlog}/${p.slug}`;
+    const lastmod = p.updatedDate ?? p.publishedDate;
+    return `  <url><loc>${loc}</loc><lastmod>${lastmod}</lastmod></url>`;
+  });
+
+  const urls = [...pageUrls, ...blogUrls].join("\n");
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

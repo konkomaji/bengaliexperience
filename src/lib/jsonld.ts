@@ -4,6 +4,15 @@ import { EXPERIENCES } from "../data/experiences";
 import { PLAYLISTS, TOTAL_TRACKS } from "../data/playlists";
 import { SCENE } from "../data/scene";
 import { PAGE_FAQ, PAGE_PATH, PAGE_SEO, type PageId } from "../data/seo";
+import { buildTarakeswarJsonLd } from "../data/tarakeswar/jsonld";
+
+const TARAKESWAR_PAGE_IDS = new Set([
+  "tarakeswar",
+  "tarakeswarTemple",
+  "tarakeswarFood",
+  "tarakeswarReach",
+  "tarakeswarBlog",
+]);
 
 /**
  * schema.org @graph, per page.
@@ -23,6 +32,14 @@ import { PAGE_FAQ, PAGE_PATH, PAGE_SEO, type PageId } from "../data/seo";
  * client side on navigation.
  */
 export function buildJsonLd(pageId: PageId) {
+  // The Tarakeswar section is a separate subject with its own schema.org
+  // shapes (TouristAttraction, HowTo, BlogPosting...); delegated rather than
+  // folded into the ternary below, which is written for the two
+  // "experiences" this file otherwise describes.
+  if (TARAKESWAR_PAGE_IDS.has(pageId)) {
+    return buildTarakeswarJsonLd(pageId as Parameters<typeof buildTarakeswarJsonLd>[0]);
+  }
+
   const seo = PAGE_SEO[pageId];
   const path = PAGE_PATH[pageId];
   const url = BRAND.url + path;

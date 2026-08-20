@@ -4,6 +4,7 @@ import { EXPERIENCES } from "../data/experiences";
 import { PLAYLISTS, TOTAL_TRACKS } from "../data/playlists";
 import { SCENE } from "../data/scene";
 import { PAGE_FAQ, PAGE_PATH, PAGE_SEO, type PageId } from "../data/seo";
+import { renderTarakeswarBody } from "../data/tarakeswar/prerender";
 
 /**
  * The version of the page a crawler sees.
@@ -24,16 +25,19 @@ import { PAGE_FAQ, PAGE_PATH, PAGE_SEO, type PageId } from "../data/seo";
  * first, before any scene setting, because a model extracting an answer takes
  * the top of the document and a reader skimming does the same.
  */
-const escape = (s: string) =>
+/** Exported for src/data/tarakeswar/prerender.ts: the same escaping and list
+ *  shapes, so the Tarakeswar section's crawlable markup is built the same
+ *  way as every other page's rather than a second, slightly different copy. */
+export const escape = (s: string) =>
   s
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 
-const facts = (lines: string[]) => `<ul>${lines.map((f) => `<li>${escape(f)}</li>`).join("")}</ul>`;
+export const facts = (lines: string[]) => `<ul>${lines.map((f) => `<li>${escape(f)}</li>`).join("")}</ul>`;
 
-const questions = (qa: { q: string; a: string }[]) =>
+export const questions = (qa: { q: string; a: string }[]) =>
   qa.map((f) => `<h3>${escape(f.q)}</h3><p>${escape(f.a)}</p>`).join("");
 
 export function renderStaticBody(pageId: PageId): string {
@@ -41,7 +45,14 @@ export function renderStaticBody(pageId: PageId): string {
 
   const head = [`<h1>${escape(seo.h1)}</h1>`, `<p>${escape(seo.intro)}</p>`, facts(seo.facts)];
 
-  const body = pageId === "home" ? homeBody() : pageId === "mahalaya" ? mahalayaBody() : busBody();
+  const body =
+    pageId === "home"
+      ? homeBody()
+      : pageId === "mahalaya"
+        ? mahalayaBody()
+        : pageId === "busdriver"
+          ? busBody()
+          : renderTarakeswarBody(pageId);
 
   // Wrapped and identified so index.html can hide it the instant JavaScript
   // is known to be running. React clears #root on first paint, but "first

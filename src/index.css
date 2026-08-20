@@ -7,6 +7,12 @@
 @import "@fontsource/baloo-da-2/600.css";
 @import "@fontsource/baloo-da-2/700.css";
 @import "@fontsource/baloo-da-2/800.css";
+/* Tarakeswar section only: see --font-tara-* below */
+@import "@fontsource/poppins/400.css";
+@import "@fontsource/poppins/500.css";
+@import "@fontsource/poppins/600.css";
+@import "@fontsource/poppins/700.css";
+@import "@fontsource/poppins/800.css";
 
 /*
   বাংলা এক্সপেরিয়েন্স — design tokens.
@@ -20,6 +26,12 @@
   --font-display: "Baloo Da 2", "Hind Siliguri", ui-sans-serif, sans-serif;
   --font-body: "Hind Siliguri", "Manrope Variable", ui-sans-serif, sans-serif;
   --font-latin: "Manrope Variable", ui-sans-serif, sans-serif;
+
+  /* Tarakeswar section: Poppins throughout, headings and body alike, the
+     rounded geometric face Material 3 Expressive is usually shown in. Kept
+     separate from --font-display/--font-body above so the rest of the site,
+     set in Baloo Da 2 and Hind Siliguri, is untouched. */
+  --font-tara: "Poppins", "Hind Siliguri", ui-sans-serif, sans-serif;
 
   /* --- bus livery --- */
   --color-primary: #ff9a45;          /* ember / headlamp warm */
@@ -45,6 +57,39 @@
 
   --color-success: #7ed99a;
   --color-error: #ff8a80;
+
+  /* --- tarakeswar: a separate light theme, scoped to /tarakeswar/* only ---
+     White, saffron and blue: the tika and the temple flag, and the sky over
+     the queue at four in the morning. Light surfaces throughout, on purpose:
+     this section is a guide read in daylight, on a phone, mid-trip, not a
+     scene to sit inside after dark. Material 3 Expressive tonal roles
+     (primary/secondary/tertiary + their containers), so gradients built from
+     these tokens always land on a pairing that is already balanced. Nothing
+     outside src/pages/tarakeswar and src/components/tarakeswar reads these. */
+  --color-tara-primary: #e8720c;            /* saffron */
+  --color-tara-primary-dim: #b6570a;
+  --color-tara-on-primary: #fffaf5;
+  --color-tara-primary-container: #ffe2c2;
+  --color-tara-on-primary-container: #6e3800;
+
+  --color-tara-secondary: #1868b0;          /* temple-sky blue */
+  --color-tara-secondary-dim: #124d85;
+  --color-tara-secondary-container: #d9e9ff;
+  --color-tara-on-secondary-container: #0a3663;
+
+  --color-tara-tertiary: #143a63;           /* deep indigo, blue's dark end */
+  --color-tara-tertiary-container: #dde6f4;
+  --color-tara-on-tertiary-container: #0c2540;
+
+  --color-tara-surface: #ffffff;
+  --color-tara-surface-dim: #f3ede3;
+  --color-tara-surface-bright: #ffffff;
+  --color-tara-surface-container: #fbf6ee;
+  --color-tara-surface-container-high: #f5ecdc;
+  --color-tara-on-surface: #241c13;
+  --color-tara-on-surface-muted: #6b6053;
+  --color-tara-outline: #d9cebb;
+  --color-tara-outline-variant: #ece4d5;
 
   /* --- shape --- */
   --radius-xs: 10px;
@@ -203,6 +248,28 @@
   ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-thumb { background: var(--color-outline); border-radius: 999px; }
   ::-webkit-scrollbar-track { background: transparent; }
+}
+
+/*
+  The Tarakeswar section is a light page sitting inside a site that is dark
+  everywhere else. `color-scheme: light` here fixes native form controls and
+  scrollbars to the light palette for the duration of this wrapper, without
+  touching `html`'s site-wide dark declaration above.
+*/
+.tarakeswar-theme {
+  color-scheme: light;
+  background: var(--color-tara-surface);
+  color: var(--color-tara-on-surface);
+  font-family: var(--font-tara);
+}
+.tarakeswar-theme ::selection {
+  background: var(--color-tara-primary-container);
+  color: var(--color-tara-on-primary-container);
+}
+.tarakeswar-theme :focus-visible {
+  outline: 2px solid var(--color-tara-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 @layer utilities {

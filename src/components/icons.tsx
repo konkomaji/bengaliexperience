@@ -78,3 +78,87 @@ export const CloseIcon = (p: { size?: number }) => (
     <path d="M6 6l12 12M18 6L6 18" />
   </svg>
 );
+
+/* ── Tarakeswar section icons ─────────────────────────────────────────
+   A different visual language on purpose: a stroked, line-drawn set for a
+   text-forward guide, next to the filled set above built for a scene's UI. */
+const line = { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round", strokeLinejoin: "round" } as const;
+
+/** the atchala temple roof: a stepped, tiered hut-roof silhouette */
+export const TempleIcon = (p: { size?: number }) => (
+  <svg {...line} width={p.size ?? 20} height={p.size ?? 20}>
+    <path d="M12 2.5 8.5 6.5h7z" />
+    <path d="M6.5 8h11M5 11h14M4 20h16M6 11v9M18 11v9M9.5 15.5v4.5M14.5 15.5v4.5" />
+    <path d="M9.5 15.5a2.5 2.5 0 0 1 5 0" />
+  </svg>
+);
+export const MapPinIcon = (p: { size?: number }) => (
+  <svg {...line} width={p.size ?? 18} height={p.size ?? 18}>
+    <path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21z" />
+    <circle cx="12" cy="9.5" r="2.4" />
+  </svg>
+);
+export const TrainIcon = (p: { size?: number }) => (
+  <svg {...line} width={p.size ?? 18} height={p.size ?? 18}>
+    <rect x="5" y="4" width="14" height="12" rx="4" />
+    <path d="M5 11h14M9 4v7M15 4v7M8 20l-2.5 2M16 20l2.5 2" />
+    <circle cx="9" cy="14" r="0.6" fill="currentColor" />
+    <circle cx="15" cy="14" r="0.6" fill="currentColor" />
+  </svg>
+);
+export const RoadIcon = (p: { size?: number }) => (
+  <svg {...line} width={p.size ?? 18} height={p.size ?? 18}>
+    <path d="M8 3 4 21M16 3l4 18M12 3v3M12 9.5v3M12 16v3" />
+  </svg>
+);
+export const FoodIcon = (p: { size?: number }) => (
+  <svg {...line} width={p.size ?? 18} height={p.size ?? 18}>
+    <path d="M6 2.5v8a2.5 2.5 0 0 0 5 0v-8M8.5 2.5v6M6 2.5v6" />
+    <path d="M17 2.5s-2 2-2 5 2 3 2 3v11" />
+  </svg>
+);
+export const ClockIcon = (p: { size?: number }) => (
+  <svg {...line} width={p.size ?? 18} height={p.size ?? 18}>
+    <circle cx="12" cy="12" r="8.5" />
+    <path d="M12 7.5V12l3 2" />
+  </svg>
+);
+export const CalendarIcon = (p: { size?: number }) => (
+  <svg {...line} width={p.size ?? 18} height={p.size ?? 18}>
+    <rect x="3.5" y="5" width="17" height="15.5" rx="2.5" />
+    <path d="M3.5 9.5h17M8 3v4M16 3v4" />
+  </svg>
+);
+export const PillIcon = (p: { size?: number }) => (
+  <svg {...line} width={p.size ?? 18} height={p.size ?? 18}>
+    <rect x="3" y="9" width="18" height="6" rx="3" transform="rotate(-35 12 12)" />
+    <path d="M9.5 9.5 14.5 14.5" />
+  </svg>
+);
+export const ArrowRightIcon = (p: { size?: number }) => (
+  <svg {...line} width={p.size ?? 16} height={p.size ?? 16}>
+    <path d="M4 12h16M13 5l7 7-7 7" />
+  </svg>
+);
+export const ExternalIcon = (p: { size?: number }) => (
+  <svg {...line} width={p.size ?? 14} height={p.size ?? 14}>
+    <path d="M9 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3M14 4h6v6M20 4l-9.5 9.5" />
+  </svg>
+);
+export const StarIcon = (p: { size?: number }) => (
+  <svg viewBox="0 0 24 24" width={p.size ?? 12} height={p.size ?? 12} fill="currentColor">
+    <path d="M12 2.5l2.9 6.4 6.9.7-5.2 4.7 1.5 6.9L12 17.6 5.9 21.2l1.5-6.9-5.2-4.7 6.9-.7z" />
+  </svg>
+);
+export const CompassIcon = (p: { size?: number }) => (
+  <svg {...line} width={p.size ?? 18} height={p.size ?? 18}>
+    <circle cx="12" cy="12" r="8.5" />
+    <path d="m15 9-4.5 1.5L9 15l4.5-1.5z" />
+  </svg>
+);
+export const ArticleIcon = (p: { size?: number }) => (
+  <svg {...line} width={p.size ?? 18} height={p.size ?? 18}>
+    <rect x="4" y="3.5" width="16" height="17" rx="2" />
+    <path d="M7.5 8h9M7.5 11.5h9M7.5 15h5.5" />
+  </svg>
+);
