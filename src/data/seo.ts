@@ -20,12 +20,44 @@ import { EXPERIENCES } from "./experiences";
  * every FAQ answer is written to be lifted whole rather than summarised.
  */
 
-export type PageId = "home" | "busdriver" | "mahalaya";
+/**
+ * The four `tarakeswar*` ids are a separate local guide to Tarakeswar, a
+ * temple town in Hooghly district. It is not one of the Bengali Experience
+ * "experiences" in src/data/experiences.ts, is not linked from the home
+ * page or the header, and is not named in the README, on purpose: it earns
+ * its visitors from search rather than from the site's own nav. It still
+ * gets a proper sitemap row, JSON-LD and an llms.txt section, because
+ * "unlinked internally" and "findable by search" are different things, and
+ * only the first one is the point. See src/data/tarakeswar/.
+ */
+/**
+ * Blog posts (src/data/tarakeswar/blog.ts) are a fifth Tarakeswar area but
+ * are not PageIds: there are ten of them today and more later, each at its
+ * own slug, which does not fit a fixed Record<PageId, ...> the way every
+ * other page here does. Only their index gets a PageId, `tarakeswarBlog`;
+ * functions/_middleware.ts, sitemap.xml.ts and src/lib/jsonld.ts each look
+ * up individual posts by slug separately, alongside this map rather than
+ * through it.
+ */
+export type PageId =
+  | "home"
+  | "busdriver"
+  | "mahalaya"
+  | "tarakeswar"
+  | "tarakeswarTemple"
+  | "tarakeswarFood"
+  | "tarakeswarReach"
+  | "tarakeswarBlog";
 
 export const PAGE_PATH: Record<PageId, string> = {
   home: "/",
   busdriver: "/busdriver",
   mahalaya: "/mahalaya",
+  tarakeswar: "/tarakeswar",
+  tarakeswarTemple: "/tarakeswar/temple-and-mela",
+  tarakeswarFood: "/tarakeswar/eat-and-stay",
+  tarakeswarReach: "/tarakeswar/how-to-reach",
+  tarakeswarBlog: "/tarakeswar/blog",
 };
 
 /** every servable path -> page */
@@ -33,6 +65,11 @@ export const PATH_TO_PAGE: Record<string, PageId> = {
   "/": "home",
   "/busdriver": "busdriver",
   "/mahalaya": "mahalaya",
+  "/tarakeswar": "tarakeswar",
+  "/tarakeswar/temple-and-mela": "tarakeswarTemple",
+  "/tarakeswar/eat-and-stay": "tarakeswarFood",
+  "/tarakeswar/how-to-reach": "tarakeswarReach",
+  "/tarakeswar/blog": "tarakeswarBlog",
 };
 
 /**
@@ -64,8 +101,25 @@ export interface PageSeo {
   intro: string;
   /** short factual lines, one claim each, the shape LLMs lift most readily */
   facts: string[];
-  /** optional per-page tab icon (SVG), swapped in on this page only */
+  /** optional per-page tab icon (SVG or PNG, inferred from the extension),
+   *  swapped in on this page only */
   favicon?: string;
+  /**
+   * Optional per-page browser-chrome colour (the `theme-color` meta tag).
+   * Every page so far has shared the site's dark chrome; the Tarakeswar
+   * pages are a light section and set their own, restored to the default
+   * dark on any other page. See useDocumentHead.
+   */
+  themeColor?: string;
+  /**
+   * Optional per-page social card, overriding BRAND.ogImage. Every page so
+   * far has shared the one site-wide illustration; the Tarakeswar section
+   * has no photography of its own (Google Maps embeds instead, see the
+   * CHANGELOG), so it carries one generated typographic card instead,
+   * shared by its four pages and every blog post. See
+   * scripts/prepare-tarakeswar-og.mjs.
+   */
+  ogImage?: { url: string; alt: string };
 }
 
 export interface QA {
@@ -73,7 +127,7 @@ export interface QA {
   a: string;
 }
 
-export const PAGE_SEO: Record<PageId, PageSeo> = {
+const PAGE_SEO_CORE: Record<"home" | "busdriver" | "mahalaya", PageSeo> = {
   home: {
     title: BRAND.seoTitle,
     description:
@@ -177,6 +231,182 @@ export const PAGE_SEO: Record<PageId, PageSeo> = {
   },
 };
 
+/** One card for the whole Tarakeswar section, the same "one illustration,
+ *  one subject" reasoning BRAND.ogImage uses site-wide. See
+ *  scripts/prepare-tarakeswar-og.mjs. */
+const TARAKESWAR_OG = {
+  url: "/tarakeswar/og.jpg",
+  alt: "An illustrated riverside view of Tarakeswar: Dudhpukur pond and the temple's domes among the town's rooftops, under a painted sky, titled Tarakeswar: Travel & Pilgrimage Guide.",
+};
+
+const PAGE_SEO_TARAKESWAR: Record<
+  "tarakeswar" | "tarakeswarTemple" | "tarakeswarFood" | "tarakeswarReach" | "tarakeswarBlog",
+  PageSeo
+> = {
+  tarakeswar: {
+    title: "Tarakeswar Travel Guide: Temple, Timings and How to Reach",
+    description:
+      "A complete Tarakeswar guide: Taraknath temple history and timings, the Shravani Mela and Bol Bom pilgrimage, how to reach from Kolkata and Howrah, and where to eat and stay. Independent and fact checked.",
+    keywords: [
+      "tarakeswar",
+      "tarakeswar temple",
+      "tarkeswar",
+      "tarakeshwar",
+      "tarkeshwar",
+      "tarakeswar travel guide",
+      "tarakeswar tourist places",
+      "things to do in tarakeswar",
+      "tarakeswar temple timings",
+      "how to reach tarakeswar",
+      "tarakeswar to kamarpukur distance",
+      "baba taraknath temple",
+      "tarakeswar shivratri mela",
+      "tarakeswar shravani mela",
+      "bol bom tarakeswar",
+      "tarakeswar west bengal",
+      "tarakeswar hooghly",
+    ],
+    h1: "Tarakeswar: A Complete Travel and Pilgrimage Guide",
+    intro:
+      "Tarakeswar is a temple town in Hooghly district, West Bengal, built around the Taraknath Mandir, one of Bengal's most visited Shiva temples. This guide covers the temple and its timings, the Gajan, Shivratri and Shravani Mela festival calendar, how to reach Tarakeswar from Kolkata and Howrah, and where to eat, stay and find essentials in town.",
+    facts: [
+      "Tarakeswar sits in Hooghly district, West Bengal, roughly 58 km from Kolkata and Howrah.",
+      "The Taraknath Mandir is dedicated to Baba Taraknath, a fierce form of Lord Shiva, in a shivalinga believed to be swayambhu, or self manifested.",
+      "The temple is usually dated to around 1729, though old accounts differ on who built it: some name Raja Bharamalla Rao, others describe a devotee called Vishnu Das.",
+      "The Shravani Mela, held through the Bengali month of Shravan (roughly mid July to mid August), is described by the state government as the longest and largest mela in West Bengal.",
+      "Direct EMU trains run from Howrah to Tarakeswar station through the day, a ride of about 1.5 hours.",
+      "This guide is independent, made for travellers and pilgrims, and is not affiliated with the temple trust or any government tourism body.",
+    ],
+    themeColor: "#e8720c",
+    ogImage: TARAKESWAR_OG,
+    favicon: "/tarakeswar/favicon.png",
+  },
+  tarakeswarTemple: {
+    title: "Taraknath Mandir Tarakeswar: History, Timings and Mela Calendar",
+    description:
+      "The Taraknath Mandir at Tarakeswar: its history and two competing founding legends, atchala architecture, darshan timings, Dudhpukur pond, and the Gajan, Shivratri and Shravani Mela (Bol Bom) festival calendar.",
+    keywords: [
+      "tarakeswar temple history",
+      "taraknath temple",
+      "taraknath mandir",
+      "tarakeswar temple timings",
+      "tarakeswar darshan timings",
+      "dudhpukur tarakeswar",
+      "tarakeswar shivratri mela",
+      "tarakeswar gajan",
+      "shravani mela tarakeswar",
+      "bol bom tarakeswar",
+      "tarakeswar shrabani mela",
+      "tarakeswar entry fee",
+      "is photography allowed in tarakeswar temple",
+      "who built tarakeswar temple",
+    ],
+    h1: "Taraknath Mandir: Temple, Timings and the Mela Calendar",
+    intro:
+      "The Taraknath Mandir at Tarakeswar is dedicated to Baba Taraknath, worshipped as a fierce form of Lord Shiva, in a self manifested shivalinga at the centre of an atchala style temple. It is one of the most visited Shiva temples in Bengal, busiest during the Shravani Mela in the month of Shravan, when lakhs of Bol Bom pilgrims walk in on foot carrying Ganga water.",
+    facts: [
+      "Old accounts of who built the temple do not agree. One names Raja Bharamalla Rao; another describes a devotee, Vishnu Das, who is said to have found the shivalinga after a cow was seen pouring milk over a buried stone. Most accounts date the temple to around 1729.",
+      "The temple is built in Bengal's atchala style, a tiered, sloping roof, with a natmandir (prayer hall) in front and smaller shrines to Kali and Lakshmi-Narayan within the same complex.",
+      "Dudhpukur, the pond north of the temple, is where pilgrims are traditionally believed to bathe or pray before darshan.",
+      "Darshan is commonly reported as roughly 5 to 5:30 in the morning until 1 to 1:30 in the afternoon, reopening from around 4 until 7 to 8:30 in the evening, with longer hours on Shivratri, Gajan and the Mondays of Shravan. No official temple source publishes fixed timings, so treat this as a guide and check locally if your visit depends on exact hours.",
+      "Entry is commonly reported as free, though this is not officially confirmed by any temple source either.",
+      "Two festivals get mixed up online: Maha Shivratri, in the Bengali month of Phalgun (February to March), is a single busy night. The Shravani Mela, through all of Shravan (mid July to mid August), is the much larger month-long pilgrimage. They are not the same event.",
+      "Gajan runs for up to five days, ending on Chaitra Sankranti in mid April, when devotees take temporary ascetic vows and perform Charak Puja.",
+    ],
+    themeColor: "#e8720c",
+    ogImage: TARAKESWAR_OG,
+    favicon: "/tarakeswar/favicon.png",
+  },
+  tarakeswarFood: {
+    title: "Where to Eat and Stay in Tarakeswar: Restaurants, Hotels, Essentials",
+    description:
+      "A working directory for Tarakeswar: real restaurants and cafes, sweet shops, a state tourism lodge, dharamshalas and hotels for pilgrims, plus pharmacies, clinics, ATMs and banks in town.",
+    keywords: [
+      "best place to eat in tarakeswar",
+      "tarakeswar restaurants",
+      "tarakeswar hotels",
+      "where to stay in tarakeswar",
+      "tarakeswar dharamshala",
+      "tarakeswar lodge",
+      "tarakeswar tourist lodge",
+      "tarakeswar pharmacy",
+      "tarakeswar hospital",
+      "tarakeswar atm",
+      "tarakeswar sweet shop",
+      "tarakeswar restaurant amantran",
+    ],
+    h1: "Where to Eat and Stay in Tarakeswar",
+    intro:
+      "This is a working directory for Tarakeswar, built from real, checkable listings rather than a paid or generated list. It covers restaurants and cafes, places to stay from a state tourism lodge to a pilgrim dharamshala, and essentials like pharmacies, clinics, ATMs and banks in town, each with a rough location so you can actually find it.",
+    facts: [
+      "Amantran (A2), opposite the bus stand gate, is the most reviewed sit-down restaurant in Tarakeswar.",
+      "Accommodation ranges from Nataraj Tourism Property, the former West Bengal Tourism lodge, to the Tarakeswar Municipality Guest House and Sri Chaitanya Saraswat Math, a pilgrim ashram.",
+      "Two Apollo Pharmacy branches operate in town, at Chaulpatty and on Post Office Road.",
+      "Tarakeswar Rural Hospital is the government hospital; Care & Cure Nursing Home, on Station Road, is open 24 hours.",
+      "Six bank branches with ATMs, including State Bank of India, HDFC Bank and Bandhan Bank, operate in and around the town centre.",
+      "Tea stalls and most sweet shops in Tarakeswar trade informally with no online listing to point to; this page says so honestly rather than inventing names.",
+    ],
+    themeColor: "#1868b0",
+    ogImage: TARAKESWAR_OG,
+    favicon: "/tarakeswar/favicon.png",
+  },
+  tarakeswarReach: {
+    title: "How to Reach Tarakeswar from Kolkata and Howrah: Train, Road, Bus",
+    description:
+      "The clearest guide to reaching Tarakeswar: direct EMU trains from Howrah station, road distance and driving time from Kolkata, state and private buses, and getting around town once you arrive.",
+    keywords: [
+      "how to reach tarakeswar",
+      "tarakeswar train",
+      "howrah to tarakeswar train",
+      "tarakeswar train timetable",
+      "tarakeswar distance from kolkata",
+      "tarakeswar by road",
+      "bus to tarakeswar",
+      "tarakeswar railway station",
+      "kolkata to tarakeswar distance",
+    ],
+    h1: "How to Reach Tarakeswar",
+    intro:
+      "Tarakeswar is easiest to reach by train: direct EMU locals run from Howrah station to Tarakeswar all day, a ride of about an hour and a half. This page also covers the road route from Kolkata, bus options, and getting around once you are there. Distance figures for Tarakeswar vary a fair bit between map tools; that is said plainly below rather than picking one number and hoping it holds.",
+    facts: [
+      "Tarakeswar Railway Station is the terminus of the Howrah-Tarakeswar branch line, opened in 1885, roughly 58 km from Howrah.",
+      "The train ride takes about 1.5 hours, with somewhere around 35 to 38 direct EMU locals running each day, so there is rarely a long wait.",
+      "By road, most map tools show somewhere between 55 and 65 km from central Kolkata, mainly along State Highway 2 or State Highway 15, a drive of roughly 1 to 2 hours depending on traffic.",
+      "State-run SBSTC buses and private buses run from Esplanade and Babughat, as well as from Arambagh and Serampore, taking about 2.5 to 3.5 hours.",
+      "Inside Tarakeswar, toto (e-rickshaw) is the usual way to cover the roughly 1 km from the railway station to the temple, about a 10-minute ride.",
+      "Flying in, Netaji Subhas Chandra Bose International Airport in Kolkata is the nearest airport. The official Tarakeswar Shrabani Mela government site gives the distance as about 70 km, roughly 2 hours by prepaid taxi, though the same site separately gives 65 km by road, so treat this as an approximate range rather than an exact figure.",
+    ],
+    themeColor: "#1868b0",
+    ogImage: TARAKESWAR_OG,
+    favicon: "/tarakeswar/favicon.png",
+  },
+  tarakeswarBlog: {
+    title: "Tarakeswar Blog: Guides on the Temple, Mela, Travel and Food",
+    description:
+      "Ten in-depth guides on Tarakeswar: temple history, timings, the Shravani Mela and Bol Bom, how to get there, where to eat and stay, and the best day trips nearby.",
+    keywords: [
+      "tarakeswar blog",
+      "tarakeswar guide",
+      "tarakeswar travel blog",
+      "tarakeswar tips",
+      "tarakeswar articles",
+    ],
+    h1: "The Tarakeswar Blog",
+    intro:
+      "Ten guides on Tarakeswar, each answering one specific question rather than repeating the same overview: the temple's real history, its timings, the Shravani Mela, how to actually get there, where to eat and stay, and the best day trips nearby.",
+    facts: [
+      "Ten posts, covering temple history, timings, travel, the mela calendar, food, stay and day trips.",
+      "Every fact traces back to a real, checkable source, noted honestly where sources disagree.",
+      "Written in plain English for a first-time visitor, not for someone who already knows the town.",
+    ],
+    themeColor: "#e8720c",
+    ogImage: TARAKESWAR_OG,
+    favicon: "/tarakeswar/favicon.png",
+  },
+};
+
+export const PAGE_SEO: Record<PageId, PageSeo> = { ...PAGE_SEO_CORE, ...PAGE_SEO_TARAKESWAR };
+
 /**
  * Answer-engine questions, per page.
  *
@@ -189,7 +419,7 @@ export const PAGE_SEO: Record<PageId, PageSeo> = {
  * Each answer is emitted three ways: as crawlable text, as FAQPage structured
  * data, and as llms.txt prose. One source, so they cannot drift apart.
  */
-export const PAGE_FAQ: Record<PageId, QA[]> = {
+const PAGE_FAQ_CORE: Record<"home" | "busdriver" | "mahalaya", QA[]> = {
   home: [
     {
       q: "What is Bengali Experience?",
@@ -305,6 +535,144 @@ export const PAGE_FAQ: Record<PageId, QA[]> = {
     },
   ],
 };
+
+const PAGE_FAQ_TARAKESWAR: Record<
+  "tarakeswar" | "tarakeswarTemple" | "tarakeswarFood" | "tarakeswarReach" | "tarakeswarBlog",
+  QA[]
+> = {
+  tarakeswar: [
+    {
+      q: "What is Tarakeswar famous for?",
+      a: "Tarakeswar is famous for the Taraknath Mandir, a Shiva temple in Hooghly district, West Bengal, and for the Shravani Mela, when lakhs of Bol Bom pilgrims walk in through the month of Shravan carrying Ganga water for the shivalinga.",
+    },
+    {
+      q: "How do I reach Tarakeswar from Kolkata or Howrah?",
+      a: "The easiest way is a direct EMU train from Howrah station to Tarakeswar, about 1.5 hours. By road it is roughly 55 to 65 km depending on the route, a drive of 1 to 2 hours. See the how to reach page for trains, buses and road detail.",
+    },
+    {
+      q: "What are Tarakeswar temple's darshan timings?",
+      a: "Darshan is commonly reported as roughly 5 to 5:30 in the morning until 1 to 1:30 in the afternoon, then again from about 4 until 7 to 8:30 in the evening, with longer hours during Shivratri, Gajan and the Mondays of Shravan. No official source publishes fixed timings, so this is a guide, not a promise.",
+    },
+    {
+      q: "Is the Tarakeswar Shivratri mela the same as the Shravani Mela?",
+      a: "No, and the two get mixed up online. Shivratri is one busy night in the Bengali month of Phalgun (February to March). The Shravani Mela runs through the whole month of Shravan (roughly mid July to mid August) and is by far the bigger event, described by the state government as the longest and largest mela in West Bengal.",
+    },
+    {
+      q: "Can I visit Tarakeswar and Kamarpukur in one day?",
+      a: "Yes, most people do. Kamarpukur, the birthplace of Sri Ramakrishna, is commonly given as around 40 km from Tarakeswar, sources vary a little, and is usually reached by road in under an hour and a half, easily combined with a temple visit on the same day.",
+    },
+    {
+      q: "Is there an entry fee at Tarakeswar temple?",
+      a: "Entry is commonly reported as free, though no official temple source confirms this directly.",
+    },
+    {
+      q: "Is Tarakeswar safe for solo travellers?",
+      a: "There is no Tarakeswar-specific source, positive or negative, addressing this directly, so it would be dishonest to claim either way with any authority. The ordinary common sense that applies to any busy Indian pilgrimage town, sticking to well-lit, populated areas, keeping valuables close in a crowd, applies here too.",
+    },
+  ],
+  tarakeswarTemple: [
+    {
+      q: "Who built Tarakeswar temple and when?",
+      a: "Accounts do not fully agree. Most date the temple to around 1729. One account names Raja Bharamalla Rao as the builder; another describes a devotee, Vishnu Das, who is said to have found the shivalinga after a cow was seen pouring milk over a buried stone in the forest, followed by a dream telling him to build a temple over it. Both versions are told locally, and neither is independently confirmed by a primary source.",
+    },
+    {
+      q: "What is Dudhpukur?",
+      a: "Dudhpukur, meaning milk pond, is the pond just north of the Taraknath Mandir. Pilgrims traditionally bathe in it or pray beside it before darshan.",
+    },
+    {
+      q: "Is photography allowed inside Tarakeswar temple?",
+      a: "Photography and video are commonly reported as not allowed inside the inner sanctum, the garbhagriha, though allowed elsewhere on the temple grounds. This is what visitors and travel guides report, not an official temple rule, so it is worth checking with temple staff on the day.",
+    },
+    {
+      q: "What is the Shravani Mela at Tarakeswar?",
+      a: "The Shravani Mela runs through the Bengali month of Shravan, roughly mid July to mid August. Pilgrims known as Bol Bom or Kanwariyas carry Ganga water on foot, commonly from Baidyabati on the Hooghly river, a walk of around 38 to 40 km, to pour over the Tarakeswar shivalinga. The state government calls it the longest and largest mela in West Bengal; Hooghly district administration figures put attendance at roughly 24 to 30 lakh devotees across the full month, with single-day peaks around 1.6 lakh.",
+    },
+    {
+      q: "What is Gajan at Tarakeswar?",
+      a: "Gajan is a Shaiva folk festival running up to five days, ending on Chaitra Sankranti in mid April. Devotees take temporary ascetic vows, known as Gajan Sannyasis, and perform penances that end in Charak Puja.",
+    },
+    {
+      q: "Do I need to dress a certain way to enter the temple?",
+      a: "Travel guides commonly report that men are expected to remove their shirts before entering the inner sanctum, a common rule at Shiva temples in Bengal. There is no strict dress code reported for women, though modest traditional wear such as a saree or salwar kameez is the norm, and leather items are commonly avoided in the inner precinct, which pilgrims enter barefoot. This is not an official temple policy published anywhere, so being ready to follow instructions from temple staff is the safer approach.",
+    },
+    {
+      q: "Where can I park at Tarakeswar temple?",
+      a: "Paid car parking is commonly reported at the Rajbari ground and the Kalibari ground, both near the temple. Parking gets noticeably tighter on Mondays and during the Shravani Mela and Shivratri, so arriving early or on foot from your accommodation is worth planning for on those days.",
+    },
+    {
+      q: "Is there VIP or special darshan at Tarakeswar temple?",
+      a: "No VIP or special darshan scheme is documented anywhere for Tarakeswar, unlike some larger temples elsewhere in India. Everyone is expected to go through the same queue.",
+    },
+    {
+      q: "Is Tarakeswar temple wheelchair accessible?",
+      a: "This is genuinely not documented anywhere online, by the temple or by any other source found in research for this guide. If accessibility is a concern for your visit, it is worth calling ahead to the Tarakeswar Municipality or asking locally rather than assuming either way.",
+    },
+    {
+      q: "Can foreigners visit Tarakeswar temple?",
+      a: "The temple is generally described as open to all visitors and pilgrims, but no source addresses foreigner-specific rules, identification requirements or etiquette directly, so treat this as unconfirmed rather than assume it works exactly like a temple built for tourist visits.",
+    },
+  ],
+  tarakeswarFood: [
+    {
+      q: "What is the best place to eat in Tarakeswar?",
+      a: "Amantran (A2), opposite the bus stand gate, is the most reviewed sit-down restaurant in town. Tarakeswar Coffee House, Jam Jam Cafe and Dawat are other listed options nearby.",
+    },
+    {
+      q: "Where can pilgrims stay in Tarakeswar?",
+      a: "Options range from Nataraj Tourism Property, the former West Bengal Tourism lodge, and the Tarakeswar Municipality Guest House, to Tarapada Bhavan and Sri Chaitanya Saraswat Math, a pilgrim ashram with basic rooms.",
+    },
+    {
+      q: "Are there pharmacies and hospitals in Tarakeswar?",
+      a: "Yes. Two Apollo Pharmacy branches operate in town, at Chaulpatty and on Post Office Road. Tarakeswar Rural Hospital is the government hospital, and Care & Cure Nursing Home on Station Road is open 24 hours.",
+    },
+    {
+      q: "Are there ATMs in Tarakeswar?",
+      a: "Yes, several bank branches with ATMs operate in town, including State Bank of India, HDFC Bank, Axis Bank, Bandhan Bank, Bank of Baroda and Bank of India.",
+    },
+    {
+      q: "Where can I get tea or sweets in Tarakeswar?",
+      a: "Both are everywhere in Tarakeswar but mostly sold by small, local shops and roadside stalls that keep no online listing. Ask locally near the station approach or the temple's main gate rather than looking for a named shop online.",
+    },
+  ],
+  tarakeswarReach: [
+    {
+      q: "Is there a direct train from Howrah to Tarakeswar?",
+      a: "Yes. Tarakeswar Railway Station is the terminus of the Howrah-Tarakeswar branch line, with direct EMU locals running through the day, roughly 35 to 38 trains daily, no change needed.",
+    },
+    {
+      q: "How long does the train from Howrah to Tarakeswar take?",
+      a: "About 1.5 hours.",
+    },
+    {
+      q: "How far is Tarakeswar from Kolkata by road?",
+      a: "Map tools disagree by quite a bit, anywhere from about 55 to 65 km depending on the exact route and starting point, mainly along State Highway 2 or State Highway 15. Treat any single number with some caution and check your maps app on the day.",
+    },
+    {
+      q: "Can I reach Tarakeswar by bus?",
+      a: "Yes. State-run SBSTC buses and private buses run from Esplanade and Babughat in Kolkata, as well as from Arambagh and Serampore, taking roughly 2.5 to 3.5 hours.",
+    },
+    {
+      q: "How do I get from Tarakeswar station to the temple?",
+      a: "The temple is about 1 km from the railway station. A toto, the local e-rickshaw, covers it in about 10 minutes for a small fare.",
+    },
+    {
+      q: "What is the nearest airport to Tarakeswar?",
+      a: "Netaji Subhas Chandra Bose International Airport in Kolkata. The official government mela site gives the distance as about 70 km, roughly 2 hours by prepaid taxi, though it separately cites 65 km by road elsewhere on the same site, so treat the figure as approximate.",
+    },
+  ],
+  tarakeswarBlog: [
+    {
+      q: "How is the blog different from the temple, food and how to reach pages?",
+      a: "Those three pages are the neutral reference: facts, timings and listings. The blog posts each answer one narrower, specific question, like whether Tarakeswar and Kamarpukur can be done in one day, or which is faster, train or car.",
+    },
+    {
+      q: "Are the blog posts kept up to date?",
+      a: "Each post carries the date it was written. Facts likely to shift, mela dates, timings, prices, are written with that in mind and flagged where sources disagree.",
+    },
+  ],
+};
+
+export const PAGE_FAQ: Record<PageId, QA[]> = { ...PAGE_FAQ_CORE, ...PAGE_FAQ_TARAKESWAR };
 
 /** Live experiences, for the internal link graph and the ItemList. */
 export const LIVE_PATHS = EXPERIENCES.filter((e) => e.path).map((e) => e.path as string);

@@ -28,9 +28,21 @@ export function useDocumentHead(seo: PageSeo, canonicalPath: string) {
     // other page restores the default, so the icon never sticks after leaving.
     const icon = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
     if (icon) {
-      icon.type = seo.favicon ? "image/svg+xml" : "image/png";
+      icon.type = seo.favicon?.endsWith(".png") ? "image/png" : seo.favicon ? "image/svg+xml" : "image/png";
       icon.href = seo.favicon ?? "/favicon-32.png";
     }
+
+    // Per-page browser-chrome colour, same "carry it or restore the
+    // default" rule as the favicon above (the Tarakeswar pages are light).
+    setMeta('meta[name="theme-color"]', seo.themeColor ?? "#150803");
+
+    // Per-page social card, same rule again: carry it if the page has one
+    // (the Tarakeswar section), restore BRAND's site-wide default otherwise.
+    const image = seo.ogImage ?? { url: BRAND.ogImage, alt: BRAND.ogImageAlt };
+    setMeta('meta[property="og:image"]', BRAND.url + image.url);
+    setMeta('meta[property="og:image:alt"]', image.alt);
+    setMeta('meta[name="twitter:image"]', BRAND.url + image.url);
+    setMeta('meta[name="twitter:image:alt"]', image.alt);
   }, [seo, canonicalPath]);
 }
 
