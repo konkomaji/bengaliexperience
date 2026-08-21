@@ -66,6 +66,11 @@ export function renderStaticBody(pageId: PageId): string {
     ...head,
     ...body,
     `<h2>Questions</h2>${questions(PAGE_FAQ[pageId])}`,
+    // After the questions, matching where the rendered page puts it. The
+    // order here is not cosmetic: both this and HomePage.tsx are written to
+    // be quotable, and a model that reads this markup should meet the same
+    // things in the same sequence a reader does.
+    ...(pageId === "home" ? homeTail() : []),
     // Credit lives on the front page only, same as the visible footer.
     ...(pageId === "home" ? [`<p>${escape("Built by Konko M.")}</p>`] : []),
     `</div>`,
@@ -80,21 +85,31 @@ function homeBody(): string[] {
     return `<li>${name}. ${escape(e.occasion)}. ${escape(e.blurb)}</li>`;
   }).join("");
 
-  // Listed under its own heading, not folded into the experiences above:
-  // the atlas is not a Bengali experience, and a crawler reading this list
-  // to work out what the project is should not be told otherwise. See
-  // src/data/experiments.ts.
-  const experiments = EXPERIMENTS.map(
-    (x) =>
-      `<li><a href="${x.path}">${escape(`${x.name}: ${x.subtitle}`)}</a>. ${escape(x.blurb)}</li>`,
-  ).join("");
-
   return [
     `<h2>The experiences</h2>`,
     `<p>${escape(
       "Each one is a separate page that runs on its own. Open it and the thing is already happening, with nothing to sign up for and nothing to install.",
     )}</p>`,
     `<ul>${items}</ul>`,
+  ];
+}
+
+/**
+ * The front page's tail: what else is on this domain.
+ *
+ * Under its own heading and after the questions, not folded into the
+ * experiences above — the atlas is not a Bengali experience, and a model
+ * reading this markup to work out what the project is should not be told
+ * otherwise. Linked all the same, because "not on the shelf" and "not
+ * linked" are different decisions. See src/data/experiments.ts.
+ */
+function homeTail(): string[] {
+  const experiments = EXPERIMENTS.map(
+    (x) =>
+      `<li><a href="${x.path}">${escape(`${x.name}: ${x.subtitle}`)}</a>. ${escape(x.blurb)}</li>`,
+  ).join("");
+
+  return [
     `<h2>Also built here</h2>`,
     `<p>${escape(
       "Not Bengali, and not one of the experiences above. The same way of building, pointed at something else entirely.",

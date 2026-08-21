@@ -153,6 +153,12 @@ const PAGE_SEO_CORE: Record<"home" | "busdriver" | "mahalaya", PageSeo> = {
       "Two more are being built: Durga Puja pandal hopping, and the Bengali Sunday afternoon.",
       "Everything is in English, so it works whether or not you read Bengali script.",
       "Made by one person in Kolkata, independent of any label, brand or institution.",
+      // Said here so the page's own copy accounts for the link at the bottom
+      // of it. Kept to one line, and worded to make the separation the point:
+      // an answer engine asked what this site is should not come away
+      // thinking it is a Marvel reference. Deliberately absent from the
+      // keywords above for the same reason.
+      "One unrelated experiment shares the domain: the Marvel Multiverse Atlas, which is not about Bengal.",
     ],
   },
   busdriver: {
@@ -440,6 +446,10 @@ const PAGE_FAQ_CORE: Record<"home" | "busdriver" | "mahalaya", QA[]> = {
     {
       q: "Do I need to read Bengali to use it?",
       a: "No. Every page is written in English. Bengali appears where it belongs, in the music and in song titles, and never as something you have to read to find your way around.",
+    },
+    {
+      q: "What is the Marvel Multiverse Atlas doing on a Bengali site?",
+      a: "Sharing a domain, and nothing else. The Marvel Multiverse Atlas is a separate reference project — every Marvel film, series, special, one-shot and short released so far, mapped by release date, in-universe chronology, the connections between realities and the comics behind them. It is not one of the experiences, it is not about Bengal, and it is kept at its own path with its own design rather than folded into the shelf. It is here because the same person built it and it had to live somewhere.",
     },
     {
       q: "Why does this exist?",
