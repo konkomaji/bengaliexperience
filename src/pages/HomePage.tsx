@@ -72,28 +72,6 @@ export function HomePage() {
           </ul>
         </section>
 
-        {/* Kept apart from the shelf above, and labelled as apart. The atlas
-            is not a Bengali experience and filing it as one would make the
-            catalogue mean less; leaving it unlinked would just make it
-            harder to find. See src/data/experiments.ts. */}
-        <section aria-labelledby="experiments" className="mt-14">
-          <h2
-            id="experiments"
-            className="font-display text-xs font-extrabold uppercase tracking-[0.26em] text-white/45"
-          >
-            Also built here
-          </h2>
-          <p className="mt-3 text-sm leading-relaxed text-on-surface-muted">
-            Not Bengali, and not on the shelf above — the same way of building, pointed at something
-            else entirely.
-          </p>
-          <ul className="mt-5 flex flex-col gap-3">
-            {EXPERIMENTS.map((x, i) => (
-              <ExperimentCard key={x.id} experiment={x} index={i} />
-            ))}
-          </ul>
-        </section>
-
         <section aria-labelledby="questions" className="mt-16">
           <h2
             id="questions"
@@ -111,6 +89,30 @@ export function HomePage() {
               </div>
             ))}
           </dl>
+        </section>
+
+        {/* Last, and deliberately. The atlas is not a Bengali experience:
+            filing it on the shelf would make the catalogue mean less, and
+            putting it above the questions would let it compete with the
+            thing this page is actually for. Leaving it unlinked would only
+            make it harder to find, which is a different problem from
+            keeping it separate. See src/data/experiments.ts. */}
+        <section aria-labelledby="experiments" className="mt-16">
+          <h2
+            id="experiments"
+            className="font-display text-xs font-extrabold uppercase tracking-[0.26em] text-white/45"
+          >
+            Also built here
+          </h2>
+          <p className="mt-3 text-sm leading-relaxed text-on-surface-muted">
+            Not Bengali, and not one of the experiences above — the same way of building, pointed
+            at something else entirely.
+          </p>
+          <ul className="mt-5 flex flex-col gap-3">
+            {EXPERIMENTS.map((x, i) => (
+              <ExperimentCard key={x.id} experiment={x} index={i} />
+            ))}
+          </ul>
         </section>
 
         <div className="flex-1" />
