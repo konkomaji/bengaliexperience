@@ -62,9 +62,11 @@ atlas-og.jpg                    generated — the one social card
 ```
 
 The pipeline that builds `data/` (`build_data.ps1`, `tmdb_enrich.py`,
-`comicvine_covers.py`, `scrape_posters.ps1`) is not published with the site.
-It needs API keys, no visitor loads it, and there is no reason to serve build
-scripts off a CDN — it stays with the source dataset.
+`comicvine_covers.py`, `scrape_posters.ps1`) is deliberately **not** published
+with the site: it needs API keys, no visitor loads it, and there is no reason
+to serve build scripts off a CDN. It lives in the Atlas's own repository,
+[konkomaji/marvelmultiverseatlas](https://github.com/konkomaji/marvelmultiverseatlas),
+which is where the dataset is regenerated before the result is committed here.
 
 ## The static pages
 
@@ -105,8 +107,9 @@ npm run atlas:og    # the social card — only when the counts change
 
 ## Rebuilding
 
-The dataset pipeline lives with the source data rather than in the published
-site (see above); run it from there.
+The dataset pipeline is not in this directory (see above); run it from the
+Atlas's own repository, then copy the regenerated `data/` and `assets/data.js`
+across and re-run `npm run atlas`.
 
 ```powershell
 # refresh posters + streaming providers (needs a TMDB API read token)
