@@ -1,6 +1,7 @@
 import { BRAND } from "../data/brand";
 import { BROADCAST } from "../data/broadcast";
 import { EXPERIENCES } from "../data/experiences";
+import { EXPERIMENTS } from "../data/experiments";
 import { PLAYLISTS, TOTAL_TRACKS } from "../data/playlists";
 import { SCENE } from "../data/scene";
 import { PAGE_FAQ, PAGE_PATH, PAGE_SEO, type PageId } from "../data/seo";
@@ -79,12 +80,26 @@ function homeBody(): string[] {
     return `<li>${name}. ${escape(e.occasion)}. ${escape(e.blurb)}</li>`;
   }).join("");
 
+  // Listed under its own heading, not folded into the experiences above:
+  // the atlas is not a Bengali experience, and a crawler reading this list
+  // to work out what the project is should not be told otherwise. See
+  // src/data/experiments.ts.
+  const experiments = EXPERIMENTS.map(
+    (x) =>
+      `<li><a href="${x.path}">${escape(`${x.name}: ${x.subtitle}`)}</a>. ${escape(x.blurb)}</li>`,
+  ).join("");
+
   return [
     `<h2>The experiences</h2>`,
     `<p>${escape(
       "Each one is a separate page that runs on its own. Open it and the thing is already happening, with nothing to sign up for and nothing to install.",
     )}</p>`,
     `<ul>${items}</ul>`,
+    `<h2>Also built here</h2>`,
+    `<p>${escape(
+      "Not Bengali, and not one of the experiences above. The same way of building, pointed at something else entirely.",
+    )}</p>`,
+    `<ul>${experiments}</ul>`,
   ];
 }
 

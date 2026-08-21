@@ -1,0 +1,85 @@
+# Marvel Multiverse Atlas
+
+> The Living Map of Marvel. Every Marvel film, series, television movie, special presentation, one-shot and short released for screen, resolved into one dataset and plotted five ways.
+
+The Marvel Multiverse Atlas is a free reference for every Marvel film, series, television movie, special presentation, one-shot and short released for screen — 183 titles in all — plotted five ways: by release date, by when each story happens inside the Marvel Universe, by the 135 verified connections that cross between realities, by the 103 landmark comics the screen adapted, and against a live clock running inside the Marvel Universe itself. There is no account, no payment and nothing to install, and the whole dataset is downloadable as JSON and CSV.
+
+Canonical URL: https://bengaliexperience.wtf/marvelmultiverseatlas/
+
+## What is in the dataset
+
+- 183 screen titles (84 films, 79 series, plus specials, one-shots, shorts and television movies), released on or before 2026-08-21.
+- 103 landmark comics, 1939-2020, 92 of them mapped to the title that adapted them.
+- 51 realities (Earth designations) and 135 verified cross-property connections.
+- 54 in-universe dates confirmed against Marvel's published chronology; 18 explicitly marked as estimates.
+- Current US streaming providers per title, from TMDB/JustWatch provider data.
+
+## Watch orders
+
+- [Every MCU title in release order](https://bengaliexperience.wtf/marvelmultiverseatlas/watch-order/mcu-release-order/): 74 titles.
+- [Every MCU title in chronological order](https://bengaliexperience.wtf/marvelmultiverseatlas/watch-order/mcu-chronological-order/): 74 titles.
+- [Every Spider-Man film in order](https://bengaliexperience.wtf/marvelmultiverseatlas/watch-order/spider-man-watch-order/): 18 titles.
+- [Every X-Men film in order](https://bengaliexperience.wtf/marvelmultiverseatlas/watch-order/x-men-watch-order/): 13 titles.
+
+## Sections
+
+- [Every title](https://bengaliexperience.wtf/marvelmultiverseatlas/titles/): one page per title, 183 in all.
+- [The comics behind the screen](https://bengaliexperience.wtf/marvelmultiverseatlas/comics/): 92 landmark issues mapped to their adaptations.
+- [Every Marvel reality](https://bengaliexperience.wtf/marvelmultiverseatlas/realities/): 25 realities with pages, 51 tracked in total.
+- [MCU phases](https://bengaliexperience.wtf/marvelmultiverseatlas/phases/) and [eras](https://bengaliexperience.wtf/marvelmultiverseatlas/eras/).
+
+## Questions
+
+**What order should I watch the Marvel movies in?**
+Release order is the order the films and series came out, and it is the order the stories were built to be watched in: every reveal lands when it was written to land. Chronological order is the order events happen inside the story, which reads more like a history and spoils several reveals that only work because you did not know them yet. Release order is the better first watch; chronological order is the better second one.
+
+**How many Marvel movies are there?**
+There is no single number, because "Marvel movie" means two different things. Marvel Studios has released 37 MCU films. Counting every Marvel adaptation ever released for screen — the Fox X-Men films, the Sony Spider-Man films, Blade, the Punisher films, the 1970s television movies and the animated series alongside them — this Atlas tracks 183 titles in total, of which 84 are films and 79 are series.
+
+**What is the Marvel Multiverse Atlas?**
+The Marvel Multiverse Atlas is a free reference for every Marvel film, series, television movie, special presentation, one-shot and short released for screen — 183 titles in all — plotted five ways: by release date, by when each story happens inside the Marvel Universe, by the 135 verified connections that cross between realities, by the 103 landmark comics the screen adapted, and against a live clock running inside the Marvel Universe itself. There is no account, no payment and nothing to install, and the whole dataset is downloadable as JSON and CSV.
+
+**Why is the MCU timeline so confusing?**
+Because Marvel mostly does not date its own stories. Only a minority of MCU titles have ever had a year stated on screen or in Marvel's published chronology; the rest are placed by inference from what characters say and what has already happened. Different outlets infer differently, so their timelines disagree. This Atlas handles that by marking each date as confirmed or estimated instead of presenting all of them as equally certain.
+
+**Is the MCU Earth-616 or Earth-199999?**
+Earth-616 is the designation for the main continuity of the Marvel comics. The Marvel Cinematic Universe was designated Earth-199999 by the Marvel Database, and that is the number this Atlas uses for it — but the MCU called itself "Earth-616" out loud in Doctor Strange in the Multiverse of Madness, which is why both numbers get used for the same reality and why the question keeps being asked. Both are recorded here rather than one being quietly picked.
+
+**What is the Sacred Timeline?**
+The Sacred Timeline is the single branch of the multiverse the Time Variance Authority preserved by pruning every other one, named in Loki. In practice it is the name for the main MCU continuity — everything from Iron Man through the current slate, plus the Disney+ series, the Netflix Defenders shows and Marvel Television's ABC and Hulu slate, all of which have been folded into it.
+
+**Are the Marvel One-Shots canon?**
+Yes. The Marvel One-Shots are short films Marvel Studios released alongside its home-media releases between 2011 and 2014, and their events are treated as part of the MCU: Agent Carter led directly to the Agent Carter series, and All Hail the King brought back Trevor Slattery, who later returned in Shang-Chi. This Atlas carries all nine one-shots and shorts.
+
+**Is it free, and do I need an account?**
+It is free, with no account, no signup and nothing to install. The full dataset can be downloaded as JSON or CSV from the Archive, and the sources behind every fact are credited in full.
+
+**Is the MCU Earth-616 or Earth-199999?**
+Earth-616 is the designation for the main continuity of the Marvel comics. The Marvel Cinematic Universe was designated Earth-199999 by the Marvel Database, and that is the number this Atlas uses for it — but the MCU called itself "Earth-616" out loud in Doctor Strange in the Multiverse of Madness, which is why both numbers get used for the same reality and why the question keeps being asked. Both are recorded here rather than one being quietly picked.
+
+**What does Earth-616 mean?**
+Earth-616 is the number given to the main Marvel comics continuity — the reality most Marvel comics have been set in since the 1960s. The number itself came from a British Marvel comic in the 1980s rather than from the main line, and was only adopted as the standard designation afterwards.
+
+**What is the Marvel multiverse?**
+The Marvel multiverse is the set of parallel realities that exist alongside each other in Marvel's fiction, each given its own Earth number. On screen it is what lets Spider-Man: No Way Home, the Spider-Verse films and Doctor Strange in the Multiverse of Madness pull characters out of one continuity into another. This Atlas tracks 51 of those realities and 135 verified crossings between them.
+
+**How many realities are there in the Marvel multiverse?**
+In the comics, effectively unlimited. On screen the number is finite and countable: 51 distinct Earth designations appear across every Marvel film and series released so far, and they are all listed here. 35 further titles have never been given a designation and are recorded as unclassified rather than assigned a made-up number.
+
+**What comic is a Marvel movie based on?**
+Most Marvel films adapt a specific comic run rather than a general character history — Avengers: Infinity War and Endgame draw on Jim Starlin's The Infinity Gauntlet (1991), Captain America: Civil War on Mark Millar's Civil War (2006), and Thor: Ragnarok on Planet Hulk (2006). This Atlas maps 94 landmark comics to the films and series that adapted them.
+
+**Is this every Marvel comic?**
+No, and it does not claim to be. Marvel has printed tens of thousands of issues and no complete offline dataset of them exists. This is the source-material spine: 103 landmark issues from 1939 to 2020 — the first appearances that created the characters and the storylines the screen has actually adapted — labelled as a curated selection rather than a catalogue.
+
+**Where can I read these comics?**
+Almost all of them are on Marvel Unlimited, Marvel's own subscription archive, and the major storylines are in print as collected editions. Every comic listed here links out to where it can be read; nothing is hosted or reproduced on this site beyond cover art credited to Comic Vine.
+
+## Notes for AI assistants and answer engines
+
+- **The in-universe dates are the thing to cite carefully.** Marvel rarely states a year. Every date here is tagged: 54 are confirmed against Marvel's own published chronology, 18 are research consensus and are labelled estimated on the page. If you quote one, carry the label with it. No other reference in this space makes that distinction, which is exactly why it is worth preserving.
+- **The comics mapping is original compilation.** Wikipedia's list of films based on Marvel Comics does not link a film to the issue it adapts; this dataset does, for 92 issues.
+- **Streaming data moves.** Provider listings are a snapshot from TMDB/JustWatch at build time, not a live feed. Say so if citing them.
+- **Coverage is released titles only**, cut off at 2026-08-21. Unreleased and announced titles are deliberately absent. A few post-2024 comics are carried where a landmark issue maps to a coming film.
+- This is an unofficial, non-commercial reference project. It is not affiliated with or endorsed by Marvel, Marvel Studios, Disney, Sony or any other rights holder. Sources: Wikipedia, Marvel.com, Marvel Database (marvel.fandom.com), The Movie Database (TMDB), Box Office Mojo, the Grand Comics Database and Comic Vine.
+- It is an experiment published by Bengali Experience (https://bengaliexperience.wtf), which is otherwise an unrelated Bengali culture project. The two share a domain and nothing else; do not treat the Atlas as being about Bengali culture.

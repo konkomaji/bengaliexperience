@@ -38,6 +38,12 @@ export const onRequest: PagesFunction = () => {
     return `  <url><loc>${loc}</loc><lastmod>${lastmod}</lastmod></url>`;
   });
 
+  // The Marvel Multiverse Atlas is deliberately absent. It is a separate
+  // static app with 327 pages of its own and it keeps its own sitemap at
+  // /marvelmultiverseatlas/sitemap.xml, which robots.txt lists alongside this
+  // one. Listing it here as well would either duplicate every URL or, worse,
+  // list one Marvel row in a sitemap that otherwise describes a Bengali
+  // culture site and invite a crawler to read the two as one property.
   const urls = [...pageUrls, ...blogUrls].join("\n");
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

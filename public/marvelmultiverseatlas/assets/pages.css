@@ -1,0 +1,148 @@
+/* ============================================================
+   THE LIVING MAP — generated reference pages
+   Loaded only by the static pages under /titles, /comics,
+   /realities, /phases, /eras and /watch-order, on top of
+   assets/style.css. Everything here is built from the same
+   tokens the app uses (surfaces, outlines, the per-universe
+   --primary accent, the M3E shape and motion scales) so a page
+   that arrives from a search result reads as the same product
+   as the app it links into.
+
+   Nothing in this file overrides a class the app uses. It only
+   adds the shapes the app has no equivalent of: a breadcrumb, a
+   numbered watch-order list, long-form prose and an FAQ block.
+   ============================================================ */
+
+/* ---------- breadcrumb ---------- */
+.crumbs { margin: 1.4rem 0 0.4rem; }
+.crumbs ol {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem;
+  list-style: none; margin: 0; padding: 0;
+  font-family: var(--font-mono); font-size: 0.62rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--on-surface-var);
+}
+.crumbs li + li::before { content: "/"; margin-right: 0.35rem; opacity: 0.45; }
+.crumbs a { color: var(--on-surface-var); text-decoration: none; }
+.crumbs a:hover { color: var(--primary); }
+.crumbs [aria-current] { color: var(--on-surface); }
+
+/* ---------- long-form prose ---------- */
+.prose { max-width: 68ch; }
+.prose p { margin: 0 0 0.9rem; font-size: 0.95rem; line-height: 1.65; color: var(--on-surface-var); }
+.prose p.answer {
+  /* The direct answer. First thing under a heading, and styled to look it,
+     because both a skimming reader and an answer engine take the top of a
+     section and stop there. */
+  font-size: 1.02rem; line-height: 1.6; color: var(--on-surface);
+  border-left: 3px solid var(--primary);
+  padding: 0.1rem 0 0.1rem 0.95rem;
+  margin-bottom: 1.1rem;
+}
+.prose ul { margin: 0 0 1rem; padding-left: 1.1rem; }
+.prose li { font-size: 0.92rem; line-height: 1.6; color: var(--on-surface-var); margin-bottom: 0.35rem; }
+.prose a { color: var(--primary); text-underline-offset: 3px; }
+
+/* ---------- fact list ---------- */
+.facts { list-style: none; margin: 1.1rem 0; padding: 0; display: grid; gap: 0.45rem; }
+.facts li {
+  position: relative; padding: 0.6rem 0.85rem 0.6rem 1.9rem;
+  border-radius: var(--shape-m);
+  background: var(--surface-c-low); border: 1px solid var(--outline-var);
+  font-size: 0.86rem; line-height: 1.55; color: var(--on-surface-var);
+}
+.facts li::before {
+  content: ""; position: absolute; left: 0.85rem; top: 1.05rem;
+  width: 7px; height: 7px; border-radius: 50%; background: var(--primary);
+}
+
+/* ---------- numbered watch order ---------- */
+.order { list-style: none; margin: 1.2rem 0; padding: 0; counter-reset: ord; }
+.order > li {
+  counter-increment: ord;
+  display: grid; grid-template-columns: 2.6rem 46px minmax(0, 1fr);
+  gap: 0.75rem; align-items: start;
+  padding: 0.7rem 0.8rem; margin-bottom: 0.5rem;
+  border-radius: var(--shape-m);
+  background: var(--surface-c-low); border: 1px solid var(--outline-var);
+  transition: border-color var(--dur-med) var(--ease-emph), transform var(--dur-med) var(--ease-emph);
+}
+.order > li:hover { border-color: var(--primary); transform: translateX(3px); }
+.order > li::before {
+  content: counter(ord);
+  font-family: var(--font-display); font-weight: 800; font-size: 1.15rem;
+  line-height: 1.2; color: var(--primary); text-align: right;
+}
+.order .thumb {
+  width: 46px; aspect-ratio: 2/3; border-radius: 7px; overflow: hidden;
+  background: var(--surface-c-highest); display: grid; place-items: center;
+  box-shadow: 0 4px 12px -6px rgba(0, 0, 0, 0.8);
+}
+.order .thumb img { width: 100%; height: 100%; object-fit: cover; }
+.order .thumb span { font-family: var(--font-display); font-weight: 800; font-size: 0.72rem; color: var(--on-surface-var); }
+.order .ob { min-width: 0; }
+.order .ot { font-family: var(--font-display); font-weight: 700; font-size: 0.98rem; line-height: 1.25; }
+.order .ot a { color: inherit; text-decoration: none; }
+.order .ot a:hover { color: var(--primary); }
+.order .om {
+  margin-top: 3px; font-family: var(--font-mono); font-size: 0.6rem;
+  letter-spacing: 0.09em; text-transform: uppercase; color: var(--on-surface-var);
+}
+.order .on { margin-top: 0.35rem; font-size: 0.82rem; line-height: 1.5; color: var(--on-surface-var); }
+
+/* An estimated in-universe date, marked everywhere it appears. */
+.est { color: var(--tertiary); font-style: normal; }
+.est::before { content: "≈ "; }
+
+/* ---------- link list (hub pages) ---------- */
+.linklist { list-style: none; margin: 1rem 0; padding: 0; display: grid; gap: 0.5rem; }
+@media (min-width: 720px) { .linklist { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.linklist a {
+  display: block; padding: 0.75rem 0.9rem; border-radius: var(--shape-m);
+  background: var(--surface-c-low); border: 1px solid var(--outline-var);
+  text-decoration: none; color: inherit;
+  transition: border-color var(--dur-med) var(--ease-emph), background var(--dur-med) var(--ease-emph);
+}
+.linklist a:hover { border-color: var(--primary); background: var(--surface-c); }
+.linklist b { display: block; font-family: var(--font-display); font-size: 0.95rem; font-weight: 700; }
+.linklist span { display: block; margin-top: 2px; font-size: 0.78rem; line-height: 1.5; color: var(--on-surface-var); }
+
+/* ---------- FAQ ---------- */
+.faq { margin: 1.2rem 0; }
+.faq h3 {
+  margin: 1.4rem 0 0.35rem; font-family: var(--font-display);
+  font-size: 1rem; font-weight: 700; line-height: 1.3; color: var(--on-surface);
+}
+.faq p { margin: 0; font-size: 0.9rem; line-height: 1.65; color: var(--on-surface-var); max-width: 70ch; }
+
+/* ---------- provider badges ---------- */
+.provs { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.8rem 0; }
+.provs span {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.35rem 0.7rem 0.35rem 0.35rem; border-radius: var(--shape-full);
+  background: var(--surface-c); border: 1px solid var(--outline-var);
+  font-size: 0.78rem; font-weight: 600;
+}
+.provs img { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
+
+/* ---------- title page header ---------- */
+.titlehead { display: grid; gap: 1.3rem; margin: 1.2rem 0 0; }
+@media (min-width: 720px) { .titlehead { grid-template-columns: 220px minmax(0, 1fr); gap: 2rem; } }
+.titlehead .poster {
+  width: 160px; aspect-ratio: 2/3; border-radius: var(--shape-l); overflow: hidden;
+  background: var(--surface-c-high); display: grid; place-items: center;
+  box-shadow: 0 24px 48px -28px rgba(0, 0, 0, 0.9);
+}
+@media (min-width: 720px) { .titlehead .poster { width: 100%; } }
+.titlehead .poster img { width: 100%; height: 100%; object-fit: cover; }
+.titlehead .poster span { font-family: var(--font-display); font-weight: 800; font-size: 2rem; color: var(--on-surface-var); }
+
+/* ---------- comic page cover ---------- */
+.comichead { display: grid; gap: 1.3rem; margin: 1.2rem 0 0; }
+@media (min-width: 720px) { .comichead { grid-template-columns: 200px minmax(0, 1fr); gap: 2rem; } }
+.comichead .cover {
+  width: 150px; aspect-ratio: 2/3; border-radius: var(--shape-m); overflow: hidden;
+  background: var(--surface-c-high); box-shadow: 0 24px 48px -28px rgba(0, 0, 0, 0.9);
+}
+@media (min-width: 720px) { .comichead .cover { width: 100%; } }
+.comichead .cover img { width: 100%; height: 100%; object-fit: cover; }

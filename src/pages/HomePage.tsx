@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { BRAND, DRIVER } from "../data/brand";
 import { EXPERIENCES, type Experience } from "../data/experiences";
+import { EXPERIMENTS, type Experiment } from "../data/experiments";
 import { PAGE_FAQ, PAGE_SEO } from "../data/seo";
 import { buildJsonLd } from "../lib/jsonld";
 import { useDocumentHead } from "../hooks/useDocumentHead";
@@ -71,6 +72,28 @@ export function HomePage() {
           </ul>
         </section>
 
+        {/* Kept apart from the shelf above, and labelled as apart. The atlas
+            is not a Bengali experience and filing it as one would make the
+            catalogue mean less; leaving it unlinked would just make it
+            harder to find. See src/data/experiments.ts. */}
+        <section aria-labelledby="experiments" className="mt-14">
+          <h2
+            id="experiments"
+            className="font-display text-xs font-extrabold uppercase tracking-[0.26em] text-white/45"
+          >
+            Also built here
+          </h2>
+          <p className="mt-3 text-sm leading-relaxed text-on-surface-muted">
+            Not Bengali, and not on the shelf above — the same way of building, pointed at something
+            else entirely.
+          </p>
+          <ul className="mt-5 flex flex-col gap-3">
+            {EXPERIMENTS.map((x, i) => (
+              <ExperimentCard key={x.id} experiment={x} index={i} />
+            ))}
+          </ul>
+        </section>
+
         <section aria-labelledby="questions" className="mt-16">
           <h2
             id="questions"
@@ -107,6 +130,42 @@ export function HomePage() {
         </footer>
       </div>
     </>
+  );
+}
+
+/**
+ * One experiment. A plain `<a>`, not a router `<Link>`: these are separate
+ * static apps mounted under public/, so client-side routing to one would
+ * find no matching route and show the breakdown screen instead of the site.
+ * A real navigation is the only thing that gets there.
+ */
+function ExperimentCard({ experiment: x, index }: { experiment: Experiment; index: number }) {
+  return (
+    <motion.li
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.2 + index * 0.06, ease: [0.16, 1, 0.3, 1] }}
+    >
+      <a
+        href={x.path}
+        className="block rounded-2xl border border-outline-variant bg-surface-container/50 p-5 transition-colors hover:border-primary/60 hover:bg-surface-container-high/70"
+      >
+        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          <h3 className="font-display text-lg font-extrabold text-on-surface sm:text-xl">
+            {x.name}
+          </h3>
+          <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/35">
+            Experiment
+          </span>
+        </div>
+        <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-white/35">{x.subtitle}</p>
+        <p className="mt-2.5 text-sm leading-relaxed text-on-surface-muted">{x.blurb}</p>
+        <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-primary">
+          {x.cta}
+          <span aria-hidden>&rarr;</span>
+        </span>
+      </a>
+    </motion.li>
   );
 }
 

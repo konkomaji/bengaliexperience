@@ -16,6 +16,7 @@
   },
   "ignorePatterns": [
     ".wrangler",
-    "dist"
+    "dist",
+    "public/marvelmultiverseatlas"
   ]
 }
