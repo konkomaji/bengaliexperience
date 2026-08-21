@@ -1,6 +1,12 @@
 User-agent: *
 Allow: /
 
+# The Marvel Multiverse Atlas ships its dataset alongside its pages, because
+# being downloadable is the point of it. Those are files, not pages, so there
+# is no reason for a crawler to spend budget on 570KB of JSON; the pages that
+# describe the data are indexable as normal.
+Disallow: /marvelmultiverseatlas/data/
+
 # Answer-engine / AI crawlers explicitly allowed so the playlist can be cited.
 User-agent: GPTBot
 Allow: /
@@ -24,3 +30,10 @@ User-agent: CCBot
 Allow: /
 
 Sitemap: https://bengaliexperience.wtf/sitemap.xml
+
+# The Marvel Multiverse Atlas keeps its own sitemap. It is a self-contained
+# reference project that happens to share this domain, and 327 Marvel URLs in
+# a sitemap that otherwise describes a Bengali culture site would tell a
+# crawler the two are one incoherent thing. Two sitemaps say what is true:
+# two unrelated properties, one host.
+Sitemap: https://bengaliexperience.wtf/marvelmultiverseatlas/sitemap.xml

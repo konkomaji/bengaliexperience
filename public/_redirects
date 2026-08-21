@@ -1,3 +1,10 @@
+# The Marvel Multiverse Atlas's own 404 is NOT handled here. Pages only
+# accepts 200, 301, 302, 303, 307 and 308 in this file and silently ignores a
+# rule with any other status, so a `404` line here would look right and do
+# nothing — the catch-all below would still answer an unknown Atlas URL with
+# the Bengali site's SPA shell at status 200. It is done in
+# functions/_middleware.ts instead, which can set a real status code.
+
 # SPA fallback — anything that isn't a static asset or /api/* renders index.html
 # so React Router can take over. Pages Functions still run first and get their
 # chance to rewrite the HTML head (see functions/_middleware.ts).

@@ -40,6 +40,41 @@ export const onRequest: PagesFunction = async ({ request, next }) => {
     return Response.redirect(BRAND.url + url.pathname + url.search, 301);
   }
 
+  // /marvelmultiverseatlas is a whole separate static app — its own head, its
+  // own JSON-LD, its own crawlable markup, all generated already. It isn't a
+  // PageId and wants none of this rewriter's work, so it is handled here and
+  // returned before the PATH_TO_PAGE lookup below can treat it as an unknown
+  // path and noindex it.
+  if (url.pathname === "/marvelmultiverseatlas" || url.pathname.startsWith("/marvelmultiverseatlas/")) {
+    const atlas = await next();
+
+    // An Atlas path that matches no file falls through `_redirects` to the
+    // SPA shell at status 200: the wrong site, served as though it were the
+    // right one, and a soft 404 that puts junk URLs in the index as
+    // duplicates of the Bengali front page. `_redirects` cannot fix this
+    // (Pages ignores any status there other than 200 and the 3xx family), so
+    // the fallback is detected by what came back and answered with the
+    // Atlas's own 404 page at a real 404. Every generated Atlas page carries
+    // `class="atlas-page"`; the app's own index.html carries
+    // `id="atlas-prerender"`. The SPA shell has neither.
+    const type = atlas.headers.get("content-type") ?? "";
+    if (type.includes("text/html") && atlas.status === 200) {
+      const html = await atlas.text();
+      const isAtlas = html.includes("atlas-page") || html.includes("atlas-prerender");
+      if (!isAtlas) {
+        const notFound = await next(
+          new Request(new URL("/marvelmultiverseatlas/404.html", request.url), request),
+        );
+        return new Response(await notFound.text(), {
+          status: 404,
+          headers: { "content-type": "text/html; charset=utf-8" },
+        });
+      }
+      return new Response(html, { status: atlas.status, headers: atlas.headers });
+    }
+    return atlas;
+  }
+
   // The site used to be four route pages, all of them the bus. Those URLs
   // were live and in a submitted sitemap, so a crawler that already knows
   // them is told where the page went rather than that it is gone.

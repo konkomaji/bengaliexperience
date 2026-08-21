@@ -10,6 +10,8 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "check:playlists": "node --experimental-strip-types scripts/check-playlists.mjs",
+    "atlas": "node scripts/prepare-atlas.mjs",
+    "atlas:og": "node scripts/prepare-atlas-og.mjs",
     "preview": "vite preview",
     "cf:dev": "npm run build && wrangler pages dev dist",
     "deploy": "npm run build && wrangler pages deploy dist"

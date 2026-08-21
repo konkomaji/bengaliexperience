@@ -19,6 +19,16 @@
 /scene/*
   Cache-Control: public, max-age=31536000, immutable
 
+# The Marvel Multiverse Atlas mount. Its CSS and JS filenames are stable
+# rather than content-hashed (it is a hand-written static app, not Vite
+# output), so it gets a revalidating cache instead of `immutable` — long
+# enough that a returning visitor does not refetch, short enough that a
+# corrected dataset is not pinned behind a year-long max-age.
+/marvelmultiverseatlas/assets/*
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+/marvelmultiverseatlas/data/*
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
 # Horn samples, the social card and the favicon: same deal.
 /horns/*
   Cache-Control: public, max-age=86400, stale-while-revalidate=604800

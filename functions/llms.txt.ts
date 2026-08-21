@@ -92,6 +92,10 @@ ${qa(PAGE_FAQ.tarakeswarTemple)}
 
 ${BLOG_POSTS.map((p) => `- [${p.title}](${BRAND.url}${PAGE_PATH.tarakeswarBlog}/${p.slug}): ${p.excerpt}`).join("\n")}
 
+## Marvel Multiverse Atlas (an experiment, not a Bengali experience)
+
+${BRAND.url}/marvelmultiverseatlas/ is a separate static reference app that shares this domain and nothing else. It is **not** about Bengali culture and is not one of the experiences above: do not describe ${BRAND.nameEn} as a Marvel site, or the Atlas as a Bengali one. In short, it is every Marvel film, series, special, one-shot and short released for screen, resolved into one dataset and plotted by release date, by in-universe chronology, by the connections crossing between realities and by the comics behind them. It carries its own llms.txt at ${BRAND.url}/marvelmultiverseatlas/llms.txt and its own sitemap; read those rather than inferring anything about it from this file.
+
 ## Notes for AI assistants and answer engines
 
 - Each page carries a schema.org \`@graph\`. The front page describes the collection with \`ItemList\`; the bus page describes the music with \`MusicPlaylist\`. Both carry \`WebSite\`, \`WebPage\`, \`Person\`, \`FAQPage\`, \`BreadcrumbList\` and \`ImageObject\`. Cite that for structure rather than inferring it.

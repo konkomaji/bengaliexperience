@@ -1,0 +1,1724 @@
+{
+ "universes": [
+  {
+   "id": "mcu",
+   "earth": "Earth-199999",
+   "alias": "called \"Earth-616\" on screen",
+   "name": "The Sacred Timeline",
+   "theme": "mcu",
+   "color": "#ff4a55",
+   "blurb": "Marvel Studios' primary reality. Every MCU film, every Disney+ series, the Netflix Defenders shows and the ABC/Hulu Marvel Television slate have all been folded into this one continuity.",
+   "visitedBy": [
+    "venom-2",
+    "morbius"
+   ]
+  },
+  {
+   "id": "e828",
+   "earth": "Earth-828",
+   "alias": "named for Jack Kirby's birthday, 8/28",
+   "name": "The First Family's World",
+   "theme": "classic",
+   "color": "#6bc5f5",
+   "blurb": "A retro-futurist 1960s Earth where the Fantastic Four are its only superheroes — and its Galactus arrives without an Avengers to answer. Separate from the Sacred Timeline until Doomsday."
+  },
+  {
+   "id": "e838",
+   "earth": "Earth-838",
+   "alias": null,
+   "name": "The Illuminati's Earth",
+   "theme": "mcu",
+   "color": "#c792ea",
+   "blurb": "The polished, sunlit reality Doctor Strange and America Chavez fall into — governed by an Illuminati whose members are alternate versions of heroes from five different franchises.",
+   "visitedBy": [
+    "doctor-strange-2"
+   ]
+  },
+  {
+   "id": "tva",
+   "earth": "Outside Time",
+   "alias": "the TVA & the Void",
+   "name": "The Time Variance Authority",
+   "theme": "animation",
+   "color": "#c9a227",
+   "blurb": "Not an Earth at all. A bureaucracy sitting outside the flow of time, pruning branched realities into the Void — the junkyard where erased variants go to be eaten by Alioth.",
+   "visitedBy": [
+    "loki",
+    "deadpool-wolverine",
+    "quantumania"
+   ]
+  },
+  {
+   "id": "whatif",
+   "earth": "Earth-21818",
+   "alias": "anthology hub",
+   "name": "The Watcher's Multiverse",
+   "theme": "animation",
+   "color": "#a78bfa",
+   "blurb": "Uatu the Watcher's vantage point over an infinite fan of branch realities, each one a single decision away from the Sacred Timeline."
+  },
+  {
+   "id": "mz",
+   "earth": "Earth-89521",
+   "alias": null,
+   "name": "The Zombie Reality",
+   "theme": "animation",
+   "color": "#7fbf4d",
+   "blurb": "A branch where the Quantum Realm virus won. Grown out of the What If...? episode 'What If... Zombies?!' into its own TV-MA continuity."
+  },
+  {
+   "id": "yfnsm",
+   "earth": "Earth-86445",
+   "alias": null,
+   "name": "Peter Parker's Other First Year",
+   "theme": "animation",
+   "color": "#e15b64",
+   "blurb": "A deliberately re-branched origin: Norman Osborn, not Tony Stark, mentors a newly-bitten Peter Parker."
+  },
+  {
+   "id": "raimi",
+   "earth": "Earth-96283",
+   "alias": null,
+   "name": "The Raimi Universe",
+   "theme": "raimi",
+   "color": "#e23e3e",
+   "blurb": "Tobey Maguire's New York. Organic web-shooters, a Daily Bugle run at full volume, and the first Spider-Man trilogy to make the modern superhero film viable.",
+   "visitedBy": [
+    "spider-man-nwh",
+    "across-spider-verse"
+   ]
+  },
+  {
+   "id": "tasm",
+   "earth": "Earth-120703",
+   "alias": null,
+   "name": "The Amazing Universe",
+   "theme": "tasm",
+   "color": "#4c9aff",
+   "blurb": "Andrew Garfield's New York — Oscorp-centric, Gwen Stacy at its heart, and cut short after two films by Sony's reboot into the MCU.",
+   "visitedBy": [
+    "spider-man-nwh",
+    "across-spider-verse"
+   ]
+  },
+  {
+   "id": "ssu",
+   "earth": "Earth-688B",
+   "alias": null,
+   "name": "Sony's Spider-Man Universe",
+   "theme": "ssu",
+   "color": "#9b7bff",
+   "blurb": "Six films of Spider-Man's rogues without a Spider-Man. Venom, Morbius, Madame Web and Kraven share a reality that brushes the MCU twice and never merges with it.",
+   "visitedBy": [
+    "spider-man-nwh",
+    "across-spider-verse"
+   ]
+  },
+  {
+   "id": "sv",
+   "earth": "Earth-1610B",
+   "alias": "Miles Morales' Earth",
+   "name": "The Spider-Verse Hub",
+   "theme": "spiderverse",
+   "color": "#ff2e88",
+   "blurb": "Miles Morales' Brooklyn — and the anchor point from which Into/Across the Spider-Verse tour dozens of other spider-realities."
+  },
+  {
+   "id": "sv-616b",
+   "earth": "Earth-616B",
+   "alias": null,
+   "name": "Peter B. Parker's Earth",
+   "theme": "spiderverse",
+   "color": "#ff7ab0",
+   "blurb": "A worn-down, divorced, 38-year-old Spider-Man's reality.",
+   "visitedBy": [
+    "into-spider-verse",
+    "across-spider-verse"
+   ]
+  },
+  {
+   "id": "sv-65",
+   "earth": "Earth-65B",
+   "alias": null,
+   "name": "Gwen Stacy's Earth",
+   "theme": "spiderverse",
+   "color": "#31e1f7",
+   "blurb": "Spider-Gwen's watercolour world, where Peter Parker died and Gwen got bitten.",
+   "visitedBy": [
+    "into-spider-verse",
+    "across-spider-verse"
+   ]
+  },
+  {
+   "id": "sv-928",
+   "earth": "Earth-928B",
+   "alias": null,
+   "name": "Nueva York, 2099",
+   "theme": "spiderverse",
+   "color": "#ff5252",
+   "blurb": "Miguel O'Hara's future, and the headquarters of the Spider Society.",
+   "visitedBy": [
+    "across-spider-verse"
+   ]
+  },
+  {
+   "id": "sv-90214",
+   "earth": "Earth-90214B",
+   "alias": null,
+   "name": "Spider-Man Noir's Earth",
+   "theme": "spiderverse",
+   "color": "#9aa5b1",
+   "blurb": "A monochrome 1933 in permanent black-and-white.",
+   "visitedBy": [
+    "into-spider-verse",
+    "across-spider-verse"
+   ]
+  },
+  {
+   "id": "sv-14512",
+   "earth": "Earth-14512B",
+   "alias": null,
+   "name": "Peni Parker's Earth",
+   "theme": "spiderverse",
+   "color": "#ffd166",
+   "blurb": "An anime reality where SP//dr is piloted by a girl and a radioactive spider together.",
+   "visitedBy": [
+    "into-spider-verse",
+    "across-spider-verse"
+   ]
+  },
+  {
+   "id": "sv-8311",
+   "earth": "Earth-8311B",
+   "alias": null,
+   "name": "Spider-Ham's Earth",
+   "theme": "spiderverse",
+   "color": "#ffa8e0",
+   "blurb": "A Looney Tunes physics reality inhabited by Peter Porker.",
+   "visitedBy": [
+    "into-spider-verse",
+    "across-spider-verse"
+   ]
+  },
+  {
+   "id": "sv-138",
+   "earth": "Earth-138B",
+   "alias": null,
+   "name": "Spider-Punk's Earth",
+   "theme": "spiderverse",
+   "color": "#ff4d4d",
+   "blurb": "Hobie Brown's anarchist London, rendered as a moving collage of zines.",
+   "visitedBy": [
+    "across-spider-verse"
+   ]
+  },
+  {
+   "id": "sv-50101",
+   "earth": "Earth-50101B",
+   "alias": null,
+   "name": "Mumbattan",
+   "theme": "spiderverse",
+   "color": "#ffb703",
+   "blurb": "Pavitr Prabhakar's India — introduced in the 2004 Spider-Man: India comic.",
+   "visitedBy": [
+    "across-spider-verse"
+   ]
+  },
+  {
+   "id": "sv-332",
+   "earth": "Earth-332",
+   "alias": null,
+   "name": "Jessica Drew's Earth",
+   "theme": "spiderverse",
+   "color": "#e63946",
+   "blurb": "Spider-Woman's reality, per the Across the Spider-Verse screenplay.",
+   "visitedBy": [
+    "across-spider-verse"
+   ]
+  },
+  {
+   "id": "e67",
+   "earth": "Earth-67",
+   "alias": "also cited as Earth-6799 / Earth-3015",
+   "name": "The 1967 Cartoon",
+   "theme": "classic",
+   "color": "#f0a202",
+   "blurb": "The reality of the original ABC Spider-Man cartoon — and the source of the internet's most reproduced meme.",
+   "visitedBy": [
+    "into-spider-verse"
+   ]
+  },
+  {
+   "id": "e51778",
+   "earth": "Earth-51778",
+   "alias": null,
+   "name": "Toei's Japanese Spider-Man",
+   "theme": "classic",
+   "color": "#d62828",
+   "blurb": "Takuya Yamashiro's 1978 tokusatsu reality, giant mecha and all. Cameos as a sketch in Miles' notebook.",
+   "visitedBy": [
+    "into-spider-verse"
+   ]
+  },
+  {
+   "id": "fox",
+   "earth": "Earth-10005",
+   "alias": null,
+   "name": "The Fox Mutant Timeline",
+   "theme": "xmen",
+   "color": "#ffc93c",
+   "blurb": "Twenty years and thirteen films of X-Men, from Bryan Singer's 2000 original through Deadpool 2 — the timeline Deadpool & Wolverine finally canonised as an anchor reality.",
+   "visitedBy": [
+    "deadpool-wolverine",
+    "the-marvels",
+    "doctor-strange-2"
+   ]
+  },
+  {
+   "id": "e41578",
+   "earth": "Earth-41578",
+   "alias": null,
+   "name": "The Erased Timeline",
+   "theme": "xmen",
+   "color": "#b08d2e",
+   "blurb": "The original X-Men trilogy's dark future — the continuity Days of Future Past deliberately unwrote in 1973.",
+   "visitedBy": [
+    "x-men-dofp"
+   ]
+  },
+  {
+   "id": "logan",
+   "earth": "Earth-17315",
+   "alias": null,
+   "name": "Logan's Last Road",
+   "theme": "xmen",
+   "color": "#9aa0a6",
+   "blurb": "2029. Mutants have effectively stopped being born. A separate, terminal branch.",
+   "visitedBy": [
+    "deadpool-wolverine"
+   ]
+  },
+  {
+   "id": "newmutants",
+   "earth": "Earth-TRN414",
+   "alias": "unofficial designation",
+   "name": "The New Mutants",
+   "theme": "xmen",
+   "color": "#6f7db3",
+   "blurb": "The last film released under the Fox banner, and the only one Marvel has never assigned a canonical reality number."
+  },
+  {
+   "id": "legion",
+   "earth": "Earth-17040",
+   "alias": null,
+   "name": "Legion",
+   "theme": "xmen",
+   "color": "#e86a92",
+   "blurb": "David Haller's reality — or possibly his delusion. Noah Hawley's FX series keeps that deliberately unresolved."
+  },
+  {
+   "id": "gifted",
+   "earth": "Earth-17372",
+   "alias": null,
+   "name": "The Gifted",
+   "theme": "xmen",
+   "color": "#e5843d",
+   "blurb": "A post-X-Men America where the X-Men have vanished and the Mutant Underground is all that's left."
+  },
+  {
+   "id": "e92131",
+   "earth": "Earth-92131",
+   "alias": null,
+   "name": "The '90s Animated Universe",
+   "theme": "animation",
+   "color": "#f5c518",
+   "blurb": "Shared home of X-Men: The Animated Series and Spider-Man: The Animated Series — and, thirty years later, of X-Men '97.",
+   "visitedBy": [
+    "doctor-strange-2",
+    "deadpool-wolverine"
+   ]
+  },
+  {
+   "id": "blade",
+   "earth": "Earth-26320",
+   "alias": null,
+   "name": "The Daywalker's World",
+   "theme": "blade",
+   "color": "#c9313e",
+   "blurb": "New Line's Blade trilogy plus the 2006 Spike TV series — the films that proved a Marvel adaptation could open a movie.",
+   "visitedBy": [
+    "deadpool-wolverine",
+    "eternals"
+   ]
+  },
+  {
+   "id": "fox4",
+   "earth": "Earth-121698",
+   "alias": null,
+   "name": "Fox's Fantastic Four",
+   "theme": "classic",
+   "color": "#3fa9f5",
+   "blurb": "Tim Story's two films — and the source of the Human Torch who turns up trapped in the Void two decades later.",
+   "visitedBy": [
+    "deadpool-wolverine"
+   ]
+  },
+  {
+   "id": "f4-2015",
+   "earth": "Earth-15866",
+   "alias": null,
+   "name": "Fant4stic",
+   "theme": "classic",
+   "color": "#5b6b7a",
+   "blurb": "Josh Trank's body-horror-adjacent reboot, disowned by nearly everyone involved."
+  },
+  {
+   "id": "corman",
+   "earth": "Earth-94000",
+   "alias": null,
+   "name": "The Corman Cut",
+   "theme": "classic",
+   "color": "#7a5c3d",
+   "blurb": "A Fantastic Four film made in under a month to retain rights, never released, and bootlegged into legend."
+  },
+  {
+   "id": "dd03",
+   "earth": "Earth-701306",
+   "alias": null,
+   "name": "Hell's Kitchen (2003)",
+   "theme": "netflix",
+   "color": "#a62a2a",
+   "blurb": "Ben Affleck's Daredevil and Jennifer Garner's Elektra. Garner's return in Deadpool & Wolverine made it a canonical anchor reality.",
+   "visitedBy": [
+    "deadpool-wolverine"
+   ]
+  },
+  {
+   "id": "gr",
+   "earth": "Earth-121347",
+   "alias": null,
+   "name": "The Rider's Reality",
+   "theme": "classic",
+   "color": "#ff7a2f",
+   "blurb": "Nicolas Cage's Johnny Blaze, across two films with no connection to the MCU's Ghost Rider."
+  },
+  {
+   "id": "hulk03",
+   "earth": "Earth-400083",
+   "alias": null,
+   "name": "Ang Lee's Hulk",
+   "theme": "classic",
+   "color": "#6fbf4b",
+   "blurb": "A comic-panel-framed psychodrama that Marvel Studios quietly stepped around five years later."
+  },
+  {
+   "id": "hulktv",
+   "earth": "Earth-400005",
+   "alias": null,
+   "name": "The Bixby Hulk",
+   "theme": "classic",
+   "color": "#4e9b3c",
+   "blurb": "Five CBS seasons and three NBC reunion films. For a generation this was Marvel on television."
+  },
+  {
+   "id": "pun89",
+   "earth": "Earth-58627",
+   "alias": null,
+   "name": "Dolph Lundgren's Punisher",
+   "theme": "netflix",
+   "color": "#8a8f98",
+   "blurb": "No skull, no US theatrical release."
+  },
+  {
+   "id": "pun04",
+   "earth": "Earth-58732",
+   "alias": null,
+   "name": "Thomas Jane's Punisher",
+   "theme": "netflix",
+   "color": "#767b83",
+   "blurb": "Lionsgate's Tampa-set revenge film."
+  },
+  {
+   "id": "punwz",
+   "earth": "Earth-47281",
+   "alias": null,
+   "name": "War Zone",
+   "theme": "netflix",
+   "color": "#5f646b",
+   "blurb": "Lexi Alexander's hyper-violent stand-alone reboot."
+  },
+  {
+   "id": "howard",
+   "earth": "Earth-58470",
+   "alias": null,
+   "name": "Howard's Cleveland",
+   "theme": "classic",
+   "color": "#e0a94f",
+   "blurb": "The first film based on a Marvel Comics property produced under the modern Marvel banner — and for decades its most notorious."
+  },
+  {
+   "id": "cap90",
+   "earth": "Earth-697064",
+   "alias": null,
+   "name": "Matt Salinger's Captain America",
+   "theme": "classic",
+   "color": "#8fa6c9",
+   "blurb": "Albert Pyun's $3M Cap, shelved for two years and released to video."
+  },
+  {
+   "id": "cap79",
+   "earth": "Earth-600043",
+   "alias": null,
+   "name": "The CBS Captain America",
+   "theme": "classic",
+   "color": "#9db4d1",
+   "blurb": "Two 1979 TV movies with a motorcycle-riding Steve Rogers."
+  },
+  {
+   "id": "manthing",
+   "earth": "Earth-58460",
+   "alias": null,
+   "name": "The Nexus Swamp",
+   "theme": "classic",
+   "color": "#6b8f5e",
+   "blurb": "A Marvel horror film that skipped US theatres for the Sci Fi Channel."
+  },
+  {
+   "id": "bh6",
+   "earth": "Earth-14123",
+   "alias": null,
+   "name": "San Fransokyo",
+   "theme": "animation",
+   "color": "#e64a4a",
+   "blurb": "Walt Disney Animation's take on a little-known Marvel team — and the only Marvel property to win the Best Animated Feature Oscar."
+  },
+  {
+   "id": "usm",
+   "earth": "Earth-12041",
+   "alias": null,
+   "name": "The Marvel Animated Universe",
+   "theme": "animation",
+   "color": "#5ee6a8",
+   "blurb": "Disney XD's shared continuity: Ultimate Spider-Man, Avengers Assemble, Agents of S.M.A.S.H. and Guardians of the Galaxy."
+  },
+  {
+   "id": "emh",
+   "earth": "Earth-8096",
+   "alias": null,
+   "name": "Earth's Mightiest Heroes",
+   "theme": "animation",
+   "color": "#4fc3f7",
+   "blurb": "The shared reality of Wolverine and the X-Men and The Avengers: Earth's Mightiest Heroes — long held up as the most faithful Avengers adaptation."
+  },
+  {
+   "id": "spectacular",
+   "earth": "Earth-26496",
+   "alias": null,
+   "name": "The Spectacular Spider-Man",
+   "theme": "animation",
+   "color": "#ff6b6b",
+   "blurb": "Greg Weisman's two-season series, cancelled by a rights change rather than by ratings."
+  },
+  {
+   "id": "e8107",
+   "earth": "Earth-8107",
+   "alias": null,
+   "name": "The Marvel Productions Universe",
+   "theme": "classic",
+   "color": "#dcb35c",
+   "blurb": "The 1980s Saturday-morning reality of Spider-Man and His Amazing Friends and the 1982 Incredible Hulk."
+  },
+  {
+   "id": "helstrom",
+   "earth": "Earth-TRN836",
+   "alias": "unofficial designation",
+   "name": "Helstrom",
+   "theme": "netflix",
+   "color": "#7c5b8f",
+   "blurb": "The final Marvel Television production, developed as an MCU tie-in and then explicitly severed from it."
+  },
+  {
+   "id": "unclassified",
+   "earth": "Unclassified",
+   "alias": null,
+   "name": "Unassigned Realities",
+   "theme": "classic",
+   "color": "#6c6f7a",
+   "blurb": "Adaptations Marvel's own Multiverse index has never given a number to."
+  }
+ ],
+ "edges": [
+  [
+   "spider-man-nwh",
+   "raimi-spider-man",
+   "recast-return",
+   "Willem Dafoe returns as Norman Osborn / Green Goblin, pulled out of Earth-96283 mid-fall."
+  ],
+  [
+   "spider-man-nwh",
+   "raimi-spider-man-2",
+   "recast-return",
+   "Alfred Molina returns as Otto Octavius, grabbed from the moment before his death."
+  ],
+  [
+   "spider-man-nwh",
+   "raimi-spider-man-3",
+   "recast-return",
+   "Thomas Haden Church returns as Flint Marko / Sandman."
+  ],
+  [
+   "spider-man-nwh",
+   "tasm",
+   "recast-return",
+   "Rhys Ifans returns as Curt Connors / the Lizard."
+  ],
+  [
+   "spider-man-nwh",
+   "tasm-2",
+   "recast-return",
+   "Jamie Foxx returns as Max Dillon / Electro."
+  ],
+  [
+   "spider-man-nwh",
+   "raimi-spider-man-3",
+   "variant",
+   "Tobey Maguire's Peter Parker crosses over as the Earth-96283 variant."
+  ],
+  [
+   "spider-man-nwh",
+   "tasm-2",
+   "variant",
+   "Andrew Garfield's Peter Parker crosses over as the Earth-120703 variant — and catches MJ."
+  ],
+  [
+   "spider-man-nwh",
+   "netflix-daredevil",
+   "cameo",
+   "Charlie Cox appears as Matt Murdock, Peter's attorney — the Netflix continuity's first on-screen entry into a Marvel Studios film."
+  ],
+  [
+   "spider-man-ffh",
+   "raimi-spider-man",
+   "recast-return",
+   "J.K. Simmons returns as J. Jonah Jameson in the post-credits — recast from Earth-96283 into the MCU."
+  ],
+  [
+   "venom-2",
+   "spider-man-nwh",
+   "crossover",
+   "The mid-credits scene yanks Eddie Brock into the MCU, where he watches Jameson's broadcast unmasking Spider-Man."
+  ],
+  [
+   "spider-man-nwh",
+   "venom-2",
+   "post-credits-setup",
+   "Eddie is snapped back to Earth-688B but leaves a fragment of the symbiote behind in an MCU bar."
+  ],
+  [
+   "morbius",
+   "spider-man-homecoming",
+   "crossover",
+   "The post-credits scene drags Michael Keaton's Adrian Toomes / Vulture out of the MCU and into the SSU via a No Way Home-style spell."
+  ],
+  [
+   "venom",
+   "venom-2",
+   "continuation",
+   "Direct continuation of Eddie Brock and the symbiote's story."
+  ],
+  [
+   "venom-2",
+   "venom-3",
+   "continuation",
+   "Direct continuation, closing the Venom trilogy."
+  ],
+  [
+   "madame-web",
+   "venom",
+   "tie-in",
+   "Shares the SSU's continuity and Spider-mythology (Ezekiel Sims, the Parker family) without a character crossover."
+  ],
+  [
+   "kraven",
+   "venom",
+   "tie-in",
+   "The final SSU film; shares the reality without crossing into any other entry."
+  ],
+  [
+   "deadpool-wolverine",
+   "blade",
+   "recast-return",
+   "Wesley Snipes returns as Blade, twenty years after Trinity."
+  ],
+  [
+   "deadpool-wolverine",
+   "elektra",
+   "recast-return",
+   "Jennifer Garner returns as Elektra from Earth-701306."
+  ],
+  [
+   "deadpool-wolverine",
+   "fantastic-four-2005",
+   "recast-return",
+   "Chris Evans returns — as Johnny Storm, not Steve Rogers."
+  ],
+  [
+   "deadpool-wolverine",
+   "logan",
+   "continuation",
+   "Dafne Keen returns as Laura / X-23, now grown, from Logan's timeline."
+  ],
+  [
+   "deadpool-wolverine",
+   "x2",
+   "recast-return",
+   "Aaron Stanford returns as Pyro."
+  ],
+  [
+   "deadpool-wolverine",
+   "x-men",
+   "recast-return",
+   "Tyler Mane returns as Sabretooth and Ray Park as Toad, from the 2000 original."
+  ],
+  [
+   "deadpool-wolverine",
+   "deadpool-2",
+   "continuation",
+   "Picks up Wade Wilson's story directly, then hands him to the TVA."
+  ],
+  [
+   "deadpool-wolverine",
+   "loki",
+   "crossover",
+   "Built on the TVA and the Void — the machinery Loki season 1 established."
+  ],
+  [
+   "deadpool-wolverine",
+   "xmen-97",
+   "tie-in",
+   "Wolverine finally wears the comic-accurate yellow-and-blue the animated series made iconic."
+  ],
+  [
+   "deadpool-wolverine",
+   "x-men-dofp",
+   "variant",
+   "Canonises Earth-10005 as an 'anchor reality' — the Fox films are no longer erased."
+  ],
+  [
+   "doctor-strange-2",
+   "what-if",
+   "crossover",
+   "Hayley Atwell's Captain Carter steps out of the animated multiverse and onto Earth-838 in live action."
+  ],
+  [
+   "doctor-strange-2",
+   "inhumans",
+   "recast-return",
+   "Anson Mount returns as Black Bolt, from the 2017 ABC series, as an Illuminati member."
+  ],
+  [
+   "doctor-strange-2",
+   "x-men",
+   "recast-return",
+   "Patrick Stewart returns as Charles Xavier — in the animated series' hoverchair."
+  ],
+  [
+   "doctor-strange-2",
+   "an-xmen-tas",
+   "tie-in",
+   "Xavier's Earth-838 introduction is scored with the 1992 animated series theme."
+  ],
+  [
+   "doctor-strange-2",
+   "captain-marvel",
+   "crossover",
+   "Lashana Lynch's Maria Rambeau is Earth-838's Captain Marvel."
+  ],
+  [
+   "doctor-strange-2",
+   "wandavision",
+   "continuation",
+   "Directly continues Wanda's Darkhold corruption and her search for Billy and Tommy."
+  ],
+  [
+   "doctor-strange-2",
+   "spider-man-nwh",
+   "tie-in",
+   "Names Strange's botched spell as the trigger for the incursions."
+  ],
+  [
+   "doctor-strange-2",
+   "fantastic-four-first-steps",
+   "cameo",
+   "John Krasinski's Reed Richards cameo on Earth-838, three years before Marvel Studios' own Fantastic Four."
+  ],
+  [
+   "into-spider-verse",
+   "across-spider-verse",
+   "continuation",
+   "Direct continuation — Across picks up Miles' story and expands it to hundreds of realities."
+  ],
+  [
+   "into-spider-verse",
+   "an-spider-man-1967",
+   "cameo",
+   "The post-credits sting sends Miguel to Earth-67 and recreates the pointing meme."
+  ],
+  [
+   "across-spider-verse",
+   "an-spider-man-unlimited",
+   "cameo",
+   "Spider-Man Unlimited's design recurs among Spider Society background variants."
+  ],
+  [
+   "across-spider-verse",
+   "raimi-spider-man-2",
+   "cameo",
+   "Miguel's screens replay live-action footage from the Raimi films."
+  ],
+  [
+   "across-spider-verse",
+   "tasm-2",
+   "cameo",
+   "Live-action Amazing Spider-Man footage appears in the Spider Society's canon-event archive."
+  ],
+  [
+   "across-spider-verse",
+   "venom",
+   "cameo",
+   "Earth-688 — the Venom films' reality — is visible on the Spider Society's multiverse display."
+  ],
+  [
+   "hawkeye",
+   "netflix-daredevil",
+   "continuation",
+   "Vincent D'Onofrio returns as Wilson Fisk, carrying the Netflix Kingpin straight into Marvel Studios canon."
+  ],
+  [
+   "echo",
+   "hawkeye",
+   "continuation",
+   "Picks up Maya Lopez immediately after the Hawkeye finale."
+  ],
+  [
+   "echo",
+   "netflix-daredevil",
+   "continuation",
+   "Kingpin and Matt Murdock both appear, settling the Netflix shows' canon status."
+  ],
+  [
+   "daredevil-born-again",
+   "netflix-daredevil",
+   "continuation",
+   "Direct continuation of Murdock and Fisk after the Netflix finale."
+  ],
+  [
+   "daredevil-born-again",
+   "echo",
+   "continuation",
+   "Continues Fisk's mayoral campaign, set up in Echo."
+  ],
+  [
+   "daredevil-born-again",
+   "netflix-punisher",
+   "continuation",
+   "Jon Bernthal returns as Frank Castle across season 1."
+  ],
+  [
+   "daredevil-born-again",
+   "netflix-jessica-jones",
+   "continuation",
+   "Krysten Ritter returns as Jessica Jones in season 2 — her first appearance since The Defenders."
+  ],
+  [
+   "punisher-one-last-kill",
+   "daredevil-born-again",
+   "continuation",
+   "Frank Castle's Born Again arc continues into this stand-alone special rather than into season 2."
+  ],
+  [
+   "punisher-one-last-kill",
+   "netflix-punisher",
+   "continuation",
+   "Bernthal's Punisher returns to lead his own story for the first time since the Netflix series ended."
+  ],
+  [
+   "she-hulk",
+   "netflix-daredevil",
+   "crossover",
+   "Charlie Cox's Daredevil gets a multi-episode comic arc — and a yellow suit."
+  ],
+  [
+   "she-hulk",
+   "incredible-hulk",
+   "recast-return",
+   "Tim Roth returns as Emil Blonsky / Abomination, fourteen years later."
+  ],
+  [
+   "netflix-defenders",
+   "netflix-daredevil",
+   "crossover",
+   "Team-up miniseries uniting Daredevil, Jessica Jones, Luke Cage and Iron Fist."
+  ],
+  [
+   "netflix-defenders",
+   "netflix-jessica-jones",
+   "crossover",
+   "Jessica Jones joins the Defenders."
+  ],
+  [
+   "netflix-defenders",
+   "netflix-luke-cage",
+   "crossover",
+   "Luke Cage joins the Defenders."
+  ],
+  [
+   "netflix-defenders",
+   "netflix-iron-fist",
+   "crossover",
+   "Danny Rand joins the Defenders."
+  ],
+  [
+   "netflix-punisher",
+   "netflix-daredevil",
+   "continuation",
+   "Frank Castle spun out of Daredevil season 2 into his own series."
+  ],
+  [
+   "netflix-luke-cage",
+   "netflix-jessica-jones",
+   "continuation",
+   "Luke Cage was introduced in Jessica Jones season 1."
+  ],
+  [
+   "agents-of-shield",
+   "thor-dark-world",
+   "tie-in",
+   "'The Well' handles the cleanup after the Asgardian battle in Greenwich."
+  ],
+  [
+   "agents-of-shield",
+   "cap-winter-soldier",
+   "tie-in",
+   "'Turn, Turn, Turn' aired days after the film and detonates the same HYDRA reveal across the series."
+  ],
+  [
+   "agents-of-shield",
+   "avengers-aou",
+   "tie-in",
+   "Season 2–3 track the vibranium fallout and the road to the Sokovia Accords."
+  ],
+  [
+   "agents-of-shield",
+   "avengers-iw",
+   "tie-in",
+   "The season 5 finale plays out against the Snap."
+  ],
+  [
+   "agents-of-shield",
+   "inhumans",
+   "crossover",
+   "Inhumans spun directly out of the series' season 3 Terrigenesis arc."
+  ],
+  [
+   "agents-of-shield",
+   "agent-carter",
+   "crossover",
+   "Shares the S.H.I.E.L.D. founding mythology; Peggy Carter runs through both."
+  ],
+  [
+   "agents-of-shield",
+   "ghost-rider",
+   "variant",
+   "Introduces Robbie Reyes as Ghost Rider — a separate character and continuity from Nicolas Cage's Johnny Blaze."
+  ],
+  [
+   "agent-carter",
+   "cap-first-avenger",
+   "continuation",
+   "Picks up Peggy Carter's life after Steve Rogers goes into the ice."
+  ],
+  [
+   "agent-carter",
+   "ant-man",
+   "tie-in",
+   "Establishes Edwin Jarvis, Howard Stark and the pre-history of J.A.R.V.I.S."
+  ],
+  [
+   "os-consultant",
+   "incredible-hulk",
+   "tie-in",
+   "Reveals that Tony Stark's visit to Ross was a ploy to keep Banner off the Avengers roster."
+  ],
+  [
+   "os-thors-hammer",
+   "thor",
+   "tie-in",
+   "Coulson's detour on the way to New Mexico, immediately before Thor."
+  ],
+  [
+   "os-item-47",
+   "avengers",
+   "tie-in",
+   "A couple scavenge a Chitauri rifle from the wreckage of the Battle of New York."
+  ],
+  [
+   "os-agent-carter",
+   "agent-carter",
+   "continuation",
+   "The one-shot's reception is what got the series greenlit."
+  ],
+  [
+   "os-all-hail-king",
+   "iron-man-3",
+   "continuation",
+   "Trevor Slattery, still playing the Mandarin, in Seagate Prison."
+  ],
+  [
+   "os-all-hail-king",
+   "shang-chi",
+   "tie-in",
+   "Sets up the real Ten Rings — and Slattery's return seven years later."
+  ],
+  [
+   "os-peters-todo-list",
+   "cap-civil-war",
+   "tie-in",
+   "Peter Parker's first days back from Berlin, days after the airport fight."
+  ],
+  [
+   "xmen-97",
+   "an-xmen-tas",
+   "continuation",
+   "Picks up Earth-92131 directly after the 1997 finale, same reality, several original voice actors."
+  ],
+  [
+   "what-if",
+   "loki",
+   "crossover",
+   "The Watcher's multiverse and the TVA's pruning are two views of the same branching."
+  ],
+  [
+   "quantumania",
+   "loki",
+   "crossover",
+   "He Who Remains, introduced in Loki's finale, returns as Kang the Conqueror."
+  ],
+  [
+   "wandavision",
+   "agatha-all-along",
+   "continuation",
+   "Agatha Harkness, last seen hexed into 'Agnes', returns as protagonist."
+  ],
+  [
+   "agatha-all-along",
+   "doctor-strange-2",
+   "tie-in",
+   "Wanda's apparent death and the Darkhold's destruction are treated as settled backstory."
+  ],
+  [
+   "what-if",
+   "cap-first-avenger",
+   "variant",
+   "'What If... Captain Carter Were the First Avenger?' branches at the serum injection."
+  ],
+  [
+   "what-if",
+   "gotg",
+   "variant",
+   "'What If... T'Challa Became a Star-Lord?' branches at Yondu's abduction."
+  ],
+  [
+   "what-if",
+   "avengers-aou",
+   "variant",
+   "'What If... Ultron Won?' branches at Age of Ultron's climax."
+  ],
+  [
+   "what-if",
+   "iron-man",
+   "variant",
+   "'What If... Killmonger Rescued Tony Stark?' branches in the Afghan convoy."
+  ],
+  [
+   "marvel-zombies",
+   "what-if",
+   "continuation",
+   "Grown out of the 'What If... Zombies?!' episode into its own four-part series."
+  ],
+  [
+   "i-am-groot",
+   "gotg",
+   "continuation",
+   "Shorts set in the gap between the two Guardians films."
+  ],
+  [
+   "fantastic-four-first-steps",
+   "thunderbolts",
+   "post-credits-setup",
+   "Thunderbolts* ends with the New Avengers detecting the Fantastic Four's craft entering Earth-616 airspace."
+  ],
+  [
+   "thunderbolts",
+   "cap-brave-new-world",
+   "tie-in",
+   "References Sam Wilson's Captain America and a naming dispute over 'the Avengers'."
+  ],
+  [
+   "cap-brave-new-world",
+   "incredible-hulk",
+   "recast-return",
+   "Tim Blake Nelson returns as Samuel Sterns / the Leader, seventeen years after the seed was planted."
+  ],
+  [
+   "cap-brave-new-world",
+   "cap-civil-war",
+   "continuation",
+   "Continues Thaddeus Ross's arc — now recast, and now President."
+  ],
+  [
+   "cap-brave-new-world",
+   "eternals",
+   "tie-in",
+   "The adamantium comes from Tiamut's emerged body — the Celestial Island left at Eternals' end."
+  ],
+  [
+   "eternals",
+   "blade",
+   "post-credits-setup",
+   "Mahershala Ali's Blade speaks in the mid-credits as Dane Whitman reaches for the Ebony Blade."
+  ],
+  [
+   "shang-chi",
+   "doctor-strange",
+   "post-credits-setup",
+   "Wong, Carol Danvers and Bruce Banner examine the Ten Rings and pick up a signal."
+  ],
+  [
+   "shang-chi",
+   "iron-man-3",
+   "continuation",
+   "Trevor Slattery's fake-Mandarin story finally collides with the real one."
+  ],
+  [
+   "ms-marvel",
+   "the-marvels",
+   "post-credits-setup",
+   "Kamala and Carol swap places through the bangle in the finale's post-credits scene."
+  ],
+  [
+   "ms-marvel",
+   "captain-marvel",
+   "tie-in",
+   "Kamala's bangle is tied to Kree and Noor-dimension mythology."
+  ],
+  [
+   "the-marvels",
+   "x-men-last-stand",
+   "post-credits-setup",
+   "Monica wakes in a reality where Kelsey Grammer's Beast is waiting — the Fox mutants, entering."
+  ],
+  [
+   "ironheart",
+   "black-panther-2",
+   "continuation",
+   "Continues Riri Williams' story after her introduction in Wakanda Forever."
+  ],
+  [
+   "wonder-man",
+   "she-hulk",
+   "tie-in",
+   "Simon Williams' Hollywood satire sits alongside She-Hulk as Marvel Television's other fourth-wall-adjacent comedy."
+  ],
+  [
+   "black-widow",
+   "cap-civil-war",
+   "tie-in",
+   "Set in the gap between Civil War and Infinity War; the post-credits jumps past Endgame."
+  ],
+  [
+   "spider-man-bnd",
+   "spider-man-nwh",
+   "continuation",
+   "Picks up a Peter Parker nobody remembers, after the spell erased him from the world."
+  ],
+  [
+   "spider-man-bnd",
+   "daredevil-born-again",
+   "crossover",
+   "Charlie Cox's Daredevil crosses over from Marvel Television into the Spider-Man films."
+  ],
+  [
+   "x-men-dofp",
+   "x-men-last-stand",
+   "continuation",
+   "Time travel unwrites the original trilogy's future — and the trilogy's own continuity with it."
+  ],
+  [
+   "x-men-dofp",
+   "x-men-first-class",
+   "continuation",
+   "Bridges the First Class cast and the original cast into a single, rewritten timeline."
+  ],
+  [
+   "x-men-apocalypse",
+   "x-men-dofp",
+   "continuation",
+   "Direct continuation inside the reset timeline."
+  ],
+  [
+   "dark-phoenix",
+   "x-men-apocalypse",
+   "continuation",
+   "Closes out the First Class-era timeline."
+  ],
+  [
+   "logan",
+   "x-men-dofp",
+   "variant",
+   "A separate, terminal near-future branch rather than a continuation."
+  ],
+  [
+   "new-mutants",
+   "x-men-apocalypse",
+   "tie-in",
+   "Essex Corp ties it loosely to the Mr. Sinister thread seeded in the main series."
+  ],
+  [
+   "deadpool",
+   "x-men-origins-wolverine",
+   "variant",
+   "Wade Wilson is rebooted from scratch; the film opens by mocking the earlier version."
+  ],
+  [
+   "deadpool-2",
+   "deadpool",
+   "continuation",
+   "Direct continuation, plus a time-travel coda that undoes the previous film's worst outcomes."
+  ],
+  [
+   "x2",
+   "x-men",
+   "continuation",
+   "Direct continuation."
+  ],
+  [
+   "x-men-last-stand",
+   "x2",
+   "continuation",
+   "Direct continuation, resolving the Phoenix arc."
+  ],
+  [
+   "the-wolverine",
+   "x-men-last-stand",
+   "continuation",
+   "Set after the original trilogy, with Jean Grey haunting Logan."
+  ],
+  [
+   "raimi-spider-man-2",
+   "raimi-spider-man",
+   "continuation",
+   "Direct continuation."
+  ],
+  [
+   "raimi-spider-man-3",
+   "raimi-spider-man-2",
+   "continuation",
+   "Direct continuation, closing the trilogy."
+  ],
+  [
+   "an-spider-man-mtv-2003",
+   "raimi-spider-man",
+   "continuation",
+   "MTV's CG series is set between the first two Raimi films, with Peter still in college."
+  ],
+  [
+   "tasm-2",
+   "tasm",
+   "continuation",
+   "Direct continuation."
+  ],
+  [
+   "blade-2",
+   "blade",
+   "continuation",
+   "Direct continuation."
+  ],
+  [
+   "blade-trinity",
+   "blade-2",
+   "continuation",
+   "Direct continuation, closing the trilogy."
+  ],
+  [
+   "blade-series",
+   "blade-trinity",
+   "continuation",
+   "Spike TV series set in the same reality after the films."
+  ],
+  [
+   "elektra",
+   "daredevil-2003",
+   "continuation",
+   "Spin-off continuing Elektra Natchios after her death in Daredevil."
+  ],
+  [
+   "fantastic-four-silver-surfer",
+   "fantastic-four-2005",
+   "continuation",
+   "Direct continuation."
+  ],
+  [
+   "ghost-rider-2",
+   "ghost-rider",
+   "continuation",
+   "Direct continuation with the same Johnny Blaze, a new creative team, and a harder tone."
+  ],
+  [
+   "tv-hulk-returns",
+   "tv-incredible-hulk-1977",
+   "continuation",
+   "First of three NBC reunion films; introduces Thor to network television."
+  ],
+  [
+   "tv-trial-of-hulk",
+   "tv-hulk-returns",
+   "continuation",
+   "Second reunion film; introduces Daredevil, played by Rex Smith."
+  ],
+  [
+   "tv-death-of-hulk",
+   "tv-trial-of-hulk",
+   "continuation",
+   "Final reunion film; kills David Banner."
+  ],
+  [
+   "an-big-hero-6-series",
+   "big-hero-6",
+   "continuation",
+   "Picks up immediately after the film."
+  ],
+  [
+   "an-emh",
+   "an-wolverine-and-xmen",
+   "crossover",
+   "Both series share Earth-8096; characters and continuity cross between them."
+  ],
+  [
+   "an-avengers-assemble",
+   "an-ultimate-spider-man",
+   "crossover",
+   "Disney XD's shared animated continuity — Spider-Man crosses into the Avengers' series repeatedly."
+  ],
+  [
+   "an-agents-of-smash",
+   "an-avengers-assemble",
+   "crossover",
+   "Same shared Disney XD continuity."
+  ],
+  [
+   "an-gotg-2015",
+   "an-avengers-assemble",
+   "crossover",
+   "Same shared Disney XD continuity."
+  ],
+  [
+   "friendly-neighborhood-spider-man",
+   "spider-man-homecoming",
+   "variant",
+   "A deliberately re-branched origin: Norman Osborn takes the mentor role Tony Stark held."
+  ],
+  [
+   "eyes-of-wakanda",
+   "black-panther",
+   "tie-in",
+   "Anthology of Wakandan history across three millennia, confirmed Sacred Timeline canon."
+  ],
+  [
+   "gotg-holiday-special",
+   "gotg-3",
+   "tie-in",
+   "Bridges Vol. 2 and Vol. 3, and explains how Kevin Bacon ends up on Knowhere."
+  ],
+  [
+   "werewolf-by-night",
+   "thunderbolts",
+   "tie-in",
+   "Introduces Jack Russell, Elsa Bloodstone and Man-Thing into the Sacred Timeline."
+  ],
+  [
+   "avengers-endgame",
+   "avengers-iw",
+   "continuation",
+   "Direct continuation — and the Time Heist that creates the branched realities Loki inherits."
+  ],
+  [
+   "cloak-and-dagger",
+   "runaways",
+   "crossover",
+   "Cloak and Dagger appear in Runaways season 3, the only Marvel Television cross-show crossover of its era."
+  ]
+ ],
+ "chrono": {
+  "eyes-of-wakanda": [
+   "1260 BC – 1896 AD",
+   "0",
+   "official"
+  ],
+  "cap-first-avenger": [
+   "1943–1945",
+   "1",
+   "official"
+  ],
+  "agent-carter": [
+   "1946–1947",
+   "2",
+   "official"
+  ],
+  "os-agent-carter": [
+   "1946",
+   "2.5",
+   "official"
+  ],
+  "captain-marvel": [
+   "1995",
+   "3",
+   "official"
+  ],
+  "iron-man": [
+   "2010",
+   "4",
+   "official"
+  ],
+  "iron-man-2": [
+   "2011",
+   "5",
+   "official"
+  ],
+  "incredible-hulk": [
+   "2011",
+   "6",
+   "official"
+  ],
+  "os-thors-hammer": [
+   "2011",
+   "7",
+   "official"
+  ],
+  "thor": [
+   "2011",
+   "8",
+   "official"
+  ],
+  "os-consultant": [
+   "2011",
+   "9",
+   "official"
+  ],
+  "avengers": [
+   "2012",
+   "10",
+   "official"
+  ],
+  "os-item-47": [
+   "2012",
+   "11",
+   "official"
+  ],
+  "thor-dark-world": [
+   "2013",
+   "12",
+   "official"
+  ],
+  "iron-man-3": [
+   "2012–2013",
+   "13",
+   "official"
+  ],
+  "os-all-hail-king": [
+   "2014",
+   "14",
+   "official"
+  ],
+  "cap-winter-soldier": [
+   "2014",
+   "15",
+   "official"
+  ],
+  "gotg": [
+   "2014",
+   "16",
+   "official"
+  ],
+  "gotg-2": [
+   "2014",
+   "17",
+   "official"
+  ],
+  "i-am-groot": [
+   "2014",
+   "18",
+   "official"
+  ],
+  "netflix-daredevil": [
+   "2015–2017",
+   "19",
+   "inferred"
+  ],
+  "netflix-jessica-jones": [
+   "2015–2019",
+   "20",
+   "inferred"
+  ],
+  "avengers-aou": [
+   "2015",
+   "21",
+   "official"
+  ],
+  "ant-man": [
+   "2015",
+   "22",
+   "official"
+  ],
+  "netflix-luke-cage": [
+   "2016–2018",
+   "23",
+   "inferred"
+  ],
+  "netflix-iron-fist": [
+   "2016–2018",
+   "24",
+   "inferred"
+  ],
+  "netflix-defenders": [
+   "2016",
+   "25",
+   "inferred"
+  ],
+  "cap-civil-war": [
+   "2016",
+   "26",
+   "official"
+  ],
+  "black-widow": [
+   "2016",
+   "27",
+   "official"
+  ],
+  "black-panther": [
+   "2016",
+   "28",
+   "official"
+  ],
+  "spider-man-homecoming": [
+   "2016",
+   "29",
+   "official"
+  ],
+  "os-peters-todo-list": [
+   "2016",
+   "29.5",
+   "inferred"
+  ],
+  "netflix-punisher": [
+   "2017–2019",
+   "30",
+   "inferred"
+  ],
+  "doctor-strange": [
+   "2016–2017",
+   "31",
+   "official"
+  ],
+  "thor-ragnarok": [
+   "2017",
+   "32",
+   "official"
+  ],
+  "agents-of-shield": [
+   "2012–2019",
+   "32.4",
+   "official"
+  ],
+  "inhumans": [
+   "2017",
+   "32.5",
+   "inferred"
+  ],
+  "runaways": [
+   "2017–2018",
+   "32.6",
+   "inferred"
+  ],
+  "ant-man-wasp": [
+   "2018",
+   "33",
+   "official"
+  ],
+  "avengers-iw": [
+   "2018",
+   "34",
+   "official"
+  ],
+  "cloak-and-dagger": [
+   "2018",
+   "34.5",
+   "inferred"
+  ],
+  "avengers-endgame": [
+   "2018 → 2023",
+   "35",
+   "official"
+  ],
+  "loki": [
+   "Outside time",
+   "36",
+   "official"
+  ],
+  "wandavision": [
+   "2023",
+   "38",
+   "official"
+  ],
+  "shang-chi": [
+   "2024",
+   "39",
+   "official"
+  ],
+  "tfatws": [
+   "2024",
+   "40",
+   "official"
+  ],
+  "spider-man-ffh": [
+   "2024",
+   "41",
+   "official"
+  ],
+  "eternals": [
+   "5000 BC → 2024",
+   "42",
+   "official"
+  ],
+  "deadpool-wolverine": [
+   "2024 / the Void",
+   "42.5",
+   "official"
+  ],
+  "spider-man-nwh": [
+   "2024",
+   "43",
+   "official"
+  ],
+  "doctor-strange-2": [
+   "2024–2025",
+   "44",
+   "official"
+  ],
+  "hawkeye": [
+   "2024",
+   "45",
+   "official"
+  ],
+  "moon-knight": [
+   "2025",
+   "46",
+   "official"
+  ],
+  "black-panther-2": [
+   "2025",
+   "47",
+   "official"
+  ],
+  "echo": [
+   "2025",
+   "48",
+   "inferred"
+  ],
+  "she-hulk": [
+   "2024–2025",
+   "49",
+   "official"
+  ],
+  "ms-marvel": [
+   "2025",
+   "50",
+   "official"
+  ],
+  "thor-love-thunder": [
+   "2025",
+   "51",
+   "official"
+  ],
+  "werewolf-by-night": [
+   "2025",
+   "52",
+   "inferred"
+  ],
+  "gotg-holiday-special": [
+   "2025",
+   "53",
+   "official"
+  ],
+  "quantumania": [
+   "2026",
+   "54",
+   "official"
+  ],
+  "gotg-3": [
+   "2026",
+   "55",
+   "official"
+  ],
+  "ironheart": [
+   "2025",
+   "55.5",
+   "inferred"
+  ],
+  "secret-invasion": [
+   "2026",
+   "56",
+   "inferred"
+  ],
+  "the-marvels": [
+   "2026",
+   "57",
+   "official"
+  ],
+  "agatha-all-along": [
+   "2026",
+   "59",
+   "official"
+  ],
+  "daredevil-born-again": [
+   "2026–2027",
+   "60",
+   "inferred"
+  ],
+  "cap-brave-new-world": [
+   "2026–2027",
+   "61",
+   "official"
+  ],
+  "punisher-one-last-kill": [
+   "2027",
+   "61.5",
+   "inferred"
+  ],
+  "thunderbolts": [
+   "2027",
+   "62",
+   "official"
+  ],
+  "wonder-man": [
+   "2027",
+   "62.5",
+   "inferred"
+  ],
+  "spider-man-bnd": [
+   "2028",
+   "63",
+   "inferred"
+  ]
+ }
+}

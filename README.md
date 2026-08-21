@@ -29,6 +29,16 @@ Two stops are open, two are being built:
 | 🪔 | **Pandal Hopping** — a night walk through Durga Puja pandals | building |
 | 😴 | **Sunday Afternoon** — mangshor jhol, a ceiling fan, and the nap after | building |
 
+### And one experiment
+
+Not a Bengali experience, and deliberately not on that shelf — a separate thing built with the same approach, kept at its own path with its own design:
+
+| | | |
+|---|---|---|
+| 🕸️ | **[Marvel Multiverse Atlas — The Living Map of Marvel](https://bengaliexperience.wtf/marvelmultiverseatlas/)** | **live** |
+
+Every Marvel film, series, special, one-shot and short released to date, resolved into one dataset and plotted five ways — by release, by in-universe chronology, by the connections crossing between realities, by the comics behind them, and against a live clock ticking inside the Marvel Universe. It is a self-contained static app mounted under `public/`, with its own stylesheet, its own theme and its own generated pages; the edge middleware passes its paths straight through untouched. See `public/marvelmultiverseatlas/README.md`.
+
 ---
 
 ## What's live — the bus
@@ -144,8 +154,12 @@ src/
 ├─ lib/                selection, jsonld, prerender, mahalayaLayout — shared by client + edge
 └─ pages/              HomePage · BusDriverPage · MahalayaPage
 functions/             Cloudflare Pages Functions (_middleware, sitemap, llms.txt, api/aboard)
-scripts/               prepare-scene + prepare-mahalaya (art → layers + geometry), check-playlists, stamp-lastmod
+scripts/               prepare-scene + prepare-mahalaya (art → layers + geometry), prepare-atlas
+                       (dataset → the Atlas's static pages), check-playlists, stamp-lastmod
 design/source/         master art PNGs (gitignored); the pipelines turn them into public/scene/*
+public/marvelmultiverseatlas/
+                       the Marvel Multiverse Atlas: a self-contained static app with its own
+                       stylesheet and theme, served verbatim; not part of the React bundle
 ```
 
 ---

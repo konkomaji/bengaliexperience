@@ -1,0 +1,14 @@
+# Secrets — never commit API keys or tokens. The dataset pipeline that needed
+# them is no longer published with the site (see README), so nothing here
+# writes one any more; these stay as a backstop, because this directory is
+# served verbatim from a CDN and anything committed into it is public the
+# moment it deploys.
+.env
+.env.*
+*.secret
+*.local.json
+
+# os / editor
+Thumbs.db
+.DS_Store
+desktop.ini
