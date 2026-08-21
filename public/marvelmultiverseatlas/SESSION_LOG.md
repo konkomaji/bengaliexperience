@@ -107,3 +107,104 @@ Wired the Comic Vine API (`tools/comicvine_covers.py`, key read from `COMICVINE_
 > Note: cover images did not render inside the automated test browser (its sandbox blocks cross-origin images), but `curl` returns HTTP 200 and there is no page CSP, so they load in a normal browser — verified visually (e.g. Fantastic Four #1's cover displayed).
 
 Final: **183 titles · 103 comics (88 with cover art) · 54 official / 18 inferred dates.**
+
+---
+
+# Round 3 — moved to bengaliexperience.wtf, and published twice
+
+**Date:** 21 August 2026
+**Scope:** the Atlas moved out of its own repository onto a live domain, and the dataset made findable and citable — search-intent research first, then 327 generated pages, then the wiring that keeps two unrelated properties from being read as one.
+
+The Atlas now lives at **[bengaliexperience.wtf/marvelmultiverseatlas](https://bengaliexperience.wtf/marvelmultiverseatlas/)**, mounted under `public/` in the [bengaliexperience](https://github.com/konkomaji/bengaliexperience) repository. Its own repository keeps the dataset pipeline; the site keeps the dataset and the app.
+
+## 1. The move
+
+Cloned in, `.git` stripped, dropped into `public/marvelmultiverseatlas/`. The build pipeline (`build_data.ps1`, `tmdb_enrich.py`, `comicvine_covers.py`, `scrape_posters.ps1`) was **not** brought across: it needs API keys, no visitor loads it, and there is no reason to serve build scripts off a CDN. It stays in the Atlas's own repo, which is where the dataset is regenerated before the result is committed to the site.
+
+The design was left alone on purpose. The generated pages load the Atlas's own `style.css`, its Material 3 Expressive tokens, its per-universe accent themes and its own header, brand and footer. Nothing from the host site bleeds in, and nothing Marvel bleeds out.
+
+## 2. Search-intent research, before writing anything
+
+A research pass ran first, against live SERPs rather than assumption. Three findings changed what got built:
+
+- **The head queries reward narrative ordered lists, not tables.** "marvel movies in order", "mcu chronological order" and "spider-man movies in order" are won by curated, numbered list articles with a short "why this order" framing — Rotten Tomatoes, Space.com, TechRadar, TheWrap. A 183-row sortable database loses to that format regardless of how good the data is. Hence `watch-order/`, which is the dataset presented narratively rather than as a table.
+- **Where this cannot win, and it is worth saying so.** JustWatch owns "where to watch *X*"; IMDb owns "*X* runtime / box office". Those queries are answered honestly on the title pages and are not chased.
+- **Where the gap is real.** Wikipedia's own *List of films based on Marvel Comics publications* does **not** link a film to the issue it adapts, and nothing found in the SERP maps comics to adaptations systematically. Nor does any incumbent — Wikipedia, IMDb, ScreenRant, marvelwatchlist.com — mark which in-universe dates Marvel actually confirmed and which are inference, despite several outlets writing about the MCU timeline being contradictory. That distinction is this dataset's one defensible advantage.
+
+## 3. 327 generated pages
+
+The app renders six views client-side out of one HTML file. Right for exploring, wrong for everything else: one URL for the whole dataset means nothing in it can be linked to or cited, and a client that does not run JavaScript sees an empty shell.
+
+`scripts/prepare-atlas.mjs` (in the host repo) emits the same data a second way:
+
+| Path | Pages |
+|---|---|
+| `titles/<id>/` | 183 |
+| `comics/<slug>/` | 92 |
+| `realities/<earth>/` | 25 |
+| `eras/<saga>/` | 11 |
+| `phases/<phase>/` | 6 |
+| `watch-order/<order>/` | 4 |
+| hubs | 6 |
+
+Each page carries its facts as real markup, a **direct answer in prose at the top** — an answer engine shows one paragraph with no page around it, so the answer has to survive being quoted alone — and `schema.org` that asserts only what the page actually shows: `Movie` / `TVSeries` / `ComicIssue` / `ItemList` / `FAQPage` / `BreadcrumbList`, plus a `Dataset` node on the home page describing the downloadable JSON and CSV.
+
+**Three gates drop real rows on purpose**, because a page per row is how programmatic SEO turns into index bloat:
+
+- **realities** — only where the reality has more than one title or takes part in at least one verified connection. 26 dropped; a designation with nothing behind it restates a one-line wiki entry.
+- **comics** — only where the issue maps to a *released* title. 11 dropped; the mapping is the page's whole reason to exist.
+- **eras** — only sagas with three or more titles. Two titles is a sentence, not a page.
+
+## 4. The copy is derived, not written down
+
+Every date on every page carries its certainty — confirmed against Marvel's published chronology, or marked estimated. That is the dataset's differentiator, and it evaporates the moment a page rounds an estimate up into a fact, so anything the data can answer is answered *from* the data.
+
+This was not theoretical. A hardcoded FAQ answer — "the first Marvel story chronologically is Captain America: The First Avenger" — was already false: *Eyes of Wakanda* opens in 1260 BC. The received answer and the dataset disagreed, and only one of them was checkable. The chronological extremes, the counts, the first and last entry of every ordered list and the era date ranges are all computed now.
+
+Two other bugs surfaced the same way:
+
+- **A comic slug collision.** *Ms. Marvel #1* is both Carol Danvers (1977) and Kamala Khan (2014); the two produced the same slug and one page silently overwrote the other. The year now disambiguates, appended only where it has to be.
+- **9 unresolved comic-to-title links**, caused by the two tables spelling names differently (`Marvel's Jessica Jones` vs `Jessica Jones`, `Dark Phoenix` vs `X-Men: Dark Phoenix`). A candidate ladder resolves them, accepting a looser form only when it matches exactly one title. 92 of 94 now resolve; the remaining two are *Avengers: Secret Wars*, which is unreleased and correctly has nothing to link to.
+
+## 5. Two properties, one host
+
+The Atlas is not about Bengal, and the wiring says so rather than hoping a crawler works it out:
+
+- **Its own `WebSite` entity, `sitemap.xml`, `llms.txt` and social card.** The host site's sitemap omits the Atlas entirely; `robots.txt` lists both so the two are crawled as two things. 327 Marvel URLs in a sitemap that otherwise describes a Bengali culture site would say the opposite.
+- **Linked from an "Also built here" section**, below the host's FAQ — never its nav, never its catalogue. `src/data/experiments.ts` exists to make that separation structural rather than a matter of remembering.
+- **A real 404.** `functions/_middleware.ts` passes Atlas paths through unrewritten, and answers an unmatched one with the Atlas's own 404 page at status 404. `_redirects` cannot do this: Cloudflare Pages silently ignores any status there outside 200 and the 3xx family, so the rule looked correct and did nothing while the SPA catch-all served the *Bengali* site at 200 under a Marvel URL. Caught by `wrangler pages dev`, which warns about it explicitly.
+- **`_headers`** gives the Atlas a revalidating cache rather than `immutable`, because its filenames are stable rather than content-hashed.
+
+## 6. Changes to the app itself
+
+- `index.html` gained a **crawlable body** (`#atlas-prerender`), hidden the instant the `js` class lands so no visitor sees it, holding the counts, the answers and a link to every generated page. It is also the app's internal link graph — without it the 327 pages would be reachable only from the sitemap.
+- Full Open Graph and Twitter card tags, a canonical link, and `atlas-og.jpg`: a 1200×630 card drawn entirely in code from the Atlas's own palette. Nothing composited over artwork, because every image the Atlas displays is a poster or a cover belonging to somebody else.
+- `assets/pages.css` — breadcrumbs, the numbered watch-order list, long-form prose and the FAQ block, all built from tokens already in `style.css`. Nothing in it overrides a class the app uses.
+- The footers of `index.html` and `credits.html` now read *An experiment by BengaliExperience.wtf*.
+
+## 7. Verified
+
+- `tsc -b`, `oxlint` and `vite build` clean, no new warnings.
+- **All 4,307 internal links** across the generated pages resolve.
+- **330 JSON-LD blocks** parse; every claimed type present.
+- Every title tag inside the pixel limit but one — *Marvel One-Shot: A Funny Thing Happened on the Way to Thor's Hammer*, which is simply that long. Descriptions are clamped centrally, at word boundaries.
+- Routed through `wrangler pages dev`: every Atlas path 200, an unknown one 404, the host site's own routes unaffected.
+
+### Commands
+
+```bash
+npm run atlas       # 327 pages + sitemap.xml, llms.txt, and the app's crawlable body
+npm run atlas:og    # the social card, only when the counts change
+npm run cf:dev      # build + wrangler pages dev dist
+```
+
+## 8. Known limitations, still honest
+
+- **Streaming providers are a build-time snapshot**, not a live feed. Rights move; the pages say so rather than implying currency they cannot guarantee.
+- **The 18 estimated dates stay estimated.** Marvel Television and the 2027–28 slate have no confirmed year, and promoting them would be exactly the fabrication the certainty flag exists to prevent.
+- **Comics remain a curated spine**, 103 issues of tens of thousands, and only the 92 with a released adaptation get a page.
+- **The host domain lends no topical authority.** The Atlas and the Bengali site share a host and nothing else; neither inherits the other's standing, which is the intended trade for keeping them cleanly separate.
+
+Final: **183 titles · 103 comics (92 with adaptation pages) · 51 realities · 135 connections · 54 official / 18 inferred dates · 327 generated pages.**
+
+Shipped in [#8](https://github.com/konkomaji/bengaliexperience/pull/8) and [#9](https://github.com/konkomaji/bengaliexperience/pull/9).
