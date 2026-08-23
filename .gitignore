@@ -35,3 +35,6 @@ src/data/lastmod.ts
 
 # asset brief, kept local
 ASSETS.md
+
+# ingest cache for scripts/fetch-suman-archive.mjs (derived output is committed)
+scripts/.cache/

@@ -1,10 +1,12 @@
 import { BRAND, DRIVER } from "../data/brand";
 import { BROADCAST } from "../data/broadcast";
 import { EXPERIENCES } from "../data/experiences";
+import { TRIBUTES } from "../data/tributes";
 import { PLAYLISTS, TOTAL_TRACKS } from "../data/playlists";
 import { SCENE } from "../data/scene";
 import { PAGE_FAQ, PAGE_PATH, PAGE_SEO, type PageId } from "../data/seo";
 import { buildTarakeswarJsonLd } from "../data/tarakeswar/jsonld";
+import { buildKabirSumanJsonLd } from "../data/kabirsuman/jsonld";
 
 const TARAKESWAR_PAGE_IDS = new Set([
   "tarakeswar",
@@ -12,6 +14,14 @@ const TARAKESWAR_PAGE_IDS = new Set([
   "tarakeswarFood",
   "tarakeswarReach",
   "tarakeswarBlog",
+]);
+
+const KABIRSUMAN_PAGE_IDS = new Set([
+  "kabirsuman",
+  "kabirsumanLife",
+  "kabirsumanWorks",
+  "kabirsumanWords",
+  "kabirsumanSources",
 ]);
 
 /**
@@ -38,6 +48,14 @@ export function buildJsonLd(pageId: PageId) {
   // "experiences" this file otherwise describes.
   if (TARAKESWAR_PAGE_IDS.has(pageId)) {
     return buildTarakeswarJsonLd(pageId as Parameters<typeof buildTarakeswarJsonLd>[0]);
+  }
+
+  // The Kabir Suman section is a third separate subject — see
+  // src/data/kabirsuman/jsonld.ts. Its two dynamic collections (albums,
+  // songs) are not PageIds and are built directly by their own pages and by
+  // functions/_middleware.ts, the same split the Tarakeswar blog posts use.
+  if (KABIRSUMAN_PAGE_IDS.has(pageId)) {
+    return buildKabirSumanJsonLd(pageId as Parameters<typeof buildKabirSumanJsonLd>[0]);
   }
 
   const seo = PAGE_SEO[pageId];
@@ -151,6 +169,23 @@ export function buildJsonLd(pageId: PageId) {
     })),
   };
 
+  /** A second, separate list: a reference archive about a real person, not
+   *  a moment to sit inside — see src/data/tributes.ts for why it is kept
+   *  out of `experiences` above rather than appended to it. */
+  const tributes = {
+    "@type": "ItemList",
+    "@id": `${BRAND.url}/#tributes`,
+    name: "Bengali Experience: tributes",
+    numberOfItems: TRIBUTES.length,
+    itemListElement: TRIBUTES.map((t, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: t.name,
+      description: t.blurb,
+      url: BRAND.url + t.path,
+    })),
+  };
+
   const collection = {
     "@type": "MusicPlaylist",
     "@id": `${BRAND.url}/#collection`,
@@ -202,7 +237,7 @@ export function buildJsonLd(pageId: PageId) {
     about: { "@type": "Thing", name: "Mahalaya, Devi Paksha and the goddess Durga" },
   };
 
-  const subject = isHome ? [experiences] : isBus ? [collection, busImage] : [broadcast];
+  const subject = isHome ? [experiences, tributes] : isBus ? [collection, busImage] : [broadcast];
 
   return {
     "@context": "https://schema.org",

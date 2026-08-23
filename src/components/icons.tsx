@@ -162,3 +162,40 @@ export const ArticleIcon = (p: { size?: number }) => (
     <path d="M7.5 8h9M7.5 11.5h9M7.5 15h5.5" />
   </svg>
 );
+
+/* --- Kabir Suman section only --- */
+
+/** a reel-to-reel tape spool: the discography */
+export const ReelIcon = (p: { size?: number }) => (
+  <svg {...line} width={p.size ?? 18} height={p.size ?? 18}>
+    <circle cx="12" cy="12" r="9" />
+    <circle cx="12" cy="12" r="2.6" />
+    <circle cx="8.2" cy="9.4" r="1.3" />
+    <circle cx="15.8" cy="9.4" r="1.3" />
+    <circle cx="12" cy="16.6" r="1.3" />
+  </svg>
+);
+
+/** a hand mic: the life, broadcasting */
+export const MicIcon = (p: { size?: number }) => (
+  <svg {...line} width={p.size ?? 18} height={p.size ?? 18}>
+    <rect x="9" y="3" width="6" height="11" rx="3" />
+    <path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6" />
+  </svg>
+);
+
+/** a magnifying glass: the concordance search */
+export const SearchIcon = (p: { size?: number }) => (
+  <svg {...line} width={p.size ?? 18} height={p.size ?? 18}>
+    <circle cx="10.5" cy="10.5" r="6.5" />
+    <path d="m20 20-4.6-4.6" />
+  </svg>
+);
+
+/** a rubber ink stamp: sources and credits */
+export const StampIcon = (p: { size?: number }) => (
+  <svg {...line} width={p.size ?? 18} height={p.size ?? 18}>
+    <rect x="6" y="3.5" width="12" height="8" rx="1.5" />
+    <path d="M9 11.5v3h6v-3M5 20.5h14M7 20.5l1-3.5h8l1 3.5" />
+  </svg>
+);

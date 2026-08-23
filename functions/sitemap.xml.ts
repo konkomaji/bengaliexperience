@@ -18,8 +18,9 @@
  */
 import { BRAND } from "../src/data/brand";
 import { LAST_MODIFIED } from "../src/data/lastmod";
-import { PAGE_PATH, type PageId } from "../src/data/seo";
+import { KABIRSUMAN_ALBUM_PREFIX, KABIRSUMAN_SONG_PREFIX, PAGE_PATH, type PageId } from "../src/data/seo";
 import { BLOG_POSTS } from "../src/data/tarakeswar/blog";
+import { ALBUMS, SONGS } from "../src/data/kabirsuman/catalogue";
 
 export const onRequest: PagesFunction = () => {
   const pages = Object.keys(PAGE_PATH) as PageId[];
@@ -44,7 +45,16 @@ export const onRequest: PagesFunction = () => {
   // one. Listing it here as well would either duplicate every URL or, worse,
   // list one Marvel row in a sitemap that otherwise describes a Bengali
   // culture site and invite a crawler to read the two as one property.
-  const urls = [...pageUrls, ...blogUrls].join("\n");
+
+  // Kabir Suman's albums and songs aren't PageIds (see src/data/seo.ts), so
+  // like the Tarakeswar blog posts they get their own rows here rather than
+  // through PAGE_PATH. No per-item lastmod: 347 rows is too many for a
+  // git-log query each to be worth it, and the archive they are sourced from
+  // changes rarely enough that an omitted date costs little.
+  const albumUrls = ALBUMS.map((a) => `  <url><loc>${BRAND.url}${KABIRSUMAN_ALBUM_PREFIX}/${a.slug}</loc></url>`);
+  const songUrls = SONGS.map((s) => `  <url><loc>${BRAND.url}${KABIRSUMAN_SONG_PREFIX}/${s.slug}</loc></url>`);
+
+  const urls = [...pageUrls, ...blogUrls, ...albumUrls, ...songUrls].join("\n");
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

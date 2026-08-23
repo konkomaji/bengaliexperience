@@ -15,7 +15,7 @@
  *   3. real status codes unknown paths 404 instead of soft-404ing at 200
  *   4. real content      per-page head, JSON-LD and a crawlable body
  */
-import { MOVED_PATHS, PAGE_PATH, PAGE_SEO, PATH_TO_PAGE } from "../src/data/seo";
+import { KABIRSUMAN_ALBUM_PREFIX, KABIRSUMAN_SONG_PREFIX, MOVED_PATHS, PAGE_PATH, PAGE_SEO, PATH_TO_PAGE } from "../src/data/seo";
 import { buildJsonLd } from "../src/lib/jsonld";
 import { renderStaticBody } from "../src/lib/prerender";
 import { BRAND } from "../src/data/brand";
@@ -23,6 +23,10 @@ import { SCENE_VERSION } from "../src/data/sceneGeometry";
 import { getBlogPost } from "../src/data/tarakeswar/blog";
 import { buildTarakeswarBlogPostJsonLd } from "../src/data/tarakeswar/jsonld";
 import { renderTarakeswarBlogPostBody } from "../src/data/tarakeswar/prerender";
+import { ALBUM_BY_SLUG, SONG_BY_SLUG, SONGS } from "../src/data/kabirsuman/catalogue";
+import { albumDescription, albumTitle, songDescription, songTitle } from "../src/data/kabirsuman/dynamicSeo";
+import { buildKabirSumanAlbumJsonLd, buildKabirSumanSongJsonLd } from "../src/data/kabirsuman/jsonld";
+import { renderKabirSumanAlbumBody, renderKabirSumanSongBody } from "../src/data/kabirsuman/prerender";
 
 /**
  * The Pages project keeps answering on its own `*.pages.dev` host even after a
@@ -133,6 +137,97 @@ export const onRequest: PagesFunction = async ({ request, next }) => {
       .on('meta[name="robots"]', noindex)
       .on('meta[name="googlebot"]', noindex)
       .transform(new Response(response.body, { status: 404, headers: response.headers }));
+  }
+
+  // Kabir Suman: two dynamic collections, 30 albums and 317 songs, neither a
+  // PageId for the reason the Tarakeswar blog posts are not one — matched by
+  // slug here, alongside PATH_TO_PAGE rather than through it.
+  if (url.pathname.startsWith(`${KABIRSUMAN_ALBUM_PREFIX}/`)) {
+    const slug = url.pathname.slice(KABIRSUMAN_ALBUM_PREFIX.length + 1);
+    const album = ALBUM_BY_SLUG[slug];
+    if (!album) {
+      const noindex = { element: (el: Element) => { el.setAttribute("content", "noindex, follow"); } };
+      return new HTMLRewriter()
+        .on('meta[name="robots"]', noindex)
+        .on('meta[name="googlebot"]', noindex)
+        .transform(new Response(response.body, { status: 404, headers: response.headers }));
+    }
+
+    const setAttr = (attr: string, value: string) => ({
+      element: (el: Element) => { el.setAttribute(attr, value); },
+    });
+
+    const canonical = `${BRAND.url}${KABIRSUMAN_ALBUM_PREFIX}/${album.slug}`;
+    const jsonLd = buildKabirSumanAlbumJsonLd(album, SONGS.filter((s) => s.albumSlug === album.slug));
+    const title = albumTitle(album);
+    const description = albumDescription(album);
+
+    return new HTMLRewriter()
+      .on("title", { element: (el) => { el.setInnerContent(title); } })
+      .on('meta[name="description"]', setAttr("content", description))
+      .on('meta[name="theme-color"]', setAttr("content", "#a02a1f"))
+      .on('meta[property="og:title"]', setAttr("content", title))
+      .on('meta[property="og:description"]', setAttr("content", description))
+      .on('meta[property="og:url"]', setAttr("content", canonical))
+      .on('meta[name="twitter:title"]', setAttr("content", title))
+      .on('meta[name="twitter:description"]', setAttr("content", description))
+      .on('link[rel="canonical"]', setAttr("href", canonical))
+      .on("#ld-json", { element: (el) => { el.setInnerContent(JSON.stringify(jsonLd), { html: false }); } })
+      .on("#root", { element: (el) => { el.setInnerContent(renderKabirSumanAlbumBody(album), { html: true }); } })
+      .transform(response);
+  }
+
+  if (url.pathname.startsWith(`${KABIRSUMAN_SONG_PREFIX}/`)) {
+    const slug = url.pathname.slice(KABIRSUMAN_SONG_PREFIX.length + 1);
+    const song = SONG_BY_SLUG[slug];
+    if (!song) {
+      const noindex = { element: (el: Element) => { el.setAttribute("content", "noindex, follow"); } };
+      return new HTMLRewriter()
+        .on('meta[name="robots"]', noindex)
+        .on('meta[name="googlebot"]', noindex)
+        .transform(new Response(response.body, { status: 404, headers: response.headers }));
+    }
+
+    const album = song.albumSlug ? ALBUM_BY_SLUG[song.albumSlug] : null;
+
+    // The lyric text lives in a static JSON file, not in this function's own
+    // bundle (see scripts/prepare-suman.mjs) — fetched here the same way the
+    // Atlas branch above fetches its own 404 page: a sibling request through
+    // `next()`, which resolves against the deployed static assets.
+    let stanzas: string[][] | null = null;
+    const lyricFile = song.albumSlug ?? "uncollected";
+    try {
+      const lyricRes = await next(new Request(new URL(`/kabirsuman/lyrics/${lyricFile}.json`, request.url), request));
+      if (lyricRes.ok) {
+        const map = await lyricRes.json<Record<string, string[][]>>();
+        stanzas = map[song.slug] ?? null;
+      }
+    } catch {
+      stanzas = null; // crawler still gets the rest of the page
+    }
+
+    const setAttr = (attr: string, value: string) => ({
+      element: (el: Element) => { el.setAttribute(attr, value); },
+    });
+
+    const canonical = `${BRAND.url}${KABIRSUMAN_SONG_PREFIX}/${song.slug}`;
+    const jsonLd = buildKabirSumanSongJsonLd(song, album);
+    const title = songTitle(song, album);
+    const description = songDescription(song, album);
+
+    return new HTMLRewriter()
+      .on("title", { element: (el) => { el.setInnerContent(title); } })
+      .on('meta[name="description"]', setAttr("content", description))
+      .on('meta[name="theme-color"]', setAttr("content", "#a02a1f"))
+      .on('meta[property="og:title"]', setAttr("content", title))
+      .on('meta[property="og:description"]', setAttr("content", description))
+      .on('meta[property="og:url"]', setAttr("content", canonical))
+      .on('meta[name="twitter:title"]', setAttr("content", title))
+      .on('meta[name="twitter:description"]', setAttr("content", description))
+      .on('link[rel="canonical"]', setAttr("href", canonical))
+      .on("#ld-json", { element: (el) => { el.setInnerContent(JSON.stringify(jsonLd), { html: false }); } })
+      .on("#root", { element: (el) => { el.setInnerContent(renderKabirSumanSongBody(song, stanzas), { html: true }); } })
+      .transform(response);
   }
 
   if (!pageId) {

@@ -17,6 +17,7 @@ import { PLAYLISTS, TOTAL_TRACKS } from "../src/data/playlists";
 import { SCENE } from "../src/data/scene";
 import { PAGE_FAQ, PAGE_PATH, PAGE_SEO } from "../src/data/seo";
 import { BLOG_POSTS } from "../src/data/tarakeswar/blog";
+import { TOTAL_ALBUMS, TOTAL_SONGS } from "../src/data/kabirsuman/counts.generated";
 
 const qa = (list: { q: string; a: string }[]) =>
   list.map((f) => `**${f.q}**\n${f.a}`).join("\n\n");
@@ -91,6 +92,21 @@ ${qa(PAGE_FAQ.tarakeswarTemple)}
 ### The Tarakeswar blog
 
 ${BLOG_POSTS.map((p) => `- [${p.title}](${BRAND.url}${PAGE_PATH.tarakeswarBlog}/${p.slug}): ${p.excerpt}`).join("\n")}
+
+## ${PAGE_SEO.kabirsuman.h1} (a tribute archive, not one of the experiences above)
+
+${BRAND.url}${PAGE_PATH.kabirsuman} is a tribute and reference catalogue for Kabir Suman (b. 1949), the Bengali singer-songwriter, journalist and broadcaster usually credited with starting jibonmukhi gaan ("life-facing song"). It is linked from this project's home page under its own heading, not listed as one of the EXPERIENCES above and not an "experiment" like the Atlas below either — it is a third kind of thing, a reference built around one person's whole body of work.
+
+${PAGE_SEO.kabirsuman.intro}
+
+- ${TOTAL_ALBUMS} albums and ${TOTAL_SONGS} songs, all sourced from the sumanami.co.uk fan archive, cross-checked against English and Bengali Wikipedia.
+- Every song plays from its own official YouTube upload; nothing is hosted here.
+- A concordance (${BRAND.url}${PAGE_PATH.kabirsumanWords}) indexes every recurring word across all 317 songs.
+- Not affiliated with Kabir Suman, his label, or sumanami.co.uk.
+
+### Questions about Kabir Suman
+
+${qa(PAGE_FAQ.kabirsuman)}
 
 ## Marvel Multiverse Atlas (an experiment, not a Bengali experience)
 

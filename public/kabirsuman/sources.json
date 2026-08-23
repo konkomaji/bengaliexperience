@@ -1,0 +1,136 @@
+{
+  "note": "Citation log for src/data/kabirsuman/playback.ts (YouTube verification) and src/data/kabirsuman/albums.ts (year corrections). Playback entries were checked by fetching each video's own watch page and confirming playableInEmbed=true, the uploading channel, and — where present — a 'Provided to YouTube by [label]' description, not by trusting search-result text alone.",
+  "checkedAt": "2026-08-23",
+  "songs": [
+    {
+      "slug": "tomake-chai",
+      "videoId": "JZ1CReueASQ",
+      "channel": "Saregama Bengali",
+      "channelId": "UCRh-4WUJx8M86gUYL2pyKSQ",
+      "playableInEmbed": true,
+      "durationSec": 383
+    },
+    {
+      "slug": "petokati-chandiyal",
+      "videoId": "_vP7lB2rOSA",
+      "channel": "Saregama Bengali",
+      "channelId": "UCRh-4WUJx8M86gUYL2pyKSQ",
+      "playableInEmbed": true,
+      "durationSec": 148
+    },
+    {
+      "slug": "dosh-phut-bai-dosh-phut",
+      "videoId": "2tLBBBdwfc0",
+      "channel": "Saregama Bengali",
+      "channelId": "UCRh-4WUJx8M86gUYL2pyKSQ",
+      "playableInEmbed": true,
+      "durationSec": 235
+    },
+    {
+      "slug": "chaichhi-tomar-bondhuta",
+      "videoId": "crtNIi70BNU",
+      "channel": "Saregama Bengali",
+      "channelId": "UCRh-4WUJx8M86gUYL2pyKSQ",
+      "playableInEmbed": true,
+      "durationSec": 182
+    },
+    {
+      "slug": "jatismor",
+      "videoId": "CIsNYA4ZMuo",
+      "channel": "Saregama Bengali",
+      "channelId": "UCRh-4WUJx8M86gUYL2pyKSQ",
+      "playableInEmbed": true,
+      "durationSec": 282
+    },
+    {
+      "slug": "khodar-kosom-jan-2014",
+      "videoId": "6tpdQT4uGeU",
+      "channel": "T-Series Bangla",
+      "channelId": "UCPH9W_9ZDQ1gemcCaIxOvCw",
+      "playableInEmbed": true,
+      "durationSec": 120
+    },
+    {
+      "slug": "mon-kharap-kora",
+      "videoId": "wrEVq5Qm6tk",
+      "channel": "Kabir Suman | Vicente Fernandez | Siddhartha Roy | Saki | Lalon Phakir - Topic",
+      "channelId": "UC9YNz7JDv2kQz1Ie4sW7q5w",
+      "playableInEmbed": true,
+      "durationSec": 191,
+      "note": "YouTube auto-generated Topic channel; description reads 'Provided to YouTube by Sa Re Ga Ma'."
+    },
+    {
+      "slug": "chena-dukh-chena-sukh",
+      "videoId": "RCdWGmZ4svU",
+      "channel": "Kabir Suman | Vicente Fernandez | Siddhartha Roy | Saki | Lalon Phakir - Topic",
+      "channelId": "UC9YNz7JDv2kQz1Ie4sW7q5w",
+      "playableInEmbed": true,
+      "durationSec": 133,
+      "note": "Provided to YouTube by Sa Re Ga Ma."
+    },
+    {
+      "slug": "amader-jonj",
+      "videoId": "_K1tKnu48Ps",
+      "channel": "Kabir Suman | Vicente Fernandez | Siddhartha Roy | Saki | Lalon Phakir - Topic",
+      "channelId": "UC9YNz7JDv2kQz1Ie4sW7q5w",
+      "playableInEmbed": true,
+      "durationSec": 349,
+      "note": "Provided to YouTube by Sa Re Ga Ma."
+    },
+    {
+      "slug": "prothom-sobokichhu",
+      "videoId": "jLzFDT9NQYs",
+      "channel": "Kabir Suman | Vicente Fernandez | Siddhartha Roy | Saki | Lalon Phakir - Topic",
+      "channelId": "UC9YNz7JDv2kQz1Ie4sW7q5w",
+      "playableInEmbed": true,
+      "durationSec": 260,
+      "note": "Provided to YouTube by Sa Re Ga Ma."
+    },
+    {
+      "slug": "sabas-pulish",
+      "videoId": "_bYiWsvupTM",
+      "channel": "Kabir Suman | Vicente Fernandez | Siddhartha Roy | Saki | Lalon Phakir - Topic",
+      "channelId": "UC9YNz7JDv2kQz1Ie4sW7q5w",
+      "playableInEmbed": true,
+      "durationSec": 134,
+      "note": "Provided to YouTube by The Orchard Enterprises; album explicitly listed as 'Nandigram' (P 2014 Cozmik Harmony), matching landmarks.ts."
+    }
+  ],
+  "notResolved": {
+    "note": "Landmark songs searched but not added: no verified/official-channel upload found matching the exact title, a real album/version mismatch, or the song has no catalogue lyric page (songSlug null in landmarks.ts) so there is nowhere to attach a player.",
+    "noVerifiedMatch": [
+      "ek-ekta-din", "jage-jage-rat", "mogoje-karophiu",
+      "ghumoo-baundule", "nishiddho-istehar", "kobiyal", "tumi-asobei"
+    ],
+    "rejectedCandidates": [
+      { "slug": "ganola", "videoId": "ck-Xq5PqjBI", "channel": "Saregama Bengali", "reason": "playableInEmbed=false" },
+      { "slug": "amar-moton-kalo", "videoId": "fpL1B90HnhI", "channel": "Topic channel", "reason": "metadata tags it to album 'Gaanola', not 'Chaichhi Tomar Bondhuta' (1996) as landmarks.ts specifies — unconfirmed whether it's actually this song" }
+    ],
+    "noCatalogueSongPage": [
+      "hal-chhero-na-bondhu (Tomake Chai)",
+      "ekushe-february (Chaichhi Tomar Bondhuta)",
+      "e-tumi-kemon-tumi (Jaatishwar 2014)",
+      "bose-anko (Bose Anko) — verified match found, videoId dWPQ_PyXmuY, Suman Chattopadhyay - Topic, playableInEmbed=true, provenance 'Sa Re Ga Ma' — but no catalogue song page exists to attach it to (album title track, not a filed lyric)"
+    ]
+  },
+  "laterCredits": {
+    "note": "Citations for src/data/kabirsuman/laterCredits.ts — work after the archive's coverage window, sourced to JioSaavn label/copyright metadata (scratchpad labels2.txt) rather than sumanami.co.uk.",
+    "entries": [
+      { "roman": "Theme Jete Jete", "source": "JioSaavn: Saregama, (c) 2024 Saregama India Ltd, from film Tekka" },
+      { "roman": "Adhar Theke Bhor", "source": "JioSaavn: Tips Music Limited under exclusive licence to Warner Music, (c) 2025, from film Ami Jokhon Hema Malini" },
+      { "roman": "Live From Hindusthan", "source": "JioSaavn: INRECO, (c) 2021" },
+      { "roman": "Surjakanya", "source": "JioSaavn: Saregama India Ltd, (c) 1998, 6 tracks; independently confirmed as the multi-artist soundtrack to the 1998 film Suryakanya" },
+      { "roman": "Mahasanghram", "source": "JioSaavn: Echo Entertainment Pvt. Ltd., (c) 2001, 5 tracks; web search corroborates composition c.1994 with Indrani Sen, but film-release year conflicts across sources (2001 vs 2006) and is not resolved" },
+      { "roman": "Sedin Chaitramash", "source": "JioSaavn: Saregama, (c) 1997, 4 tracks; none of the 4 titles match any catalogue entry — genuinely unclear whether this is a distinct release or a mistitled fragment of an existing album" }
+    ]
+  },
+  "albumYearCorrections": [
+    {
+      "slug": "sumoner-konthe-robindronath",
+      "field": "year",
+      "value": 1996,
+      "yearUncertain": true,
+      "basis": "The archive page itself states 'এটি কোন অ্যালবাম নয়' ('this is not an album') — a curated selection, not one dated release. 6 of its 13 songs match Saregama's 1996 release 'Amar Ei Path Chaoatei Ananda' (JioSaavn tracklist cross-check); a 7th matches the 1997 'Sanchayan' compilation that repackages it. 1996 is the best available date for the bulk of the collection, not a confirmed date for the whole."
+    }
+  ]
+}

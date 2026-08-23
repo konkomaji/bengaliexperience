@@ -1,5 +1,6 @@
 import { BRAND } from "./brand";
 import { EXPERIENCES } from "./experiences";
+import { PAGE_SEO_KABIRSUMAN, PAGE_FAQ_KABIRSUMAN } from "./kabirsuman/seo";
 
 /**
  * One source of truth for URLs and per-page copy. Imported by the React app,
@@ -39,6 +40,16 @@ import { EXPERIENCES } from "./experiences";
  * up individual posts by slug separately, alongside this map rather than
  * through it.
  */
+/**
+ * `kabirsuman*` is a fifth section: a tribute archive for the musician Kabir
+ * Suman, at its own URLs, linked from the home page under its own heading
+ * (src/data/tributes.ts) rather than folded into EXPERIENCES or EXPERIMENTS
+ * — it is neither a moment to sit inside nor an unrelated experiment, it is
+ * a reference built around one person's whole body of work. Two of its
+ * areas, albums and songs, are not PageIds for the same reason Tarakeswar's
+ * blog posts are not: 30 albums and 317 songs each need their own URL, which
+ * does not fit a fixed Record<PageId, ...>. See src/data/kabirsuman/.
+ */
 export type PageId =
   | "home"
   | "busdriver"
@@ -47,7 +58,12 @@ export type PageId =
   | "tarakeswarTemple"
   | "tarakeswarFood"
   | "tarakeswarReach"
-  | "tarakeswarBlog";
+  | "tarakeswarBlog"
+  | "kabirsuman"
+  | "kabirsumanLife"
+  | "kabirsumanWorks"
+  | "kabirsumanWords"
+  | "kabirsumanSources";
 
 export const PAGE_PATH: Record<PageId, string> = {
   home: "/",
@@ -58,7 +74,16 @@ export const PAGE_PATH: Record<PageId, string> = {
   tarakeswarFood: "/tarakeswar/eat-and-stay",
   tarakeswarReach: "/tarakeswar/how-to-reach",
   tarakeswarBlog: "/tarakeswar/blog",
+  kabirsuman: "/kabirsuman",
+  kabirsumanLife: "/kabirsuman/life",
+  kabirsumanWorks: "/kabirsuman/works",
+  kabirsumanWords: "/kabirsuman/words",
+  kabirsumanSources: "/kabirsuman/sources",
 };
+
+/** path prefixes for the two dynamic Kabir Suman collections, joined with a slug */
+export const KABIRSUMAN_ALBUM_PREFIX = "/kabirsuman/album";
+export const KABIRSUMAN_SONG_PREFIX = "/kabirsuman/song";
 
 /** every servable path -> page */
 export const PATH_TO_PAGE: Record<string, PageId> = {
@@ -70,6 +95,11 @@ export const PATH_TO_PAGE: Record<string, PageId> = {
   "/tarakeswar/eat-and-stay": "tarakeswarFood",
   "/tarakeswar/how-to-reach": "tarakeswarReach",
   "/tarakeswar/blog": "tarakeswarBlog",
+  "/kabirsuman": "kabirsuman",
+  "/kabirsuman/life": "kabirsumanLife",
+  "/kabirsuman/works": "kabirsumanWorks",
+  "/kabirsuman/words": "kabirsumanWords",
+  "/kabirsuman/sources": "kabirsumanSources",
 };
 
 /**
@@ -159,6 +189,7 @@ const PAGE_SEO_CORE: Record<"home" | "busdriver" | "mahalaya", PageSeo> = {
       // thinking it is a Marvel reference. Deliberately absent from the
       // keywords above for the same reason.
       "One unrelated experiment shares the domain: the Marvel Multiverse Atlas, which is not about Bengal.",
+      "A tribute archive for the musician Kabir Suman is also linked from here, cataloguing his complete recorded works.",
     ],
   },
   busdriver: {
@@ -411,7 +442,7 @@ const PAGE_SEO_TARAKESWAR: Record<
   },
 };
 
-export const PAGE_SEO: Record<PageId, PageSeo> = { ...PAGE_SEO_CORE, ...PAGE_SEO_TARAKESWAR };
+export const PAGE_SEO: Record<PageId, PageSeo> = { ...PAGE_SEO_CORE, ...PAGE_SEO_TARAKESWAR, ...PAGE_SEO_KABIRSUMAN };
 
 /**
  * Answer-engine questions, per page.
@@ -682,7 +713,7 @@ const PAGE_FAQ_TARAKESWAR: Record<
   ],
 };
 
-export const PAGE_FAQ: Record<PageId, QA[]> = { ...PAGE_FAQ_CORE, ...PAGE_FAQ_TARAKESWAR };
+export const PAGE_FAQ: Record<PageId, QA[]> = { ...PAGE_FAQ_CORE, ...PAGE_FAQ_TARAKESWAR, ...PAGE_FAQ_KABIRSUMAN };
 
 /** Live experiences, for the internal link graph and the ItemList. */
 export const LIVE_PATHS = EXPERIENCES.filter((e) => e.path).map((e) => e.path as string);

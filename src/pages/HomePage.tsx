@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { BRAND, DRIVER } from "../data/brand";
 import { EXPERIENCES, type Experience } from "../data/experiences";
 import { EXPERIMENTS, type Experiment } from "../data/experiments";
+import { TRIBUTES, type Tribute } from "../data/tributes";
 import { PAGE_FAQ, PAGE_SEO } from "../data/seo";
 import { buildJsonLd } from "../lib/jsonld";
 import { useDocumentHead } from "../hooks/useDocumentHead";
@@ -72,6 +73,25 @@ export function HomePage() {
           </ul>
         </section>
 
+        {/* Its own shelf, between the experiences and the questions: not a
+            moment to sit inside (so not on the EXPERIENCES list above) and
+            not an unrelated experiment either (so not folded into "Also
+            built here" below) — a reference built around one person's whole
+            body of work. See src/data/tributes.ts. */}
+        <section aria-labelledby="tributes" className="mt-16">
+          <h2
+            id="tributes"
+            className="font-display text-xs font-extrabold uppercase tracking-[0.26em] text-white/45"
+          >
+            Tributes
+          </h2>
+          <ul className="mt-5 flex flex-col gap-3">
+            {TRIBUTES.map((t, i) => (
+              <TributeCard key={t.id} tribute={t} index={i} />
+            ))}
+          </ul>
+        </section>
+
         <section aria-labelledby="questions" className="mt-16">
           <h2
             id="questions"
@@ -132,6 +152,35 @@ export function HomePage() {
         </footer>
       </div>
     </>
+  );
+}
+
+/**
+ * One tribute. A router `<Link>`, unlike ExperimentCard below: this is a
+ * route inside this app, not a separate static mount.
+ */
+function TributeCard({ tribute: t, index }: { tribute: Tribute; index: number }) {
+  return (
+    <motion.li
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.2 + index * 0.06, ease: [0.16, 1, 0.3, 1] }}
+    >
+      <Link
+        to={t.path}
+        className="block rounded-2xl border border-outline-variant bg-surface-container/50 p-5 transition-colors hover:border-primary/60 hover:bg-surface-container-high/70"
+      >
+        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          <h3 className="font-display text-lg font-extrabold text-on-surface sm:text-xl">{t.name}</h3>
+        </div>
+        <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-white/35">{t.subtitle}</p>
+        <p className="mt-2.5 text-sm leading-relaxed text-on-surface-muted">{t.blurb}</p>
+        <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-primary">
+          {t.cta}
+          <span aria-hidden>&rarr;</span>
+        </span>
+      </Link>
+    </motion.li>
   );
 }
 
