@@ -2,10 +2,20 @@ import { BRAND } from "../data/brand";
 import { BROADCAST } from "../data/broadcast";
 import { EXPERIENCES } from "../data/experiences";
 import { EXPERIMENTS } from "../data/experiments";
+import { TRIBUTES } from "../data/tributes";
 import { PLAYLISTS, TOTAL_TRACKS } from "../data/playlists";
 import { SCENE } from "../data/scene";
 import { PAGE_FAQ, PAGE_PATH, PAGE_SEO, type PageId } from "../data/seo";
 import { renderTarakeswarBody } from "../data/tarakeswar/prerender";
+import { renderKabirSumanBody } from "../data/kabirsuman/prerender";
+
+const KABIRSUMAN_PAGE_IDS = new Set<PageId>([
+  "kabirsuman",
+  "kabirsumanLife",
+  "kabirsumanWorks",
+  "kabirsumanWords",
+  "kabirsumanSources",
+]);
 
 /**
  * The version of the page a crawler sees.
@@ -53,7 +63,9 @@ export function renderStaticBody(pageId: PageId): string {
         ? mahalayaBody()
         : pageId === "busdriver"
           ? busBody()
-          : renderTarakeswarBody(pageId);
+          : KABIRSUMAN_PAGE_IDS.has(pageId)
+            ? renderKabirSumanBody(pageId)
+            : renderTarakeswarBody(pageId);
 
   // Wrapped and identified so index.html can hide it the instant JavaScript
   // is known to be running. React clears #root on first paint, but "first
@@ -85,12 +97,21 @@ function homeBody(): string[] {
     return `<li>${name}. ${escape(e.occasion)}. ${escape(e.blurb)}</li>`;
   }).join("");
 
+  const tributes = TRIBUTES.map(
+    (t) => `<li><a href="${t.path}">${escape(`${t.name}: ${t.subtitle}`)}</a>. ${escape(t.blurb)}</li>`,
+  ).join("");
+
   return [
     `<h2>The experiences</h2>`,
     `<p>${escape(
       "Each one is a separate page that runs on its own. Open it and the thing is already happening, with nothing to sign up for and nothing to install.",
     )}</p>`,
     `<ul>${items}</ul>`,
+    // Its own heading, between the experiences and the questions, matching
+    // the visible page's order — see src/data/tributes.ts for why this is
+    // neither an experience nor an experiment.
+    `<h2>Tributes</h2>`,
+    `<ul>${tributes}</ul>`,
   ];
 }
 

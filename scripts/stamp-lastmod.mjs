@@ -54,6 +54,15 @@ const PAGES = {
     "src/data/tarakeswar/blog.ts",
     "src/pages/tarakeswar/TarakeswarBlogIndexPage.tsx",
   ],
+  // Albums and songs carry no lastmod of their own — like the Tarakeswar
+  // blog posts, there are too many (30, 317) for a per-item git query to be
+  // worth it, and sitemap.xml.ts omits <lastmod> for them entirely. These
+  // five are the fixed pages only.
+  kabirsuman: [...SHARED, "src/data/kabirsuman/seo.ts", "src/data/kabirsuman/prerender.ts", "src/pages/kabirsuman/KabirSumanHubPage.tsx"],
+  kabirsumanLife: [...SHARED, "src/data/kabirsuman/life.ts", "src/pages/kabirsuman/KabirSumanLifePage.tsx"],
+  kabirsumanWorks: [...SHARED, "src/data/kabirsuman/albums.ts", "src/pages/kabirsuman/KabirSumanWorksPage.tsx"],
+  kabirsumanWords: [...SHARED, "src/pages/kabirsuman/KabirSumanWordsPage.tsx"],
+  kabirsumanSources: [...SHARED, "src/data/kabirsuman/sources.ts", "src/pages/kabirsuman/KabirSumanSourcesPage.tsx"],
 };
 
 /** ISO-8601 date of the newest commit touching any of `files`, or null. */

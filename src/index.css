@@ -13,6 +13,10 @@
 @import "@fontsource/poppins/600.css";
 @import "@fontsource/poppins/700.css";
 @import "@fontsource/poppins/800.css";
+/* Kabir Suman section only: see --font-ks-* below */
+@import "@fontsource-variable/fraunces";
+@import "@fontsource-variable/noto-serif-bengali";
+@import "@fontsource-variable/jetbrains-mono";
 
 /*
   বাংলা এক্সপেরিয়েন্স — design tokens.
@@ -90,6 +94,59 @@
   --color-tara-on-surface-muted: #6b6053;
   --color-tara-outline: #d9cebb;
   --color-tara-outline-variant: #ece4d5;
+
+  /* --- kabir suman: a fourth theme, scoped to /kabirsuman/* only ---
+     Everything else on this site is either a night scene (the bus, the
+     Mahalaya window) or a bright modern guide (Tarakeswar). This section is
+     neither: it reads as a physical archive object — an ink-stamped
+     manifesto, a songbook, a wire-service dispatch — because its subject
+     was a broadcaster and a print journalist for two decades before he was
+     a recording artist, and a protest-manifesto title (নিষিদ্ধ ইস্তেহার,
+     "the forbidden manifesto") is one of his own albums.
+
+     Aged paper rather than a stark white, so it reads as archival record
+     rather than a modern web app; a manifesto red carried over from a
+     cassette spine and an ink stamp; a brass/reel gold for the discography
+     (tape and harmonium both); a signal green held back for exactly one
+     job, an "on air" / now-playing indicator, so it keeps the charge of
+     something rare rather than becoming a third accent colour in general
+     use. Three type families do real work rather than decoration: Fraunces
+     (a display serif with a printed-manifesto weight) for headings, Noto
+     Serif Bengali for the lyrics and Bengali titles themselves — set as
+     text to be read, not as UI chrome — and JetBrains Mono for every date
+     and metadata line, the teleprinter register of a wire dispatch.
+     Nothing outside src/pages/kabirsuman and src/components/kabirsuman
+     reads these. */
+  --font-ks-display: "Fraunces Variable", "Noto Serif Bengali Variable", ui-serif, serif;
+  --font-ks-bengali: "Noto Serif Bengali Variable", "Fraunces Variable", ui-serif, serif;
+  --font-ks-body: "Manrope Variable", "Hind Siliguri", ui-sans-serif, sans-serif;
+  --font-ks-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+
+  --color-ks-paper: #f2e9d4;                  /* aged paper */
+  --color-ks-paper-dim: #e6d9b9;
+  --color-ks-paper-bright: #faf5e8;
+  --color-ks-paper-container: #ece0c4;
+  --color-ks-paper-container-high: #e2d3ac;
+
+  --color-ks-ink: #1c1610;                    /* near-black, warm */
+  --color-ks-ink-muted: #6b5f48;
+
+  --color-ks-red: #a02a1f;                    /* manifesto red / ink stamp */
+  --color-ks-red-dim: #7a1f16;
+  --color-ks-on-red: #fdf3ee;
+  --color-ks-red-container: #f0d3c9;
+  --color-ks-on-red-container: #4d1209;
+
+  --color-ks-brass: #8a6a2e;                  /* tape reel / harmonium brass */
+  --color-ks-brass-dim: #6b5220;
+  --color-ks-brass-container: #e8d9ab;
+  --color-ks-on-brass-container: #423308;
+
+  --color-ks-signal: #29684f;                 /* held back for "on air" only */
+  --color-ks-signal-container: #cfe6d7;
+
+  --color-ks-outline: #cbb98d;
+  --color-ks-outline-variant: #ddcda3;
 
   /* --- shape --- */
   --radius-xs: 10px;
@@ -270,6 +327,70 @@
   outline: 2px solid var(--color-tara-primary);
   outline-offset: 2px;
   border-radius: 4px;
+}
+
+.kabirsuman-theme {
+  color-scheme: light;
+  background: var(--color-ks-paper);
+  color: var(--color-ks-ink);
+  font-family: var(--font-ks-body);
+  /* A faint fibre texture over the paper colour, entirely in CSS (two
+     overlapping radial-gradient "grain" layers at a tiny scale, repeated).
+     Kept extremely subtle — this reads as paper at a glance and only shows
+     its texture up close — and is pure background-image, so it costs
+     nothing to layout and nothing to any assistive technology. */
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(28, 22, 16, 0.05) 0.6px, transparent 0.6px),
+    radial-gradient(circle at 3px 2px, rgba(28, 22, 16, 0.035) 0.5px, transparent 0.5px);
+  background-size: 5px 5px, 7px 7px;
+}
+.kabirsuman-theme ::selection {
+  background: var(--color-ks-red-container);
+  color: var(--color-ks-on-red-container);
+}
+.kabirsuman-theme :focus-visible {
+  outline: 2px solid var(--color-ks-red);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+/* Bengali running text — lyrics, titles — set in the serif, not the UI sans. */
+.kabirsuman-theme .ks-bengali {
+  font-family: var(--font-ks-bengali);
+}
+.kabirsuman-theme .ks-mono {
+  font-family: var(--font-ks-mono);
+  font-feature-settings: "tnum" 1;
+}
+
+/* A punch-tape edge: a row of perforation holes along one side, the way a
+   reel-to-reel tape or a teleprinter ribbon actually has sprocket holes.
+   Pure background-image again — no markup, no per-hole element. */
+.kabirsuman-theme .ks-perf-top {
+  background-image: radial-gradient(circle, var(--color-ks-paper) 3.5px, transparent 3.6px);
+  background-size: 18px 18px;
+  background-position: 9px 0;
+  background-repeat: repeat-x;
+}
+
+/* A clipped news cutting: torn top edge via a repeating conic zigzag mask,
+   a slight pin-rotation, and a soft cast shadow like something lifted off a
+   corkboard rather than a flat card. */
+.kabirsuman-theme .ks-clipping {
+  position: relative;
+  filter: drop-shadow(0 6px 10px rgba(28, 22, 16, 0.18));
+}
+.kabirsuman-theme .ks-clipping::before {
+  content: "";
+  position: absolute;
+  inset: -3px -3px auto -3px;
+  height: 10px;
+  background: var(--color-ks-paper);
+  clip-path: polygon(
+    0% 100%, 4% 30%, 8% 100%, 12% 40%, 16% 100%, 20% 25%, 24% 100%, 28% 45%,
+    32% 100%, 36% 20%, 40% 100%, 44% 40%, 48% 100%, 52% 30%, 56% 100%, 60% 45%,
+    64% 100%, 68% 25%, 72% 100%, 76% 40%, 80% 100%, 84% 20%, 88% 100%, 92% 35%,
+    96% 100%, 100% 25%, 100% 0%, 0% 0%
+  );
 }
 
 @layer utilities {
