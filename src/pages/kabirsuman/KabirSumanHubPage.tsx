@@ -67,8 +67,8 @@ export function KabirSumanHubPage() {
 
       <KsSection id="works" heading={`The Discography (${ALBUMS.length})`}>
         <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-4">
-          {ALBUMS.slice(0, 8).map((a) => (
-            <AlbumCard key={a.slug} album={a} />
+          {ALBUMS.slice(0, 8).map((a, i) => (
+            <AlbumCard key={a.slug} album={a} index={i} />
           ))}
         </div>
         <Link to={PAGE_PATH.kabirsumanWorks} className="mt-4 inline-flex items-center gap-1.5 text-[13px] font-semibold text-ks-red hover:underline">
