@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { BRAND } from "../../data/brand";
+import { PAGE_PATH } from "../../data/seo";
 import { KABIRSUMAN_NAV } from "../../data/kabirsuman/nav";
 import { ArrowRightIcon } from "../icons";
 
@@ -95,6 +96,11 @@ export function KabirSumanLayout({
           <p>
             <Link to={KABIRSUMAN_NAV[4].path} className="font-semibold text-ks-red hover:underline">
               Full sources and corrections →
+            </Link>
+          </p>
+          <p>
+            <Link to={PAGE_PATH.privacy} className="underline decoration-ks-ink-muted/40 underline-offset-2 hover:text-ks-ink">
+              Privacy
             </Link>
           </p>
         </div>

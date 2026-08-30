@@ -29,6 +29,11 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
+# Google AdSense's own crawler, so it can actually see the pages it's asked
+# to place ads on.
+User-agent: Mediapartners-Google
+Allow: /
+
 Sitemap: https://bengaliexperience.wtf/sitemap.xml
 
 # The Marvel Multiverse Atlas keeps its own sitemap. It is a self-contained

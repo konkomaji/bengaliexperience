@@ -63,7 +63,8 @@ export type PageId =
   | "kabirsumanLife"
   | "kabirsumanWorks"
   | "kabirsumanWords"
-  | "kabirsumanSources";
+  | "kabirsumanSources"
+  | "privacy";
 
 export const PAGE_PATH: Record<PageId, string> = {
   home: "/",
@@ -79,6 +80,7 @@ export const PAGE_PATH: Record<PageId, string> = {
   kabirsumanWorks: "/kabirsuman/works",
   kabirsumanWords: "/kabirsuman/words",
   kabirsumanSources: "/kabirsuman/sources",
+  privacy: "/privacy",
 };
 
 /** path prefixes for the two dynamic Kabir Suman collections, joined with a slug */
@@ -100,6 +102,7 @@ export const PATH_TO_PAGE: Record<string, PageId> = {
   "/kabirsuman/works": "kabirsumanWorks",
   "/kabirsuman/words": "kabirsumanWords",
   "/kabirsuman/sources": "kabirsumanSources",
+  "/privacy": "privacy",
 };
 
 /**
@@ -442,7 +445,39 @@ const PAGE_SEO_TARAKESWAR: Record<
   },
 };
 
-export const PAGE_SEO: Record<PageId, PageSeo> = { ...PAGE_SEO_CORE, ...PAGE_SEO_TARAKESWAR, ...PAGE_SEO_KABIRSUMAN };
+/**
+ * The privacy policy. Its own tiny record rather than folded into
+ * PAGE_SEO_CORE — it is neither an experience nor a section, just the one
+ * page every site with ads and analytics on it has to have. See
+ * src/lib/prerender.ts and src/lib/jsonld.ts for the equally small delegated
+ * body and structured data.
+ */
+const PAGE_SEO_PRIVACY: Record<"privacy", PageSeo> = {
+  privacy: {
+    title: "Privacy Policy | Bengali Experience",
+    description:
+      "How Bengali Experience handles data: what Google AdSense and Microsoft Clarity collect, the cookies involved, and how to control ad personalisation.",
+    keywords: ["bengali experience privacy policy", "cookie policy", "adsense privacy"],
+    h1: "Privacy Policy",
+    intro:
+      "Bengali Experience runs with no account and no login anywhere on it, so it never asks for a name, an email address or anything you'd type in. What it does collect comes from two places: Google AdSense, which may show ads and use cookies to do it, and Microsoft Clarity, which records anonymised session replay and heatmaps so the pages can be improved. This page says exactly what each one does and how to opt out.",
+    facts: [
+      "No account, no login, no form on the site ever asks for personal details.",
+      "Google AdSense may serve ads on this site and use cookies for that, including personalised ads unless you opt out.",
+      "Microsoft Clarity records anonymised session replay and heatmaps to see how pages are actually used.",
+      "A cookie banner on the site lets you accept or decline non-essential cookies before any ad personalisation runs.",
+      "You can manage Google's ad personalisation directly at adssettings.google.com.",
+      "No data collected here is sold. Third-party vendors (Google, Microsoft) process it under their own privacy policies, linked below.",
+    ],
+  },
+};
+
+export const PAGE_SEO: Record<PageId, PageSeo> = {
+  ...PAGE_SEO_CORE,
+  ...PAGE_SEO_TARAKESWAR,
+  ...PAGE_SEO_KABIRSUMAN,
+  ...PAGE_SEO_PRIVACY,
+};
 
 /**
  * Answer-engine questions, per page.
@@ -713,7 +748,33 @@ const PAGE_FAQ_TARAKESWAR: Record<
   ],
 };
 
-export const PAGE_FAQ: Record<PageId, QA[]> = { ...PAGE_FAQ_CORE, ...PAGE_FAQ_TARAKESWAR, ...PAGE_FAQ_KABIRSUMAN };
+const PAGE_FAQ_PRIVACY: Record<"privacy", QA[]> = {
+  privacy: [
+    {
+      q: "Does Bengali Experience use cookies?",
+      a: "Yes, two kinds. Google AdSense may set cookies to serve and measure ads, and Microsoft Clarity sets a cookie to group anonymised session recordings. Neither is required for the site to work, and a banner on first visit lets you decline both.",
+    },
+    {
+      q: "Does the site collect personal information?",
+      a: "Not directly. There is no account, no login and no form anywhere on the site. Google and Microsoft, as third-party vendors, may process standard technical data like IP address and device type under their own privacy policies, linked from this page.",
+    },
+    {
+      q: "How do I turn off personalised ads?",
+      a: "Use Google's own ad settings at adssettings.google.com, or decline non-essential cookies in the banner shown on this site. Either stops ad personalisation here; you may still see non-personalised ads.",
+    },
+    {
+      q: "Who do I contact about privacy?",
+      a: "Email work.konkomaji@gmail.com with any privacy question or request, including asking what data, if any, is held about you.",
+    },
+  ],
+};
+
+export const PAGE_FAQ: Record<PageId, QA[]> = {
+  ...PAGE_FAQ_CORE,
+  ...PAGE_FAQ_TARAKESWAR,
+  ...PAGE_FAQ_KABIRSUMAN,
+  ...PAGE_FAQ_PRIVACY,
+};
 
 /** Live experiences, for the internal link graph and the ItemList. */
 export const LIVE_PATHS = EXPERIENCES.filter((e) => e.path).map((e) => e.path as string);

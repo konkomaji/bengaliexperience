@@ -3,6 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag() { dataLayer.push(arguments); }
+gtag("consent", "default", { ad_storage: "denied", ad_user_data: "denied", ad_personalization: "denied", analytics_storage: "denied", wait_for_update: 500 });
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1575101534552294" crossorigin="anonymous"></script>
 <title>MCU Chronological Order — Every Title, Timeline Order</title>
 <meta name="description" content="Every title in MCU in chronological order, 74 in all, with release dates, in-universe setting and where each one streams.">
 <meta name="theme-color" content="#0d0d12">
@@ -598,11 +604,35 @@
 <div class="faq"><h3>Should I watch Marvel movies in release order or chronological order?</h3><p>Release order is the order the films and series came out, and it is the order the stories were built to be watched in: every reveal lands when it was written to land. Chronological order is the order events happen inside the story, which reads more like a history and spoils several reveals that only work because you did not know them yet. Release order is the better first watch; chronological order is the better second one.</p><h3>How many Marvel movies are there?</h3><p>There is no single number, because &quot;Marvel movie&quot; means two different things. Marvel Studios has released 37 MCU films. Counting every Marvel adaptation ever released for screen — the Fox X-Men films, the Sony Spider-Man films, Blade, the Punisher films, the 1970s television movies and the animated series alongside them — this Atlas tracks 183 titles in total, of which 84 are films and 79 are series.</p><h3>What Marvel movie should I start with?</h3><p>Start with Iron Man (2008) if you are watching in release order — it is where the MCU begins, and everything after it was written assuming you saw it. If you are watching chronologically, start with Captain America: The First Avenger, set in 1943–1945, which is the earliest of the films.</p><h3>What is the first Marvel movie chronologically?</h3><p>The earliest MCU story is Eyes of Wakanda, set in 1260 BC – 1896 AD. The earliest MCU film is Captain America: The First Avenger, most of which takes place in 1943–1945 — decades before any other film, though it was not the first released. The two answers differ because the series reach much further back than the films do, which is why &quot;the first Marvel movie chronologically&quot; and &quot;where the timeline starts&quot; are not the same question.</p><h3>Do I need to watch the Marvel One-Shots?</h3><p>No, nothing later depends on having seen them, but two pay off directly: Agent Carter sets up the Agent Carter series, and All Hail the King explains Trevor Slattery, who returns years later in Shang-Chi. They are ten to fifteen minutes each.</p><h3>Why do some dates say estimated?</h3><p>Marvel rarely puts a year on screen. Where Marvel's own published chronology confirms one, this Atlas marks the date confirmed. Where it does not, the date is marked estimated and is the consensus of press and research rather than canon. 54 titles carry confirmed in-universe dates and 18 are marked as estimates.</p></div>
       <footer class="site">
         <p style="font-size:.75rem">Poster artwork served from TMDB. Marvel, all title names and all character names are trademarks of Marvel Characters, Inc. and their respective rights holders. This is an unofficial, non-commercial reference project. <a href="../../credits.html">Full sources &amp; credits →</a></p>
-        <p style="margin-top:.6rem;font-size:.75rem">An experiment by <a href="https://bengaliexperience.wtf">BengaliExperience.wtf</a></p>
+        <p style="margin-top:.6rem;font-size:.75rem">An experiment by <a href="https://bengaliexperience.wtf">BengaliExperience.wtf</a> · <a href="https://bengaliexperience.wtf/privacy">Privacy</a></p>
       </footer>
     </div>
   </main>
 </div>
 
+<div id="bx-consent" style="display:none;position:fixed;inset:auto 0 0 0;z-index:999;background:rgba(13,13,18,.97);border-top:1px solid rgba(255,255,255,.1);padding:14px 16px;font:13px/1.5 system-ui,sans-serif;color:#c7c7d1;backdrop-filter:blur(6px)">
+  <div style="max-width:1080px;margin:0 auto;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between">
+    <p style="margin:0;flex:1;min-width:240px">This site uses cookies for ads (Google AdSense) and anonymised usage recording (Microsoft Clarity). See the <a href="https://bengaliexperience.wtf/privacy" style="color:#ff4a55">privacy policy</a>.</p>
+    <div style="display:flex;gap:8px;flex-shrink:0">
+      <button id="bx-consent-decline" style="border:1px solid rgba(255,255,255,.15);background:transparent;color:#c7c7d1;border-radius:999px;padding:8px 16px;font:inherit;cursor:pointer">Decline</button>
+      <button id="bx-consent-accept" style="border:none;background:#ff4a55;color:#fff;border-radius:999px;padding:8px 16px;font:inherit;font-weight:600;cursor:pointer">Accept</button>
+    </div>
+  </div>
+</div>
+<script>(function(){
+  var KEY="bx-consent";
+  function apply(v){
+    if (window.gtag) gtag("consent","update",{ad_storage:v,ad_user_data:v,ad_personalization:v,analytics_storage:v});
+    try { localStorage.setItem(KEY, v); } catch(e) {}
+  }
+  var stored = null;
+  try { stored = localStorage.getItem(KEY); } catch(e) {}
+  if (stored === "granted" || stored === "denied") { apply(stored); return; }
+  var el = document.getElementById("bx-consent");
+  if (!el) return;
+  el.style.display = "block";
+  document.getElementById("bx-consent-accept").onclick = function(){ apply("granted"); el.style.display="none"; };
+  document.getElementById("bx-consent-decline").onclick = function(){ apply("denied"); el.style.display="none"; };
+})();</script>
 </body>
 </html>

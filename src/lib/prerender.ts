@@ -63,9 +63,11 @@ export function renderStaticBody(pageId: PageId): string {
         ? mahalayaBody()
         : pageId === "busdriver"
           ? busBody()
-          : KABIRSUMAN_PAGE_IDS.has(pageId)
-            ? renderKabirSumanBody(pageId)
-            : renderTarakeswarBody(pageId);
+          : pageId === "privacy"
+            ? privacyBody()
+            : KABIRSUMAN_PAGE_IDS.has(pageId)
+              ? renderKabirSumanBody(pageId)
+              : renderTarakeswarBody(pageId);
 
   // Wrapped and identified so index.html can hide it the instant JavaScript
   // is known to be running. React clears #root on first paint, but "first
@@ -157,6 +159,30 @@ function busBody(): string[] {
     `<p><a href="${PAGE_PATH.home}">${escape(
       `More from ${BRAND.nameEn}`,
     )}</a></p>`,
+  ];
+}
+
+function privacyBody(): string[] {
+  return [
+    `<h2>Google AdSense</h2>`,
+    `<p>${escape(
+      "This site may show ads served by Google AdSense. Google and its partners use cookies, including the DoubleClick cookie, to serve ads based on prior visits to this and other sites. Google's use of advertising cookies lets it and its partners serve ads based on your visits here and elsewhere on the internet.",
+    )}</p>`,
+    `<p><a href="https://policies.google.com/technologies/ads">${escape("How Google uses information from sites that use its services")}</a>. <a href="https://adssettings.google.com">${escape("Manage or opt out of personalised advertising")}</a>.</p>`,
+    `<h2>Microsoft Clarity</h2>`,
+    `<p>${escape(
+      "This site uses Microsoft Clarity for anonymised session replay and heatmaps, to see how the pages are actually used. See Microsoft's privacy statement for how it handles that data.",
+    )}</p>`,
+    `<p><a href="https://privacy.microsoft.com/privacystatement">${escape("Microsoft Privacy Statement")}</a>.</p>`,
+    `<h2>Your choices</h2>`,
+    `<p>${escape(
+      "A cookie banner is shown on first visit to any ad-carrying page, with the choice to accept or decline non-essential cookies. Declining still lets the site work; it just stops ad personalisation and Clarity recording.",
+    )}</p>`,
+    `<h2>Children's privacy</h2>`,
+    `<p>${escape("This site is not directed at children under 13 and does not knowingly collect data from them.")}</p>`,
+    `<h2>Contact</h2>`,
+    `<p>${escape("Questions or requests about this policy: ")}<a href="mailto:work.konkomaji@gmail.com">work.konkomaji@gmail.com</a>.</p>`,
+    `<p><a href="${PAGE_PATH.home}">${escape(`More from ${BRAND.nameEn}`)}</a></p>`,
   ];
 }
 

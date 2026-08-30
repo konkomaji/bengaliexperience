@@ -10,6 +10,8 @@ import { TarakeswarReachPage } from "./pages/tarakeswar/TarakeswarReachPage";
 import { TarakeswarBlogIndexPage } from "./pages/tarakeswar/TarakeswarBlogIndexPage";
 import { TarakeswarBlogPostPage } from "./pages/tarakeswar/TarakeswarBlogPostPage";
 import { BreakdownScreen } from "./components/BreakdownScreen";
+import { ConsentBanner } from "./components/ConsentBanner";
+import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage";
 import { KABIRSUMAN_ALBUM_PREFIX, KABIRSUMAN_SONG_PREFIX, MOVED_PATHS, PAGE_PATH } from "./data/seo";
 
 /**
@@ -41,6 +43,10 @@ const KabirSumanSourcesPage = lazy(() => import("./pages/kabirsuman/KabirSumanSo
 export default function App() {
   return (
     <BrowserRouter>
+      {/* Site-wide, watching the route itself to decide whether to show:
+          see src/components/ConsentBanner.tsx for why the bus and Mahalaya
+          pages are excluded. */}
+      <ConsentBanner />
       {/* Only the seven lazy Kabir Suman routes ever suspend; every eager
           page above resolves synchronously and never shows this fallback. */}
       <Suspense fallback={null}>
@@ -71,6 +77,8 @@ export default function App() {
         <Route path={`${KABIRSUMAN_SONG_PREFIX}/:slug`} element={<KabirSumanSongPage />} />
         <Route path={PAGE_PATH.kabirsumanWords} element={<KabirSumanWordsPage />} />
         <Route path={PAGE_PATH.kabirsumanSources} element={<KabirSumanSourcesPage />} />
+
+        <Route path={PAGE_PATH.privacy} element={<PrivacyPolicyPage />} />
 
         {Object.entries(MOVED_PATHS).map(([from, to]) => (
           <Route key={from} path={from} element={<Navigate to={to} replace />} />

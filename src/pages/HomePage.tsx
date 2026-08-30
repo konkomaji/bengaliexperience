@@ -4,7 +4,7 @@ import { BRAND, DRIVER } from "../data/brand";
 import { EXPERIENCES, type Experience } from "../data/experiences";
 import { EXPERIMENTS, type Experiment } from "../data/experiments";
 import { TRIBUTES, type Tribute } from "../data/tributes";
-import { PAGE_FAQ, PAGE_SEO } from "../data/seo";
+import { PAGE_FAQ, PAGE_PATH, PAGE_SEO } from "../data/seo";
 import { buildJsonLd } from "../lib/jsonld";
 import { useDocumentHead } from "../hooks/useDocumentHead";
 import { JsonLd } from "../components/JsonLd";
@@ -148,6 +148,13 @@ export function HomePage() {
             >
               Konko M
             </a>
+            {" · "}
+            <Link
+              to={PAGE_PATH.privacy}
+              className="underline decoration-white/20 underline-offset-4 hover:text-on-surface hover:decoration-primary"
+            >
+              Privacy
+            </Link>
           </p>
         </footer>
       </div>

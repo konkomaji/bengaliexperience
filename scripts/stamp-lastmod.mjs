@@ -63,6 +63,7 @@ const PAGES = {
   kabirsumanWorks: [...SHARED, "src/data/kabirsuman/albums.ts", "src/pages/kabirsuman/KabirSumanWorksPage.tsx"],
   kabirsumanWords: [...SHARED, "src/pages/kabirsuman/KabirSumanWordsPage.tsx"],
   kabirsumanSources: [...SHARED, "src/data/kabirsuman/sources.ts", "src/pages/kabirsuman/KabirSumanSourcesPage.tsx"],
+  privacy: [...SHARED, "src/pages/PrivacyPolicyPage.tsx"],
 };
 
 /** ISO-8601 date of the newest commit touching any of `files`, or null. */

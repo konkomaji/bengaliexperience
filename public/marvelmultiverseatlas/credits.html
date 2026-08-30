@@ -3,6 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag() { dataLayer.push(arguments); }
+gtag("consent", "default", { ad_storage: "denied", ad_user_data: "denied", ad_personalization: "denied", analytics_storage: "denied", wait_for_update: 500 });
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1575101534552294" crossorigin="anonymous"></script>
 <title>Sources &amp; Credits — Marvel Multiverse Atlas</title>
 <meta name="description" content="Every data source, image provider and rights holder behind the Marvel Multiverse Atlas.">
 <meta name="theme-color" content="#0d0d12">
@@ -12,7 +18,7 @@
 <link rel="stylesheet" href="assets/style.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23ff4a55'/%3E%3Ctext x='50' y='72' font-size='64' font-family='sans-serif' font-weight='bold' text-anchor='middle' fill='%23350009'%3EM%3C/text%3E%3C/svg%3E">
 </head>
-<body>
+<body class="atlas-page">
 
 <div class="aurora"></div>
 <div class="grain"></div>
@@ -169,7 +175,7 @@
 
       <footer class="site">
         <p>Compiled 21 August 2026. Dataset cutoff: only titles released on or before that date are included. If you spot an error — a wrong date, a missed title, a connection that isn’t real — the underlying data lives in <code>data/entries.json</code> and <code>data/graph.json</code> and corrections are welcome.</p>
-        <p style="margin-top:.6rem;font-size:.75rem">An experiment by <a href="https://bengaliexperience.wtf" target="_blank" rel="noopener noreferrer">BengaliExperience.wtf</a></p>
+        <p style="margin-top:.6rem;font-size:.75rem">An experiment by <a href="https://bengaliexperience.wtf" target="_blank" rel="noopener noreferrer">BengaliExperience.wtf</a> · <a href="https://bengaliexperience.wtf/privacy" target="_blank" rel="noopener noreferrer">Privacy</a></p>
         <div style="margin-top:1.2rem">
           <a class="btn" href="index.html">
             <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg> Back to the atlas
@@ -181,5 +187,29 @@
   </main>
 </div>
 
+<div id="bx-consent" style="display:none;position:fixed;inset:auto 0 0 0;z-index:999;background:rgba(13,13,18,.97);border-top:1px solid rgba(255,255,255,.1);padding:14px 16px;font:13px/1.5 system-ui,sans-serif;color:#c7c7d1;backdrop-filter:blur(6px)">
+  <div style="max-width:1080px;margin:0 auto;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between">
+    <p style="margin:0;flex:1;min-width:240px">This site uses cookies for ads (Google AdSense) and anonymised usage recording (Microsoft Clarity). See the <a href="https://bengaliexperience.wtf/privacy" style="color:#ff4a55">privacy policy</a>.</p>
+    <div style="display:flex;gap:8px;flex-shrink:0">
+      <button id="bx-consent-decline" style="border:1px solid rgba(255,255,255,.15);background:transparent;color:#c7c7d1;border-radius:999px;padding:8px 16px;font:inherit;cursor:pointer">Decline</button>
+      <button id="bx-consent-accept" style="border:none;background:#ff4a55;color:#fff;border-radius:999px;padding:8px 16px;font:inherit;font-weight:600;cursor:pointer">Accept</button>
+    </div>
+  </div>
+</div>
+<script>(function(){
+  var KEY="bx-consent";
+  function apply(v){
+    if (window.gtag) gtag("consent","update",{ad_storage:v,ad_user_data:v,ad_personalization:v,analytics_storage:v});
+    try { localStorage.setItem(KEY, v); } catch(e) {}
+  }
+  var stored = null;
+  try { stored = localStorage.getItem(KEY); } catch(e) {}
+  if (stored === "granted" || stored === "denied") { apply(stored); return; }
+  var el = document.getElementById("bx-consent");
+  if (!el) return;
+  el.style.display = "block";
+  document.getElementById("bx-consent-accept").onclick = function(){ apply("granted"); el.style.display="none"; };
+  document.getElementById("bx-consent-decline").onclick = function(){ apply("denied"); el.style.display="none"; };
+})();</script>
 </body>
 </html>

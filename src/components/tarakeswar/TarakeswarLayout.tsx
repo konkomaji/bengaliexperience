@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { BRAND, DRIVER } from "../../data/brand";
+import { PAGE_PATH } from "../../data/seo";
 import { TARAKESWAR_NAV } from "../../data/tarakeswar/nav";
 import { useTarakeswarPageViews } from "../../hooks/useTarakeswarPageViews";
 import { ArrowRightIcon } from "../icons";
@@ -104,6 +105,14 @@ export function TarakeswarLayout({
               Tarakeswar Shrabani Mela
             </a>{" "}
             portal, Government of West Bengal.
+          </p>
+          <p>
+            <Link
+              to={PAGE_PATH.privacy}
+              className="font-semibold text-tara-primary underline decoration-tara-primary/30 underline-offset-2"
+            >
+              Privacy
+            </Link>
           </p>
           {views !== null && (
             <p className="flex items-center gap-1.5 text-tara-on-surface-muted/80">

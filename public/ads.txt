@@ -1,0 +1,3 @@
+# Authorized digital sellers for bengaliexperience.wtf, per the IAB's
+# ads.txt spec: https://iabtechlab.com/ads-txt/
+google.com, pub-1575101534552294, DIRECT, f08c47fec0942fa0
