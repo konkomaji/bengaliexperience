@@ -3,6 +3,42 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <!--
+      Google Consent Mode v2, default state. Must run before any Google ad or
+      analytics tag (the AdSense loader below, and any future gtag/GA) reads
+      it, so it is the first script in the document. Everyone starts denied —
+      no ad personalisation, no analytics storage — until they answer the
+      cookie banner (src/components/ConsentBanner.tsx), which calls
+      gtag('consent', 'update', ...) with their choice. AdSense still respects
+      this without loading gtag.js itself: the manual, no-CMP implementation
+      Google documents for sites that don't run a certified consent platform.
+    -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("consent", "default", {
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+        analytics_storage: "denied",
+        wait_for_update: 500,
+      });
+    </script>
+
+    <!--
+      Google AdSense. Site-wide and unconditional, on purpose, even on the
+      two pages (the bus, Mahalaya) that should never carry an ad: this is a
+      single-page app, so a script tag present only on some server-rendered
+      entry points would simply be missing for anyone who reached an
+      ad-enabled page by clicking into it from one that lacks it. Auto ads
+      does support this correctly — it watches client-side navigation and
+      re-evaluates per route — so the actual exclusion is configured once in
+      the AdSense dashboard (Auto ads → Site and page exclusion) for
+      /busdriver and /mahalaya, rather than fought here in markup.
+    -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1575101534552294" crossorigin="anonymous"></script>
+
     <meta name="theme-color" content="#150803" />
     <meta name="color-scheme" content="dark" />
 

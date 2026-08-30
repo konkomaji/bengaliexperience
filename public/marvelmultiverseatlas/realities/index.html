@@ -3,6 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag() { dataLayer.push(arguments); }
+gtag("consent", "default", { ad_storage: "denied", ad_user_data: "denied", ad_personalization: "denied", analytics_storage: "denied", wait_for_update: 500 });
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1575101534552294" crossorigin="anonymous"></script>
 <title>Earth-616 vs Earth-199999 — Every Marvel Reality</title>
 <meta name="description" content="Is the MCU Earth-616 or Earth-199999? Every Marvel reality on screen, what is set in each, and the 135 verified crossings between them.">
 <meta name="theme-color" content="#0d0d12">
@@ -78,11 +84,35 @@
       </div></div><div class="faq"><h3>Is the MCU Earth-616 or Earth-199999?</h3><p>Earth-616 is the designation for the main continuity of the Marvel comics. The Marvel Cinematic Universe was designated Earth-199999 by the Marvel Database, and that is the number this Atlas uses for it — but the MCU called itself &quot;Earth-616&quot; out loud in Doctor Strange in the Multiverse of Madness, which is why both numbers get used for the same reality and why the question keeps being asked. Both are recorded here rather than one being quietly picked.</p><h3>What does Earth-616 mean?</h3><p>Earth-616 is the number given to the main Marvel comics continuity — the reality most Marvel comics have been set in since the 1960s. The number itself came from a British Marvel comic in the 1980s rather than from the main line, and was only adopted as the standard designation afterwards.</p><h3>What is the Marvel multiverse?</h3><p>The Marvel multiverse is the set of parallel realities that exist alongside each other in Marvel's fiction, each given its own Earth number. On screen it is what lets Spider-Man: No Way Home, the Spider-Verse films and Doctor Strange in the Multiverse of Madness pull characters out of one continuity into another. This Atlas tracks 51 of those realities and 135 verified crossings between them.</p><h3>How many realities are there in the Marvel multiverse?</h3><p>In the comics, effectively unlimited. On screen the number is finite and countable: 51 distinct Earth designations appear across every Marvel film and series released so far, and they are all listed here. 35 further titles have never been given a designation and are recorded as unclassified rather than assigned a made-up number.</p></div>
       <footer class="site">
         <p style="font-size:.75rem">Poster artwork served from TMDB. Marvel, all title names and all character names are trademarks of Marvel Characters, Inc. and their respective rights holders. This is an unofficial, non-commercial reference project. <a href="../credits.html">Full sources &amp; credits →</a></p>
-        <p style="margin-top:.6rem;font-size:.75rem">An experiment by <a href="https://bengaliexperience.wtf">BengaliExperience.wtf</a></p>
+        <p style="margin-top:.6rem;font-size:.75rem">An experiment by <a href="https://bengaliexperience.wtf">BengaliExperience.wtf</a> · <a href="https://bengaliexperience.wtf/privacy">Privacy</a></p>
       </footer>
     </div>
   </main>
 </div>
 
+<div id="bx-consent" style="display:none;position:fixed;inset:auto 0 0 0;z-index:999;background:rgba(13,13,18,.97);border-top:1px solid rgba(255,255,255,.1);padding:14px 16px;font:13px/1.5 system-ui,sans-serif;color:#c7c7d1;backdrop-filter:blur(6px)">
+  <div style="max-width:1080px;margin:0 auto;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between">
+    <p style="margin:0;flex:1;min-width:240px">This site uses cookies for ads (Google AdSense) and anonymised usage recording (Microsoft Clarity). See the <a href="https://bengaliexperience.wtf/privacy" style="color:#ff4a55">privacy policy</a>.</p>
+    <div style="display:flex;gap:8px;flex-shrink:0">
+      <button id="bx-consent-decline" style="border:1px solid rgba(255,255,255,.15);background:transparent;color:#c7c7d1;border-radius:999px;padding:8px 16px;font:inherit;cursor:pointer">Decline</button>
+      <button id="bx-consent-accept" style="border:none;background:#ff4a55;color:#fff;border-radius:999px;padding:8px 16px;font:inherit;font-weight:600;cursor:pointer">Accept</button>
+    </div>
+  </div>
+</div>
+<script>(function(){
+  var KEY="bx-consent";
+  function apply(v){
+    if (window.gtag) gtag("consent","update",{ad_storage:v,ad_user_data:v,ad_personalization:v,analytics_storage:v});
+    try { localStorage.setItem(KEY, v); } catch(e) {}
+  }
+  var stored = null;
+  try { stored = localStorage.getItem(KEY); } catch(e) {}
+  if (stored === "granted" || stored === "denied") { apply(stored); return; }
+  var el = document.getElementById("bx-consent");
+  if (!el) return;
+  el.style.display = "block";
+  document.getElementById("bx-consent-accept").onclick = function(){ apply("granted"); el.style.display="none"; };
+  document.getElementById("bx-consent-decline").onclick = function(){ apply("denied"); el.style.display="none"; };
+})();</script>
 </body>
 </html>

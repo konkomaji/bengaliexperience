@@ -42,6 +42,11 @@ const KABIRSUMAN_PAGE_IDS = new Set([
  * client side on navigation.
  */
 export function buildJsonLd(pageId: PageId) {
+  // The privacy policy: a WebPage and nothing else. It has no subject beyond
+  // itself, so it skips the experiences/tributes/collection/broadcast
+  // machinery below entirely rather than forcing a null case through it.
+  if (pageId === "privacy") return buildPrivacyJsonLd();
+
   // The Tarakeswar section is a separate subject with its own schema.org
   // shapes (TouristAttraction, HowTo, BlogPosting...); delegated rather than
   // folded into the ternary below, which is written for the two
@@ -243,4 +248,44 @@ export function buildJsonLd(pageId: PageId) {
     "@context": "https://schema.org",
     "@graph": [curator, website, primaryImage, webPage, faq, breadcrumb, ...subject],
   };
+}
+
+/** The privacy policy's own tiny graph: a WebPage, its FAQ and a one-item
+ *  breadcrumb, without curator/website/experiences — those describe the
+ *  project, not a policy document about it. */
+function buildPrivacyJsonLd() {
+  const seo = PAGE_SEO.privacy;
+  const url = BRAND.url + PAGE_PATH.privacy;
+
+  const webPage = {
+    "@type": "WebPage",
+    "@id": `${url}#webpage`,
+    url,
+    name: seo.title,
+    description: seo.description,
+    isPartOf: { "@id": `${BRAND.url}/#website` },
+    inLanguage: "en-IN",
+    breadcrumb: { "@id": `${url}#breadcrumb` },
+  };
+
+  const faq = {
+    "@type": "FAQPage",
+    "@id": `${url}#faq`,
+    mainEntity: PAGE_FAQ.privacy.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
+
+  const breadcrumb = {
+    "@type": "BreadcrumbList",
+    "@id": `${url}#breadcrumb`,
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: BRAND.nameEn, item: `${BRAND.url}/` },
+      { "@type": "ListItem", position: 2, name: seo.h1, item: url },
+    ],
+  };
+
+  return { "@context": "https://schema.org", "@graph": [webPage, faq, breadcrumb] };
 }
