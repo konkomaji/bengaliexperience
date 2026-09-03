@@ -339,8 +339,8 @@ export const FILM_DETAILS: FilmDetail[] = [
     slug: "oti-uttam-2024",
     director: "Srijit Mukherji",
     synopsis:
-      "Not archive footage stitched into a documentary but a constructed new performance: VFX composited from 54 of his old films to put him, freshly, into a new story — his first \"new\" screen appearance in 37 years, and a box-office hit on release.",
-    significance: "Counted by the archive's own note as his 212th film.",
+      "Srijit Mukherji's tribute film, and the reason this filmography has a 2024 entry at all: a PhD researcher writing on the Mahanayak, unlucky in love, holds a planchette to summon him for romantic advice — and Uttam Kumar answers, assembled out of clips and dialogue lifted from 56 of his own films and cut into the new story. Not a deepfake and not a recreation: every frame of him in it is footage he actually shot, decades earlier, re-edited into a conversation he never had. His real grandson, Gourab Chatterjee, appears as himself.",
+    significance: "Released 22 March 2024, forty-four years after his death, and counted by the source filmography as his 212th film.",
     era: "posthumous",
   },
 ];

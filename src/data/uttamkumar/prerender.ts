@@ -38,8 +38,6 @@ export function renderUttamKumarBody(pageId: PageId): string[] {
       return wordsBody();
     case "uttamkumarSources":
       return sourcesBody();
-    case "uttamkumarCredits":
-      return creditsBody();
     default:
       return [];
   }
@@ -127,18 +125,16 @@ function wordsBody(): string[] {
   return [`<h2>In their words</h2><ul>${items}</ul>`, `<h2>Collaborators</h2><ul>${collab}</ul>`];
 }
 
-function creditsBody(): string[] {
-  const items = IMAGE_CREDITS.map(
+function sourcesBody(): string[] {
+  const images = IMAGE_CREDITS.map(
     (c) =>
       `<li>${escape(c.caption)} — ${escape(c.author)}, <a href="${c.licenseUrl}">${escape(c.license)}</a>, <a href="${c.sourceUrl}">source</a>.</li>`,
   ).join("");
   const rejected = REJECTED_IMAGES.map((r) => `<li>${escape(r.title)}: ${escape(r.reason)}</li>`).join("");
-  return [`<h2>Used</h2><ul>${items}</ul>`, `<h2>Reviewed and rejected</h2><ul>${rejected}</ul>`];
-}
-
-function sourcesBody(): string[] {
   return [
     `<p>${escape("The biography and the 211-film catalogue are drawn from and cross-checked against Wikipedia's own articles. The 2026 centenary coverage and book bibliography are drawn from independent press and publisher sources, each listed on this page rather than folded into one vague credit line.")}</p>`,
+    `<h2>Images used</h2><ul>${images}</ul>`,
+    `<h2>Images reviewed and rejected</h2><ul>${rejected}</ul>`,
   ];
 }
 

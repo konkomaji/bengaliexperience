@@ -18,7 +18,7 @@ export function CreditedImage({ slug, className }: { slug: string; className?: s
       <img src={`/uttamkumar/photos/${slug}.webp`} alt={credit.caption} loading="lazy" className="w-full rounded-sm object-cover" />
       <figcaption className="uk-mono mt-1.5 text-[10px] leading-snug text-uk-on-void-muted">
         {credit.caption}{" "}
-        <Link to={PAGE_PATH.uttamkumarCredits} className="text-uk-gold hover:underline">
+        <Link to={PAGE_PATH.uttamkumarSources} className="text-uk-gold hover:underline">
           ({credit.author}, {credit.license})
         </Link>
       </figcaption>

@@ -18,9 +18,15 @@ import { FilmReelNav } from "./FilmReelNav";
 export function UttamKumarLayout({
   active,
   children,
+  bleed = false,
 }: {
   active: (typeof UTTAMKUMAR_NAV)[number]["id"];
   children: ReactNode;
+  /** Full-bleed pages lay out their own width and padding — the wings that
+   *  open on a full-viewport scene rather than a centred reading column.
+   *  Every page here composes its own body; this shell only owns the
+   *  marquee, the reel dial and the backdrop. */
+  bleed?: boolean;
 }) {
   const location = useLocation();
 
@@ -59,7 +65,11 @@ export function UttamKumarLayout({
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-        className="relative mx-auto max-w-3xl px-4 pb-24 pt-6 sm:px-6 sm:pb-16 sm:pt-9"
+        className={
+          bleed
+            ? "relative pb-24 sm:pb-16"
+            : "relative mx-auto max-w-3xl px-4 pb-24 pt-6 sm:px-6 sm:pb-16 sm:pt-9"
+        }
       >
         {children}
       </motion.main>

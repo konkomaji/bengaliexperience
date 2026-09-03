@@ -74,7 +74,6 @@ const PAGES = {
   uttamkumarCentenary: [...SHARED, "src/data/uttamkumar/centenary.ts", "src/pages/uttamkumar/UttamKumarCentenaryPage.tsx"],
   uttamkumarWords: [...SHARED, "src/data/uttamkumar/quotes.ts", "src/pages/uttamkumar/UttamKumarWordsPage.tsx"],
   uttamkumarSources: [...SHARED, "src/data/uttamkumar/sources.ts", "src/pages/uttamkumar/UttamKumarSourcesPage.tsx"],
-  uttamkumarCredits: [...SHARED, "src/data/uttamkumar/credits.ts", "src/pages/uttamkumar/UttamKumarCreditsPage.tsx"],
   privacy: [...SHARED, "src/pages/PrivacyPolicyPage.tsx"],
 };
 
