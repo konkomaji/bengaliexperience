@@ -63,6 +63,17 @@ const PAGES = {
   kabirsumanWorks: [...SHARED, "src/data/kabirsuman/albums.ts", "src/pages/kabirsuman/KabirSumanWorksPage.tsx"],
   kabirsumanWords: [...SHARED, "src/pages/kabirsuman/KabirSumanWordsPage.tsx"],
   kabirsumanSources: [...SHARED, "src/data/kabirsuman/sources.ts", "src/pages/kabirsuman/KabirSumanSourcesPage.tsx"],
+  // Uttam Kumar: same fixed-pages-only rule as Kabir Suman above — 211 films
+  // carry no per-item lastmod, and sitemap.xml.ts omits <lastmod> for them.
+  uttamkumar: [...SHARED, "src/data/uttamkumar/seo.ts", "src/data/uttamkumar/prerender.ts", "src/pages/uttamkumar/UttamKumarHubPage.tsx"],
+  uttamkumarLife: [...SHARED, "src/data/uttamkumar/life.ts", "src/pages/uttamkumar/UttamKumarLifePage.tsx"],
+  uttamkumarFilms: [...SHARED, "src/data/uttamkumar/films.ts", "src/pages/uttamkumar/UttamKumarFilmsPage.tsx"],
+  uttamkumarSuchitra: [...SHARED, "src/data/uttamkumar/suchitra.ts", "src/pages/uttamkumar/UttamKumarSuchitraPage.tsx"],
+  uttamkumarAwards: [...SHARED, "src/data/uttamkumar/awards.ts", "src/pages/uttamkumar/UttamKumarAwardsPage.tsx"],
+  uttamkumarBooks: [...SHARED, "src/data/uttamkumar/books.ts", "src/pages/uttamkumar/UttamKumarBooksPage.tsx"],
+  uttamkumarCentenary: [...SHARED, "src/data/uttamkumar/centenary.ts", "src/pages/uttamkumar/UttamKumarCentenaryPage.tsx"],
+  uttamkumarWords: [...SHARED, "src/data/uttamkumar/quotes.ts", "src/pages/uttamkumar/UttamKumarWordsPage.tsx"],
+  uttamkumarSources: [...SHARED, "src/data/uttamkumar/sources.ts", "src/pages/uttamkumar/UttamKumarSourcesPage.tsx"],
   privacy: [...SHARED, "src/pages/PrivacyPolicyPage.tsx"],
 };
 

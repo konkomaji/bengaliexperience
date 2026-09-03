@@ -34,4 +34,13 @@ export const TRIBUTES: Tribute[] = [
       "Every album, every lyric the archive holds, and the life around them — the journalist and broadcaster before the songwriter, the politics inside the songs, the late turn to Bengali khayal — for the man who is usually credited with starting jibonmukhi gaan on his own.",
     cta: "Open the archive",
   },
+  {
+    id: "uttamkumar",
+    name: "Uttam Kumar",
+    subtitle: "A century of the Mahanayak, catalogued",
+    path: "/uttamkumar",
+    blurb:
+      "All 211 credited films sorted chronologically, the complete Uttam-Suchitra pairing, the awards, the books, the life with its harder chapters left in rather than out — and a dated record of what his 2026 birth centenary is actually doing, not just marking it happened.",
+    cta: "Step into the archive",
+  },
 ];

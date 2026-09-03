@@ -12,7 +12,7 @@ import { TarakeswarBlogPostPage } from "./pages/tarakeswar/TarakeswarBlogPostPag
 import { BreakdownScreen } from "./components/BreakdownScreen";
 import { ConsentBanner } from "./components/ConsentBanner";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage";
-import { KABIRSUMAN_ALBUM_PREFIX, KABIRSUMAN_SONG_PREFIX, MOVED_PATHS, PAGE_PATH } from "./data/seo";
+import { KABIRSUMAN_ALBUM_PREFIX, KABIRSUMAN_SONG_PREFIX, MOVED_PATHS, PAGE_PATH, UTTAMKUMAR_FILM_PREFIX } from "./data/seo";
 
 /**
  * The Kabir Suman section is lazy-loaded, not imported at the top like every
@@ -29,6 +29,19 @@ const KabirSumanAlbumPage = lazy(() => import("./pages/kabirsuman/KabirSumanAlbu
 const KabirSumanSongPage = lazy(() => import("./pages/kabirsuman/KabirSumanSongPage").then((m) => ({ default: m.KabirSumanSongPage })));
 const KabirSumanWordsPage = lazy(() => import("./pages/kabirsuman/KabirSumanWordsPage").then((m) => ({ default: m.KabirSumanWordsPage })));
 const KabirSumanSourcesPage = lazy(() => import("./pages/kabirsuman/KabirSumanSourcesPage").then((m) => ({ default: m.KabirSumanSourcesPage })));
+
+/** The Uttam Kumar section: 211 films' worth of catalogue data, the same
+ *  "don't ship it to a bus visitor" reasoning as the Kabir Suman split above. */
+const UttamKumarHubPage = lazy(() => import("./pages/uttamkumar/UttamKumarHubPage").then((m) => ({ default: m.UttamKumarHubPage })));
+const UttamKumarLifePage = lazy(() => import("./pages/uttamkumar/UttamKumarLifePage").then((m) => ({ default: m.UttamKumarLifePage })));
+const UttamKumarFilmsPage = lazy(() => import("./pages/uttamkumar/UttamKumarFilmsPage").then((m) => ({ default: m.UttamKumarFilmsPage })));
+const UttamKumarFilmPage = lazy(() => import("./pages/uttamkumar/UttamKumarFilmPage").then((m) => ({ default: m.UttamKumarFilmPage })));
+const UttamKumarSuchitraPage = lazy(() => import("./pages/uttamkumar/UttamKumarSuchitraPage").then((m) => ({ default: m.UttamKumarSuchitraPage })));
+const UttamKumarAwardsPage = lazy(() => import("./pages/uttamkumar/UttamKumarAwardsPage").then((m) => ({ default: m.UttamKumarAwardsPage })));
+const UttamKumarBooksPage = lazy(() => import("./pages/uttamkumar/UttamKumarBooksPage").then((m) => ({ default: m.UttamKumarBooksPage })));
+const UttamKumarCentenaryPage = lazy(() => import("./pages/uttamkumar/UttamKumarCentenaryPage").then((m) => ({ default: m.UttamKumarCentenaryPage })));
+const UttamKumarWordsPage = lazy(() => import("./pages/uttamkumar/UttamKumarWordsPage").then((m) => ({ default: m.UttamKumarWordsPage })));
+const UttamKumarSourcesPage = lazy(() => import("./pages/uttamkumar/UttamKumarSourcesPage").then((m) => ({ default: m.UttamKumarSourcesPage })));
 
 /**
  * The collection (home, the bus, Mahalaya), plus the Tarakeswar section: a
@@ -77,6 +90,21 @@ export default function App() {
         <Route path={`${KABIRSUMAN_SONG_PREFIX}/:slug`} element={<KabirSumanSongPage />} />
         <Route path={PAGE_PATH.kabirsumanWords} element={<KabirSumanWordsPage />} />
         <Route path={PAGE_PATH.kabirsumanSources} element={<KabirSumanSourcesPage />} />
+
+        {/* Uttam Kumar: a centenary tribute archive, the same third-shelf
+            treatment as Kabir Suman above (see src/data/tributes.ts). One
+            dynamic route (211 films) takes a :slug rather than living in
+            PAGE_PATH. */}
+        <Route path={PAGE_PATH.uttamkumar} element={<UttamKumarHubPage />} />
+        <Route path={PAGE_PATH.uttamkumarLife} element={<UttamKumarLifePage />} />
+        <Route path={PAGE_PATH.uttamkumarFilms} element={<UttamKumarFilmsPage />} />
+        <Route path={`${UTTAMKUMAR_FILM_PREFIX}/:slug`} element={<UttamKumarFilmPage />} />
+        <Route path={PAGE_PATH.uttamkumarSuchitra} element={<UttamKumarSuchitraPage />} />
+        <Route path={PAGE_PATH.uttamkumarAwards} element={<UttamKumarAwardsPage />} />
+        <Route path={PAGE_PATH.uttamkumarBooks} element={<UttamKumarBooksPage />} />
+        <Route path={PAGE_PATH.uttamkumarCentenary} element={<UttamKumarCentenaryPage />} />
+        <Route path={PAGE_PATH.uttamkumarWords} element={<UttamKumarWordsPage />} />
+        <Route path={PAGE_PATH.uttamkumarSources} element={<UttamKumarSourcesPage />} />
 
         <Route path={PAGE_PATH.privacy} element={<PrivacyPolicyPage />} />
 

@@ -8,6 +8,7 @@ import { SCENE } from "../data/scene";
 import { PAGE_FAQ, PAGE_PATH, PAGE_SEO, type PageId } from "../data/seo";
 import { renderTarakeswarBody } from "../data/tarakeswar/prerender";
 import { renderKabirSumanBody } from "../data/kabirsuman/prerender";
+import { renderUttamKumarBody } from "../data/uttamkumar/prerender";
 
 const KABIRSUMAN_PAGE_IDS = new Set<PageId>([
   "kabirsuman",
@@ -15,6 +16,18 @@ const KABIRSUMAN_PAGE_IDS = new Set<PageId>([
   "kabirsumanWorks",
   "kabirsumanWords",
   "kabirsumanSources",
+]);
+
+const UTTAMKUMAR_PAGE_IDS = new Set<PageId>([
+  "uttamkumar",
+  "uttamkumarLife",
+  "uttamkumarFilms",
+  "uttamkumarSuchitra",
+  "uttamkumarAwards",
+  "uttamkumarBooks",
+  "uttamkumarCentenary",
+  "uttamkumarWords",
+  "uttamkumarSources",
 ]);
 
 /**
@@ -67,7 +80,9 @@ export function renderStaticBody(pageId: PageId): string {
             ? privacyBody()
             : KABIRSUMAN_PAGE_IDS.has(pageId)
               ? renderKabirSumanBody(pageId)
-              : renderTarakeswarBody(pageId);
+              : UTTAMKUMAR_PAGE_IDS.has(pageId)
+                ? renderUttamKumarBody(pageId)
+                : renderTarakeswarBody(pageId);
 
   // Wrapped and identified so index.html can hide it the instant JavaScript
   // is known to be running. React clears #root on first paint, but "first

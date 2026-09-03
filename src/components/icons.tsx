@@ -199,3 +199,12 @@ export const StampIcon = (p: { size?: number }) => (
     <path d="M9 11.5v3h6v-3M5 20.5h14M7 20.5l1-3.5h8l1 3.5" />
   </svg>
 );
+
+/* --- Uttam Kumar section only --- */
+
+/** a pairing/romance marker: the Uttam-Suchitra page */
+export const HeartIcon = (p: { size?: number }) => (
+  <svg {...line} width={p.size ?? 18} height={p.size ?? 18}>
+    <path d="M12 20.5S3.5 15 3.5 9a4.5 4.5 0 0 1 8.5-2 4.5 4.5 0 0 1 8.5 2c0 6-8.5 11.5-8.5 11.5z" />
+  </svg>
+);
