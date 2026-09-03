@@ -42,6 +42,7 @@ const UttamKumarBooksPage = lazy(() => import("./pages/uttamkumar/UttamKumarBook
 const UttamKumarCentenaryPage = lazy(() => import("./pages/uttamkumar/UttamKumarCentenaryPage").then((m) => ({ default: m.UttamKumarCentenaryPage })));
 const UttamKumarWordsPage = lazy(() => import("./pages/uttamkumar/UttamKumarWordsPage").then((m) => ({ default: m.UttamKumarWordsPage })));
 const UttamKumarSourcesPage = lazy(() => import("./pages/uttamkumar/UttamKumarSourcesPage").then((m) => ({ default: m.UttamKumarSourcesPage })));
+const UttamKumarCreditsPage = lazy(() => import("./pages/uttamkumar/UttamKumarCreditsPage").then((m) => ({ default: m.UttamKumarCreditsPage })));
 
 /**
  * The collection (home, the bus, Mahalaya), plus the Tarakeswar section: a
@@ -105,6 +106,7 @@ export default function App() {
         <Route path={PAGE_PATH.uttamkumarCentenary} element={<UttamKumarCentenaryPage />} />
         <Route path={PAGE_PATH.uttamkumarWords} element={<UttamKumarWordsPage />} />
         <Route path={PAGE_PATH.uttamkumarSources} element={<UttamKumarSourcesPage />} />
+        <Route path={PAGE_PATH.uttamkumarCredits} element={<UttamKumarCreditsPage />} />
 
         <Route path={PAGE_PATH.privacy} element={<PrivacyPolicyPage />} />
 

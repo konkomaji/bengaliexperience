@@ -1,3 +1,4 @@
+import { CreditedImage } from "../../components/uttamkumar/CreditedImage";
 import { UttamKumarLayout } from "../../components/uttamkumar/UttamKumarLayout";
 import { UkHero, UkSection } from "../../components/uttamkumar/shared";
 import { QUOTES } from "../../data/uttamkumar/quotes";
@@ -14,7 +15,10 @@ export function UttamKumarWordsPage() {
   return (
     <UttamKumarLayout active="words">
       <JsonLd data={buildJsonLd("uttamkumarWords")} />
-      <UkHero eyebrow="Voices" h1={seo.h1} intro={seo.intro} />
+      <div className="flex flex-col-reverse items-start gap-6 sm:flex-row sm:gap-8">
+        <UkHero eyebrow="Voices" h1={seo.h1} intro={seo.intro} />
+        <CreditedImage slug="portrait-sketch-ghosh" className="w-32 shrink-0 sm:w-40" />
+      </div>
 
       <UkSection id="quotes" heading="In Their Words">
         <div className="grid gap-4 sm:grid-cols-2">

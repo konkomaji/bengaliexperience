@@ -1,3 +1,4 @@
+import { CreditedImage } from "../../components/uttamkumar/CreditedImage";
 import { LifeReel } from "../../components/uttamkumar/LifeReel";
 import { UttamKumarLayout } from "../../components/uttamkumar/UttamKumarLayout";
 import { UkFaq, UkFacts, UkHero, UkSection } from "../../components/uttamkumar/shared";
@@ -30,6 +31,7 @@ export function UttamKumarLifePage() {
           that turned opinion against him for a season, and the apology that followed. None of it is
           hidden here, and none of it is dwelt on beyond what's actually documented.
         </p>
+        <CreditedImage slug="morgan-house-testimonial" className="mt-5 max-w-md" />
       </UkSection>
 
       <div className="mt-14">

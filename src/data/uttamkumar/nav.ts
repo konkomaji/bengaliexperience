@@ -2,7 +2,7 @@ import { ArticleIcon, CalendarIcon, CompassIcon, HeartIcon, ReelIcon, StampIcon,
 import { PAGE_PATH } from "../seo";
 
 export interface UttamKumarNavItem {
-  id: "hub" | "life" | "films" | "suchitra" | "awards" | "books" | "centenary" | "words" | "sources";
+  id: "hub" | "life" | "films" | "suchitra" | "awards" | "books" | "centenary" | "words" | "sources" | "credits";
   label: string;
   path: string;
   icon: typeof CompassIcon;
@@ -18,4 +18,5 @@ export const UTTAMKUMAR_NAV: UttamKumarNavItem[] = [
   { id: "centenary", label: "Centenary 2026", path: PAGE_PATH.uttamkumarCentenary, icon: CalendarIcon },
   { id: "words", label: "Voices", path: PAGE_PATH.uttamkumarWords, icon: ArticleIcon },
   { id: "sources", label: "Sources", path: PAGE_PATH.uttamkumarSources, icon: ArticleIcon },
+  { id: "credits", label: "Image Credits", path: PAGE_PATH.uttamkumarCredits, icon: StampIcon },
 ];

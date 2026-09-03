@@ -1,3 +1,4 @@
+import { CreditedImage } from "../../components/uttamkumar/CreditedImage";
 import { UttamKumarLayout } from "../../components/uttamkumar/UttamKumarLayout";
 import { UkFaq, UkFacts, UkHero, UkProse, UkSection } from "../../components/uttamkumar/shared";
 import { CENTENARY_EVENTS, CENTENARY_INTRO } from "../../data/uttamkumar/centenary";
@@ -17,7 +18,10 @@ export function UttamKumarCentenaryPage() {
       <UkFacts facts={seo.facts} />
 
       <UkSection id="intro" heading="A Living Record">
-        <UkProse paragraphs={[CENTENARY_INTRO]} />
+        <div className="flex flex-col gap-6 sm:flex-row-reverse sm:gap-8">
+          <CreditedImage slug="centenary-stamp" className="w-36 shrink-0 sm:w-48" />
+          <UkProse paragraphs={[CENTENARY_INTRO]} />
+        </div>
       </UkSection>
 
       <UkSection id="events" heading="The Programme">

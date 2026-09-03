@@ -3,6 +3,7 @@ import { PAGE_PATH, type PageId } from "../seo";
 import { NATIONAL_AWARDS, BFJA_AWARDS, FILMFARE_AWARDS, POSTHUMOUS_HONORS } from "./awards";
 import { BOOKS } from "./books";
 import { CENTENARY_EVENTS, CENTENARY_INTRO } from "./centenary";
+import { IMAGE_CREDITS, REJECTED_IMAGES } from "./credits";
 import { filmDescription } from "./dynamicSeo";
 import { ERA_LABEL, FILMS, LANDMARK_FILMS, type Film } from "./films";
 import { LIFE_EVENTS } from "./life";
@@ -37,6 +38,8 @@ export function renderUttamKumarBody(pageId: PageId): string[] {
       return wordsBody();
     case "uttamkumarSources":
       return sourcesBody();
+    case "uttamkumarCredits":
+      return creditsBody();
     default:
       return [];
   }
@@ -122,6 +125,15 @@ function wordsBody(): string[] {
   const items = QUOTES.map((q) => `<li>"${escape(q.en)}" — ${escape(q.speaker)}, ${escape(q.source)}</li>`).join("");
   const collab = COLLABORATORS.map((c) => `<li><strong>${escape(c.name)}</strong> (${escape(c.role)}): ${escape(c.blurb)}</li>`).join("");
   return [`<h2>In their words</h2><ul>${items}</ul>`, `<h2>Collaborators</h2><ul>${collab}</ul>`];
+}
+
+function creditsBody(): string[] {
+  const items = IMAGE_CREDITS.map(
+    (c) =>
+      `<li>${escape(c.caption)} — ${escape(c.author)}, <a href="${c.licenseUrl}">${escape(c.license)}</a>, <a href="${c.sourceUrl}">source</a>.</li>`,
+  ).join("");
+  const rejected = REJECTED_IMAGES.map((r) => `<li>${escape(r.title)}: ${escape(r.reason)}</li>`).join("");
+  return [`<h2>Used</h2><ul>${items}</ul>`, `<h2>Reviewed and rejected</h2><ul>${rejected}</ul>`];
 }
 
 function sourcesBody(): string[] {

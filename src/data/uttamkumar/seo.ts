@@ -24,7 +24,8 @@ export type UttamKumarPageId =
   | "uttamkumarBooks"
   | "uttamkumarCentenary"
   | "uttamkumarWords"
-  | "uttamkumarSources";
+  | "uttamkumarSources"
+  | "uttamkumarCredits";
 
 export const PAGE_SEO_UTTAMKUMAR: Record<UttamKumarPageId, PageSeo> = {
   uttamkumar: {
@@ -150,6 +151,19 @@ export const PAGE_SEO_UTTAMKUMAR: Record<UttamKumarPageId, PageSeo> = {
       "This is an independent tribute, not affiliated with Uttam Kumar's family, estate, or the West Bengal government's centenary committee.",
     ],
   },
+  uttamkumarCredits: {
+    title: "Image Credits: Every Photo and Sketch on This Uttam Kumar Tribute",
+    description: "Full attribution for every self-hosted image on this Uttam Kumar tribute — an official India Post stamp, two artist-dedicated portrait sketches, and a photograph of a real testimonial he signed — plus which Commons files were rejected and why.",
+    keywords: ["uttam kumar image credits", "uttam kumar photo attribution", "wikimedia commons uttam kumar"],
+    h1: "Image Credits",
+    intro:
+      "Four images are self-hosted on this tribute, each chosen and verified individually rather than pulled wholesale from a category listing. This page names every one — photographer or artist, licence, source — and explains which Commons files were left out and why, so a gap in the gallery reads as a decision rather than an oversight.",
+    facts: [
+      "Four images: an official 2009 India Post stamp (GODL-India), two CC0 artist-dedicated portrait sketches, and a CC0 photo of a real signed testimonial.",
+      "Six other files in Wikimedia Commons' Uttam Kumar category were reviewed and rejected — a rephotographed print, a film-still screenshot, a misfiled photo of a different actor, an unusable night photo, and one with an unverifiable chain of custody.",
+      "No film stills or posters are used anywhere on this site; see /uttamkumar/sources and the reasoning in scripts/prepare-uttamkumar-images.mjs.",
+    ],
+  },
 };
 
 export const PAGE_FAQ_UTTAMKUMAR: Record<UttamKumarPageId, QA[]> = {
@@ -204,4 +218,10 @@ export const PAGE_FAQ_UTTAMKUMAR: Record<UttamKumarPageId, QA[]> = {
   ],
   uttamkumarWords: [],
   uttamkumarSources: [],
+  uttamkumarCredits: [
+    {
+      q: "Why are there only four images on the whole site?",
+      a: "Because that's how many could actually be verified as safely reusable. This site runs ads, and Indian photograph copyright runs 60 years from publication, so nearly every real photo of Uttam Kumar from his working life is still under copyright. These four survived individual review — an official government stamp, two artist-dedicated sketches, and a photo of a real testimonial — everything else in Commons' own Uttam Kumar category was rejected on inspection, listed on this page with the specific reason.",
+    },
+  ],
 };
