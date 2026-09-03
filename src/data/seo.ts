@@ -1,6 +1,7 @@
 import { BRAND } from "./brand";
 import { EXPERIENCES } from "./experiences";
 import { PAGE_SEO_KABIRSUMAN, PAGE_FAQ_KABIRSUMAN } from "./kabirsuman/seo";
+import { PAGE_SEO_UTTAMKUMAR, PAGE_FAQ_UTTAMKUMAR } from "./uttamkumar/seo";
 
 /**
  * One source of truth for URLs and per-page copy. Imported by the React app,
@@ -50,6 +51,13 @@ import { PAGE_SEO_KABIRSUMAN, PAGE_FAQ_KABIRSUMAN } from "./kabirsuman/seo";
  * blog posts are not: 30 albums and 317 songs each need their own URL, which
  * does not fit a fixed Record<PageId, ...>. See src/data/kabirsuman/.
  */
+/**
+ * `uttamkumar*` is a sixth section: a centenary tribute archive for the
+ * actor Uttam Kumar, the same third-shelf reasoning as Kabir Suman's — see
+ * src/data/tributes.ts. Its filmography, /uttamkumar/film/:slug, is not a
+ * PageId for the same reason albums and songs aren't: 211 films each need
+ * their own URL. See src/data/uttamkumar/.
+ */
 export type PageId =
   | "home"
   | "busdriver"
@@ -64,6 +72,15 @@ export type PageId =
   | "kabirsumanWorks"
   | "kabirsumanWords"
   | "kabirsumanSources"
+  | "uttamkumar"
+  | "uttamkumarLife"
+  | "uttamkumarFilms"
+  | "uttamkumarSuchitra"
+  | "uttamkumarAwards"
+  | "uttamkumarBooks"
+  | "uttamkumarCentenary"
+  | "uttamkumarWords"
+  | "uttamkumarSources"
   | "privacy";
 
 export const PAGE_PATH: Record<PageId, string> = {
@@ -80,12 +97,24 @@ export const PAGE_PATH: Record<PageId, string> = {
   kabirsumanWorks: "/kabirsuman/works",
   kabirsumanWords: "/kabirsuman/words",
   kabirsumanSources: "/kabirsuman/sources",
+  uttamkumar: "/uttamkumar",
+  uttamkumarLife: "/uttamkumar/life",
+  uttamkumarFilms: "/uttamkumar/films",
+  uttamkumarSuchitra: "/uttamkumar/suchitra",
+  uttamkumarAwards: "/uttamkumar/awards",
+  uttamkumarBooks: "/uttamkumar/books",
+  uttamkumarCentenary: "/uttamkumar/centenary",
+  uttamkumarWords: "/uttamkumar/words",
+  uttamkumarSources: "/uttamkumar/sources",
   privacy: "/privacy",
 };
 
 /** path prefixes for the two dynamic Kabir Suman collections, joined with a slug */
 export const KABIRSUMAN_ALBUM_PREFIX = "/kabirsuman/album";
 export const KABIRSUMAN_SONG_PREFIX = "/kabirsuman/song";
+
+/** path prefix for the one dynamic Uttam Kumar collection (211 films), joined with a slug */
+export const UTTAMKUMAR_FILM_PREFIX = "/uttamkumar/film";
 
 /** every servable path -> page */
 export const PATH_TO_PAGE: Record<string, PageId> = {
@@ -102,6 +131,15 @@ export const PATH_TO_PAGE: Record<string, PageId> = {
   "/kabirsuman/works": "kabirsumanWorks",
   "/kabirsuman/words": "kabirsumanWords",
   "/kabirsuman/sources": "kabirsumanSources",
+  "/uttamkumar": "uttamkumar",
+  "/uttamkumar/life": "uttamkumarLife",
+  "/uttamkumar/films": "uttamkumarFilms",
+  "/uttamkumar/suchitra": "uttamkumarSuchitra",
+  "/uttamkumar/awards": "uttamkumarAwards",
+  "/uttamkumar/books": "uttamkumarBooks",
+  "/uttamkumar/centenary": "uttamkumarCentenary",
+  "/uttamkumar/words": "uttamkumarWords",
+  "/uttamkumar/sources": "uttamkumarSources",
   "/privacy": "privacy",
 };
 
@@ -193,6 +231,7 @@ const PAGE_SEO_CORE: Record<"home" | "busdriver" | "mahalaya", PageSeo> = {
       // keywords above for the same reason.
       "One unrelated experiment shares the domain: the Marvel Multiverse Atlas, which is not about Bengal.",
       "A tribute archive for the musician Kabir Suman is also linked from here, cataloguing his complete recorded works.",
+      "A second tribute, for the actor Uttam Kumar on his 2026 birth centenary, catalogues his complete filmography and life.",
     ],
   },
   busdriver: {
@@ -476,6 +515,7 @@ export const PAGE_SEO: Record<PageId, PageSeo> = {
   ...PAGE_SEO_CORE,
   ...PAGE_SEO_TARAKESWAR,
   ...PAGE_SEO_KABIRSUMAN,
+  ...PAGE_SEO_UTTAMKUMAR,
   ...PAGE_SEO_PRIVACY,
 };
 
@@ -773,6 +813,7 @@ export const PAGE_FAQ: Record<PageId, QA[]> = {
   ...PAGE_FAQ_CORE,
   ...PAGE_FAQ_TARAKESWAR,
   ...PAGE_FAQ_KABIRSUMAN,
+  ...PAGE_FAQ_UTTAMKUMAR,
   ...PAGE_FAQ_PRIVACY,
 };
 

@@ -148,6 +148,37 @@
   --color-ks-outline: #cbb98d;
   --color-ks-outline-variant: #ddcda3;
 
+  /* --- Uttam Kumar tribute (src/pages/uttamkumar, src/components/uttamkumar) ---
+     A single-screen Kolkata cinema hall after dark, not the Kabir Suman
+     archive's daylit paper: a maroon-black void standing in for the house
+     once the lights go down, marquee gold for anything you'd press or
+     follow, and a warm ticket-cream for reading text — set in Fraunces at a
+     heavier, more theatrical weight than the archive's own use of the same
+     family, so the two tributes don't read as one reskinned the other.
+     Poppins (already bundled) carries body text here instead of Manrope, for
+     the same reason. Nothing outside src/pages/uttamkumar and
+     src/components/uttamkumar reads these. */
+  --font-uk-display: "Fraunces Variable", "Noto Serif Bengali Variable", ui-serif, serif;
+  --font-uk-body: "Poppins", ui-sans-serif, sans-serif;
+  --font-uk-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+
+  --color-uk-void: #140705;                   /* the darkened hall */
+  --color-uk-void-dim: #0c0403;
+  --color-uk-curtain: #3a0f10;                /* maroon curtain velvet */
+  --color-uk-curtain-bright: #591619;
+
+  --color-uk-on-void: #f4e9d2;                /* ticket-cream text on the hall */
+  --color-uk-on-void-muted: #c7b393;
+
+  --color-uk-gold: #d8a94a;                   /* marquee bulb gold */
+  --color-uk-gold-dim: #a97f34;
+  --color-uk-on-gold: #241202;
+  --color-uk-gold-container: #4a3312;
+  --color-uk-on-gold-container: #f0d9a4;
+
+  --color-uk-outline: #5c4326;
+  --color-uk-outline-variant: #3a2a17;
+
   /* --- shape --- */
   --radius-xs: 10px;
   --radius-sm: 16px;
@@ -391,6 +422,60 @@
     64% 100%, 68% 25%, 72% 100%, 76% 40%, 80% 100%, 84% 20%, 88% 100%, 92% 35%,
     96% 100%, 100% 25%, 100% 0%, 0% 0%
   );
+}
+
+.uttamkumar-theme {
+  color-scheme: dark;
+  background: var(--color-uk-void);
+  color: var(--color-uk-on-void);
+  font-family: var(--font-uk-body);
+  /* A faint film-grain: two tiny offset grain layers, pure background-image,
+     the darkened-hall equivalent of the archive's paper fibre texture. */
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(244, 233, 210, 0.05) 0.6px, transparent 0.6px),
+    radial-gradient(circle at 3px 2px, rgba(244, 233, 210, 0.03) 0.5px, transparent 0.5px);
+  background-size: 5px 5px, 7px 7px;
+}
+.uttamkumar-theme ::selection {
+  background: var(--color-uk-gold-container);
+  color: var(--color-uk-on-gold-container);
+}
+.uttamkumar-theme :focus-visible {
+  outline: 2px solid var(--color-uk-gold);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+.uttamkumar-theme .uk-mono {
+  font-family: var(--font-uk-mono);
+  font-feature-settings: "tnum" 1;
+}
+/* The marquee: heavy italic Fraunces with a soft gold glow standing in for
+   bulb light, rather than a literal string-of-bulbs illustration. */
+.uttamkumar-theme .uk-marquee {
+  font-family: var(--font-uk-display);
+  font-style: italic;
+  font-variation-settings: "wght" 640, "opsz" 72, "SOFT" 40;
+  text-shadow: 0 0 28px rgba(216, 169, 74, 0.35), 0 0 8px rgba(216, 169, 74, 0.25);
+}
+/* A sprocket-hole rail, the film-reel equivalent of the archive's punch-tape
+   edge — pure background-image, no per-hole markup. */
+.uttamkumar-theme .uk-sprockets {
+  background-image: radial-gradient(circle, var(--color-uk-void) 3.5px, transparent 3.6px);
+  background-size: 18px 18px;
+  background-position: 9px 0;
+  background-repeat: repeat-x;
+}
+/* A section divider styled as a strip of film stock: two sprocket rails
+   around a dark band, used between museum-wing sections instead of a plain
+   rule line. */
+.uttamkumar-theme .uk-filmstrip {
+  height: 22px;
+  background:
+    radial-gradient(circle, var(--color-uk-gold-dim) 2px, transparent 2.2px) repeat-x top/16px 100%,
+    radial-gradient(circle, var(--color-uk-gold-dim) 2px, transparent 2.2px) repeat-x bottom/16px 100%,
+    var(--color-uk-void-dim);
+  border-top: 1px solid var(--color-uk-outline-variant);
+  border-bottom: 1px solid var(--color-uk-outline-variant);
 }
 
 @layer utilities {

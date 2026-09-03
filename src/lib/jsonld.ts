@@ -7,6 +7,7 @@ import { SCENE } from "../data/scene";
 import { PAGE_FAQ, PAGE_PATH, PAGE_SEO, type PageId } from "../data/seo";
 import { buildTarakeswarJsonLd } from "../data/tarakeswar/jsonld";
 import { buildKabirSumanJsonLd } from "../data/kabirsuman/jsonld";
+import { buildUttamKumarJsonLd } from "../data/uttamkumar/jsonld";
 
 const TARAKESWAR_PAGE_IDS = new Set([
   "tarakeswar",
@@ -22,6 +23,18 @@ const KABIRSUMAN_PAGE_IDS = new Set([
   "kabirsumanWorks",
   "kabirsumanWords",
   "kabirsumanSources",
+]);
+
+const UTTAMKUMAR_PAGE_IDS = new Set([
+  "uttamkumar",
+  "uttamkumarLife",
+  "uttamkumarFilms",
+  "uttamkumarSuchitra",
+  "uttamkumarAwards",
+  "uttamkumarBooks",
+  "uttamkumarCentenary",
+  "uttamkumarWords",
+  "uttamkumarSources",
 ]);
 
 /**
@@ -61,6 +74,14 @@ export function buildJsonLd(pageId: PageId) {
   // functions/_middleware.ts, the same split the Tarakeswar blog posts use.
   if (KABIRSUMAN_PAGE_IDS.has(pageId)) {
     return buildKabirSumanJsonLd(pageId as Parameters<typeof buildKabirSumanJsonLd>[0]);
+  }
+
+  // The Uttam Kumar section is a fourth separate subject — see
+  // src/data/uttamkumar/jsonld.ts. Its one dynamic collection (211 films) is
+  // not a PageId and is built directly by its own page and by
+  // functions/_middleware.ts, the same split Kabir Suman's albums/songs use.
+  if (UTTAMKUMAR_PAGE_IDS.has(pageId)) {
+    return buildUttamKumarJsonLd(pageId as Parameters<typeof buildUttamKumarJsonLd>[0]);
   }
 
   const seo = PAGE_SEO[pageId];

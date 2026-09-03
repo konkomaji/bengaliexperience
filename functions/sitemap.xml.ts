@@ -18,9 +18,10 @@
  */
 import { BRAND } from "../src/data/brand";
 import { LAST_MODIFIED } from "../src/data/lastmod";
-import { KABIRSUMAN_ALBUM_PREFIX, KABIRSUMAN_SONG_PREFIX, PAGE_PATH, type PageId } from "../src/data/seo";
+import { KABIRSUMAN_ALBUM_PREFIX, KABIRSUMAN_SONG_PREFIX, PAGE_PATH, UTTAMKUMAR_FILM_PREFIX, type PageId } from "../src/data/seo";
 import { BLOG_POSTS } from "../src/data/tarakeswar/blog";
 import { ALBUMS, SONGS } from "../src/data/kabirsuman/catalogue";
+import { FILMS } from "../src/data/uttamkumar/films";
 
 export const onRequest: PagesFunction = () => {
   const pages = Object.keys(PAGE_PATH) as PageId[];
@@ -54,7 +55,11 @@ export const onRequest: PagesFunction = () => {
   const albumUrls = ALBUMS.map((a) => `  <url><loc>${BRAND.url}${KABIRSUMAN_ALBUM_PREFIX}/${a.slug}</loc></url>`);
   const songUrls = SONGS.map((s) => `  <url><loc>${BRAND.url}${KABIRSUMAN_SONG_PREFIX}/${s.slug}</loc></url>`);
 
-  const urls = [...pageUrls, ...blogUrls, ...albumUrls, ...songUrls].join("\n");
+  // Uttam Kumar's 211 films, same reasoning: no per-item lastmod, the source
+  // filmography changes rarely enough that an omitted date costs little.
+  const filmUrls = FILMS.map((f) => `  <url><loc>${BRAND.url}${UTTAMKUMAR_FILM_PREFIX}/${f.slug}</loc></url>`);
+
+  const urls = [...pageUrls, ...blogUrls, ...albumUrls, ...songUrls, ...filmUrls].join("\n");
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

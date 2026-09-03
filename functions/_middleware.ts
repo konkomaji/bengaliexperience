@@ -15,7 +15,7 @@
  *   3. real status codes unknown paths 404 instead of soft-404ing at 200
  *   4. real content      per-page head, JSON-LD and a crawlable body
  */
-import { KABIRSUMAN_ALBUM_PREFIX, KABIRSUMAN_SONG_PREFIX, MOVED_PATHS, PAGE_PATH, PAGE_SEO, PATH_TO_PAGE } from "../src/data/seo";
+import { KABIRSUMAN_ALBUM_PREFIX, KABIRSUMAN_SONG_PREFIX, MOVED_PATHS, PAGE_PATH, PAGE_SEO, PATH_TO_PAGE, UTTAMKUMAR_FILM_PREFIX } from "../src/data/seo";
 import { buildJsonLd } from "../src/lib/jsonld";
 import { renderStaticBody } from "../src/lib/prerender";
 import { BRAND } from "../src/data/brand";
@@ -27,6 +27,12 @@ import { ALBUM_BY_SLUG, SONG_BY_SLUG, SONGS } from "../src/data/kabirsuman/catal
 import { albumDescription, albumTitle, songDescription, songTitle } from "../src/data/kabirsuman/dynamicSeo";
 import { buildKabirSumanAlbumJsonLd, buildKabirSumanSongJsonLd } from "../src/data/kabirsuman/jsonld";
 import { renderKabirSumanAlbumBody, renderKabirSumanSongBody } from "../src/data/kabirsuman/prerender";
+import { FILMS } from "../src/data/uttamkumar/films";
+import { filmDescription, filmTitle } from "../src/data/uttamkumar/dynamicSeo";
+import { buildUttamKumarFilmJsonLd } from "../src/data/uttamkumar/jsonld";
+import { renderUttamKumarFilmBody } from "../src/data/uttamkumar/prerender";
+
+const FILM_BY_SLUG = Object.fromEntries(FILMS.map((f) => [f.slug, f]));
 
 /**
  * The Pages project keeps answering on its own `*.pages.dev` host even after a
@@ -227,6 +233,44 @@ export const onRequest: PagesFunction = async ({ request, next }) => {
       .on('link[rel="canonical"]', setAttr("href", canonical))
       .on("#ld-json", { element: (el) => { el.setInnerContent(JSON.stringify(jsonLd), { html: false }); } })
       .on("#root", { element: (el) => { el.setInnerContent(renderKabirSumanSongBody(song, stanzas), { html: true }); } })
+      .transform(response);
+  }
+
+  // Uttam Kumar: one dynamic collection, 211 films, not a PageId for the same
+  // reason Kabir Suman's albums and songs aren't — matched by slug here,
+  // alongside PATH_TO_PAGE rather than through it.
+  if (url.pathname.startsWith(`${UTTAMKUMAR_FILM_PREFIX}/`)) {
+    const slug = url.pathname.slice(UTTAMKUMAR_FILM_PREFIX.length + 1);
+    const film = FILM_BY_SLUG[slug];
+    if (!film) {
+      const noindex = { element: (el: Element) => { el.setAttribute("content", "noindex, follow"); } };
+      return new HTMLRewriter()
+        .on('meta[name="robots"]', noindex)
+        .on('meta[name="googlebot"]', noindex)
+        .transform(new Response(response.body, { status: 404, headers: response.headers }));
+    }
+
+    const setAttr = (attr: string, value: string) => ({
+      element: (el: Element) => { el.setAttribute(attr, value); },
+    });
+
+    const canonical = `${BRAND.url}${UTTAMKUMAR_FILM_PREFIX}/${film.slug}`;
+    const jsonLd = buildUttamKumarFilmJsonLd(film);
+    const title = filmTitle(film);
+    const description = filmDescription(film);
+
+    return new HTMLRewriter()
+      .on("title", { element: (el) => { el.setInnerContent(title); } })
+      .on('meta[name="description"]', setAttr("content", description))
+      .on('meta[name="theme-color"]', setAttr("content", "#8a1c1c"))
+      .on('meta[property="og:title"]', setAttr("content", title))
+      .on('meta[property="og:description"]', setAttr("content", description))
+      .on('meta[property="og:url"]', setAttr("content", canonical))
+      .on('meta[name="twitter:title"]', setAttr("content", title))
+      .on('meta[name="twitter:description"]', setAttr("content", description))
+      .on('link[rel="canonical"]', setAttr("href", canonical))
+      .on("#ld-json", { element: (el) => { el.setInnerContent(JSON.stringify(jsonLd), { html: false }); } })
+      .on("#root", { element: (el) => { el.setInnerContent(renderUttamKumarFilmBody(film), { html: true }); } })
       .transform(response);
   }
 

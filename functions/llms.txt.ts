@@ -18,6 +18,7 @@ import { SCENE } from "../src/data/scene";
 import { PAGE_FAQ, PAGE_PATH, PAGE_SEO } from "../src/data/seo";
 import { BLOG_POSTS } from "../src/data/tarakeswar/blog";
 import { TOTAL_ALBUMS, TOTAL_SONGS } from "../src/data/kabirsuman/counts.generated";
+import { TOTAL_FILMS, FIRST_YEAR as UK_FIRST_YEAR, LATEST_YEAR as UK_LATEST_YEAR } from "../src/data/uttamkumar/counts.generated";
 
 const qa = (list: { q: string; a: string }[]) =>
   list.map((f) => `**${f.q}**\n${f.a}`).join("\n\n");
@@ -107,6 +108,22 @@ ${PAGE_SEO.kabirsuman.intro}
 ### Questions about Kabir Suman
 
 ${qa(PAGE_FAQ.kabirsuman)}
+
+## ${PAGE_SEO.uttamkumar.h1} (a tribute archive, not one of the experiences above)
+
+${BRAND.url}${PAGE_PATH.uttamkumar} is a tribute and reference catalogue for Uttam Kumar (1926–1980), the Bengali film actor known as Mahanayak ("the great hero"), built around his 2026 birth centenary. Linked from this project's home page under its own heading, the same third-shelf treatment as Kabir Suman above — not one of the EXPERIENCES, not an "experiment" like the Atlas below either.
+
+${PAGE_SEO.uttamkumar.intro}
+
+- ${TOTAL_FILMS} credited films, ${UK_FIRST_YEAR}–${UK_LATEST_YEAR}, parsed directly from Wikipedia's own filmography table, not retyped by hand.
+- A dedicated page on the Uttam Kumar–Suchitra Sen pairing (${BRAND.url}${PAGE_PATH.uttamkumarSuchitra}), including the off-screen rumor, addressed rather than repeated as fact.
+- A dated, sourced record of the 2026 centenary (${BRAND.url}${PAGE_PATH.uttamkumarCentenary}), drawn from ten independent news sources.
+- The life page (${BRAND.url}${PAGE_PATH.uttamkumarLife}) includes his two marriages and the 1976 All India Radio controversy, not just the career highlights.
+- Not affiliated with Uttam Kumar's family, estate, or the West Bengal government's centenary committee.
+
+### Questions about Uttam Kumar
+
+${qa(PAGE_FAQ.uttamkumar)}
 
 ## Marvel Multiverse Atlas (an experiment, not a Bengali experience)
 
