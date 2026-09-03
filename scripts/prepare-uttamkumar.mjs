@@ -47,7 +47,7 @@ function main() {
   const filmLines = films
     .map(
       (f) =>
-        `  { order: ${f.order}, slug: ${tsString(f.slug)}, year: ${f.year}, title: ${tsString(f.title)}, role: ${tsString(f.role)}, note: ${tsString(f.note)} },`,
+        `  { order: ${f.order}, slug: ${tsString(f.slug)}, year: ${f.year}, title: ${tsString(f.title)}, role: ${tsString(f.role)}, note: ${tsString(f.note)}${f.wikiTarget ? `, wikiTitle: ${tsString(f.wikiTarget)}` : ""} },`,
     )
     .join("\n");
 
@@ -70,6 +70,8 @@ export interface ArchiveFilm {
   role: string;
   /** the source table's own "Notes" cell, verbatim (e.g. "First film opposite Suchitra Sen") */
   note: string;
+  /** Wikipedia's own article title for this film, when the table links one — see extracts.generated.ts */
+  wikiTitle?: string;
 }
 
 export const ARCHIVE_FILMS: ArchiveFilm[] = [

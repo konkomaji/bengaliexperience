@@ -24,7 +24,7 @@ export function UttamKumarAwardsPage() {
   return (
     <UttamKumarLayout active="awards">
       <JsonLd data={buildJsonLd("uttamkumarAwards")} />
-      <UkHero eyebrow="সম্মাননা · Awards & Honours" h1={seo.h1} intro={seo.intro} />
+      <UkHero eyebrow="Awards & Honours" h1={seo.h1} intro={seo.intro} />
       <UkFacts facts={seo.facts} />
 
       <UkSection id="national" heading="National Film Awards">

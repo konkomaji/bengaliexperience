@@ -450,12 +450,42 @@
   font-feature-settings: "tnum" 1;
 }
 /* The marquee: heavy italic Fraunces with a soft gold glow standing in for
-   bulb light, rather than a literal string-of-bulbs illustration. */
+   bulb light, rather than a literal string-of-bulbs illustration. The glow
+   itself breathes — a real marquee's bulbs are never perfectly steady
+   current — rather than sitting as a flat, static text-shadow. */
 .uttamkumar-theme .uk-marquee {
   font-family: var(--font-uk-display);
   font-style: italic;
   font-variation-settings: "wght" 640, "opsz" 72, "SOFT" 40;
-  text-shadow: 0 0 28px rgba(216, 169, 74, 0.35), 0 0 8px rgba(216, 169, 74, 0.25);
+  animation: uk-bulb-breathe 5.5s ease-in-out infinite;
+}
+@keyframes uk-bulb-breathe {
+  0%, 100% { text-shadow: 0 0 26px rgba(216, 169, 74, 0.32), 0 0 8px rgba(216, 169, 74, 0.22); }
+  50% { text-shadow: 0 0 38px rgba(216, 169, 74, 0.48), 0 0 12px rgba(216, 169, 74, 0.32); }
+}
+
+/* Dust motes drifting through the projector beam: a handful of small gold
+   points, each on its own slow, slightly-different rise-and-drift loop.
+   Positioned by an inline CSS custom property per instance (see
+   CinemaBackdrop.tsx) rather than one animation for all of them, so they
+   don't move in visible lockstep. Skipped entirely under reduced motion via
+   the existing global rule further down this file. */
+.uttamkumar-theme .uk-mote {
+  position: absolute;
+  width: var(--uk-mote-size, 3px);
+  height: var(--uk-mote-size, 3px);
+  border-radius: 999px;
+  background: var(--color-uk-gold);
+  opacity: 0;
+  animation: uk-drift var(--uk-mote-duration, 14s) linear infinite;
+  animation-delay: var(--uk-mote-delay, 0s);
+  will-change: transform, opacity;
+}
+@keyframes uk-drift {
+  0% { transform: translate3d(0, 8vh, 0); opacity: 0; }
+  8% { opacity: 0.55; }
+  92% { opacity: 0.35; }
+  100% { transform: translate3d(var(--uk-mote-drift, 24px), -32vh, 0); opacity: 0; }
 }
 /* A sprocket-hole rail, the film-reel equivalent of the archive's punch-tape
    edge — pure background-image, no per-hole markup. */

@@ -35,6 +35,7 @@ const UTTAMKUMAR_PAGE_IDS = new Set([
   "uttamkumarCentenary",
   "uttamkumarWords",
   "uttamkumarSources",
+  "uttamkumarCredits",
 ]);
 
 /**

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { CreditedImage } from "../../components/uttamkumar/CreditedImage";
 import { FilmCard } from "../../components/uttamkumar/FilmCard";
 import { LifeReel } from "../../components/uttamkumar/LifeReel";
 import { UttamKumarLayout } from "../../components/uttamkumar/UttamKumarLayout";
@@ -26,8 +27,13 @@ export function UttamKumarHubPage() {
   return (
     <UttamKumarLayout active="hub">
       <JsonLd data={buildJsonLd("uttamkumar")} />
-      <UkHero eyebrow="মহানায়ক · The Great Hero" h1={seo.h1} intro={seo.intro} />
-      <UkFacts facts={seo.facts} />
+      <div className="flex flex-col-reverse items-start gap-6 sm:flex-row sm:gap-8">
+        <div className="min-w-0 flex-1">
+          <UkHero eyebrow="Mahanayak · The Great Hero" h1={seo.h1} intro={seo.intro} />
+          <UkFacts facts={seo.facts} />
+        </div>
+        <CreditedImage slug="portrait-sketch-murty" className="w-32 shrink-0 sm:w-44" />
+      </div>
 
       {latestCentenary && (
         <motion.div
