@@ -13,7 +13,7 @@ export function UttamKumarCentenaryPage() {
   return (
     <UttamKumarLayout active="centenary">
       <JsonLd data={buildJsonLd("uttamkumarCentenary")} />
-      <UkHero eyebrow="২০২৬ · The Centenary Year" h1={seo.h1} intro={seo.intro} />
+      <UkHero eyebrow="2026 · The Centenary Year" h1={seo.h1} intro={seo.intro} />
       <UkFacts facts={seo.facts} />
 
       <UkSection id="intro" heading="A Living Record">

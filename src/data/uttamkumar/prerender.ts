@@ -106,7 +106,7 @@ function awardsBody(): string[] {
 
 function booksBody(): string[] {
   const items = BOOKS.map(
-    (b) => `<li>${escape(b.title)}${b.titleBn ? ` (${b.titleBn})` : ""}, ${escape(b.author)}, ${b.year}. ${escape(b.note)}</li>`,
+    (b) => `<li>${escape(b.title)}, ${escape(b.author)}, ${b.year}. ${escape(b.note)}</li>`,
   ).join("");
   return [`<ul>${items}</ul>`];
 }

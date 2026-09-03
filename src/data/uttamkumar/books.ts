@@ -6,7 +6,6 @@
  */
 export interface Book {
   title: string;
-  titleBn?: string;
   author: string;
   year: number;
   kind: "autobiography" | "biography";
@@ -19,7 +18,6 @@ export interface Book {
 export const BOOKS: Book[] = [
   {
     title: "Aamar Ami",
-    titleBn: "আমার আমি",
     author: "Uttam Kumar",
     year: 1972,
     kind: "autobiography",
@@ -29,7 +27,6 @@ export const BOOKS: Book[] = [
   },
   {
     title: "Harano Dinguli Mor",
-    titleBn: "হারিয়ে যাওয়া দিনগুলি মোর",
     author: "Uttam Kumar",
     year: 2013,
     kind: "autobiography",

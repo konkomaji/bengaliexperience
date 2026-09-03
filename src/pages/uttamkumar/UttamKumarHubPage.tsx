@@ -26,7 +26,7 @@ export function UttamKumarHubPage() {
   return (
     <UttamKumarLayout active="hub">
       <JsonLd data={buildJsonLd("uttamkumar")} />
-      <UkHero eyebrow="মহানায়ক · The Great Hero" h1={seo.h1} intro={seo.intro} />
+      <UkHero eyebrow="Mahanayak · The Great Hero" h1={seo.h1} intro={seo.intro} />
       <UkFacts facts={seo.facts} />
 
       {latestCentenary && (

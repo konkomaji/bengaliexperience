@@ -35,6 +35,15 @@ async function getRawWikitext(title) {
   return res.text();
 }
 
+/** The wikilink target of a title cell, if it has one — `[[Target|Shown]]`
+ *  or `[[Target]]` -> "Target"; a bare `''Title''` with no link -> null,
+ *  meaning no Wikipedia article exists to pull a synopsis from. */
+function wikiTarget(s) {
+  if (!s) return null;
+  const m = s.match(/\[\[([^|\]#]+)/);
+  return m ? m[1].trim() : null;
+}
+
 /** Strip a wikilink/italics/ref soup down to plain display text.
  *  `[[Target|Shown]]` -> Shown, `[[Target]]` -> Target, `''x''`/`'''x'''` ->
  *  x, `<ref>...</ref>` and `{{Efn|...}}` dropped, `{{!}}` -> "|". */
@@ -124,6 +133,7 @@ function parseActingTable(wikitext) {
       role: plain(roleLine ?? ""),
       note: plain(notesLine ?? ""),
       slug: `${slugify(title)}-${currentYear ?? "u"}`,
+      wikiTarget: wikiTarget(titleLine),
     });
   }
   return films;

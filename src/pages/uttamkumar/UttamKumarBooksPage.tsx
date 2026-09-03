@@ -14,10 +14,7 @@ function BookSpine({ book }: { book: (typeof BOOKS)[number] }) {
         <UkStub>{book.year}</UkStub> {book.kind === "autobiography" ? "Autobiography" : "Biography"}
         {book.unfinished ? " · unfinished" : ""}
       </p>
-      <p className="uk-marquee mt-1.5 text-[19px] text-uk-on-void">
-        {book.title}
-        {book.titleBn && <span className="ml-2 text-[14px] not-italic text-uk-on-void-muted">{book.titleBn}</span>}
-      </p>
+      <p className="uk-marquee mt-1.5 text-[19px] text-uk-on-void">{book.title}</p>
       <p className="mt-0.5 text-[12.5px] text-uk-on-void-muted">by {book.author}</p>
       <p className="mt-2 text-[13px] leading-relaxed text-uk-on-void-muted">{book.note}</p>
       {book.link && (
@@ -36,7 +33,7 @@ export function UttamKumarBooksPage() {
   return (
     <UttamKumarLayout active="books">
       <JsonLd data={buildJsonLd("uttamkumarBooks")} />
-      <UkHero eyebrow="পাঠকক্ষ · The Reading Room" h1={seo.h1} intro={seo.intro} />
+      <UkHero eyebrow="The Reading Room" h1={seo.h1} intro={seo.intro} />
       <UkFacts facts={seo.facts} />
 
       <UkSection id="shelf" heading="The Shelf">

@@ -24,7 +24,7 @@ export function UttamKumarSourcesPage() {
   return (
     <UttamKumarLayout active="sources">
       <JsonLd data={buildJsonLd("uttamkumarSources")} />
-      <UkHero eyebrow="সূত্র · Sources and Credits" h1={seo.h1} intro={seo.intro} />
+      <UkHero eyebrow="Sources and Credits" h1={seo.h1} intro={seo.intro} />
 
       <UkSection id="primary" heading="Biography &amp; Filmography">
         <ul>{PRIMARY_SOURCES.map((s) => <SourceRow key={s.url} s={s} />)}</ul>

@@ -14,7 +14,7 @@ export function UttamKumarLifePage() {
   return (
     <UttamKumarLayout active="life">
       <JsonLd data={buildJsonLd("uttamkumarLife")} />
-      <UkHero eyebrow="সংক্ষেপে উত্তম · A Life" h1={seo.h1} intro={seo.intro} />
+      <UkHero eyebrow="A Life" h1={seo.h1} intro={seo.intro} />
       <UkFacts facts={seo.facts} />
 
       <UkSection id="timeline" heading="The Full Timeline, 1926–2026">

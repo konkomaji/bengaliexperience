@@ -14,7 +14,7 @@ export function UttamKumarWordsPage() {
   return (
     <UttamKumarLayout active="words">
       <JsonLd data={buildJsonLd("uttamkumarWords")} />
-      <UkHero eyebrow="উক্তি · Voices" h1={seo.h1} intro={seo.intro} />
+      <UkHero eyebrow="Voices" h1={seo.h1} intro={seo.intro} />
 
       <UkSection id="quotes" heading="In Their Words">
         <div className="grid gap-4 sm:grid-cols-2">

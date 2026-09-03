@@ -1,3 +1,4 @@
+import { ARCHIVE_EXTRACTS } from "./extracts.generated";
 import { ARCHIVE_FILM_BY_SLUG, ARCHIVE_FILMS, type ArchiveFilm } from "./films.generated";
 
 /**
@@ -26,6 +27,13 @@ export interface FilmDetail {
   acclaimed?: boolean;
   /** co-starred Suchitra Sen — see /uttamkumar/suchitra, which filters on this */
   withSuchitra?: boolean;
+  /** "editorial" (default, hand-written above) or "wikipedia" (synthesized
+   *  below from extracts.generated.ts — see /uttamkumar/credits for the
+   *  CC BY-SA attribution this requires) */
+  sourceKind?: "editorial" | "wikipedia";
+  /** Wikipedia's own article title, set on "wikipedia"-sourced entries so a
+   *  film page can link straight to the article it's quoting */
+  wikiTitle?: string;
 }
 
 export const FILM_DETAILS: FilmDetail[] = [
@@ -337,8 +345,8 @@ export const FILM_DETAILS: FilmDetail[] = [
   },
 ];
 
-export const FILM_DETAIL_BY_SLUG: Record<string, FilmDetail> = Object.fromEntries(
-  FILM_DETAILS.map((f) => [f.slug, f]),
+const EDITORIAL_BY_SLUG: Record<string, FilmDetail> = Object.fromEntries(
+  FILM_DETAILS.map((f) => [f.slug, { ...f, sourceKind: "editorial" as const }]),
 );
 
 const missing = FILM_DETAILS.filter((f) => !ARCHIVE_FILM_BY_SLUG[f.slug]);
@@ -348,15 +356,58 @@ if (missing.length) {
   );
 }
 
+/** Same year boundaries the hand-curated eras above already use, applied
+ *  mechanically to the Wikipedia-sourced entries so every film lands in a
+ *  consistent bucket regardless of which layer wrote its detail. */
+function eraForYear(year: number): FilmDetail["era"] {
+  if (year <= 1954) return "the-struggle";
+  if (year <= 1959) return "breakthrough";
+  if (year <= 1969) return "the-sixties";
+  if (year <= 1976) return "peak-seventies";
+  if (year <= 1980) return "final-years";
+  return "posthumous";
+}
+
+/** Everything without a hand-curated entry falls back to Wikipedia's own
+ *  lead extract for that film, where one exists — see
+ *  scripts/prepare-uttamkumar-extracts.mjs and /uttamkumar/credits. This is
+ *  what takes the site from "44 films with real detail" to "every film
+ *  Wikipedia has already written about," without inventing a single line. */
+export const FILM_DETAIL_BY_SLUG: Record<string, FilmDetail> = Object.fromEntries(
+  ARCHIVE_FILMS.map((f): [string, FilmDetail] | null => {
+    if (EDITORIAL_BY_SLUG[f.slug]) return [f.slug, EDITORIAL_BY_SLUG[f.slug]];
+    const wiki = ARCHIVE_EXTRACTS[f.slug];
+    if (!wiki) return null;
+    return [
+      f.slug,
+      {
+        slug: f.slug,
+        director: wiki.director,
+        synopsis: wiki.extract,
+        era: eraForYear(f.year),
+        sourceKind: "wikipedia",
+        wikiTitle: wiki.wikiTitle,
+      },
+    ];
+  }).filter((e): e is [string, FilmDetail] => e !== null),
+);
+
 export interface Film extends ArchiveFilm {
   detail?: FilmDetail;
 }
 
-/** every film, generated fact plus editorial detail where it exists */
+/** every film, generated fact plus detail (editorial or Wikipedia) where it exists */
 export const FILMS: Film[] = ARCHIVE_FILMS.map((f) => ({ ...f, detail: FILM_DETAIL_BY_SLUG[f.slug] }));
 
 /** only the ones with a real page behind them */
 export const LANDMARK_FILMS: Film[] = FILMS.filter((f) => f.detail);
+
+/** the subset with this site's own hand-written detail, not a Wikipedia
+ *  extract — used where "curated by this project" needs to be shown as such */
+export const EDITORIAL_FILMS: Film[] = FILMS.filter((f) => f.detail?.sourceKind !== "wikipedia" && f.detail);
+
+/** the subset sourced from Wikipedia's own lead extract — see /uttamkumar/credits */
+export const WIKIPEDIA_SOURCED_FILMS: Film[] = FILMS.filter((f) => f.detail?.sourceKind === "wikipedia");
 
 export const ERA_LABEL: Record<FilmDetail["era"], string> = {
   "the-struggle": "1948–1954 — the flop years, then the breakthrough",

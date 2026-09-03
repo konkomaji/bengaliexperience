@@ -17,7 +17,7 @@ export function UttamKumarSuchitraPage() {
   return (
     <UttamKumarLayout active="suchitra">
       <JsonLd data={buildJsonLd("uttamkumarSuchitra")} />
-      <UkHero eyebrow="উত্তম-সুচিত্রা · The Pairing" h1={seo.h1} intro={seo.intro} />
+      <UkHero eyebrow="The Pairing" h1={seo.h1} intro={seo.intro} />
       <UkFacts facts={seo.facts} />
 
       <UkSection id="story" heading="The Pairing">

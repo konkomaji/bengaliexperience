@@ -66,7 +66,7 @@ export function UttamKumarFilmsPage() {
   return (
     <UttamKumarLayout active="films">
       <JsonLd data={buildJsonLd("uttamkumarFilms")} />
-      <UkHero eyebrow="দুশো এগারো ছবি · The Filmography" h1={seo.h1} intro={seo.intro} />
+      <UkHero eyebrow="211 Films · The Filmography" h1={seo.h1} intro={seo.intro} />
       <UkFacts facts={seo.facts} />
 
       <UkSection id="acclaimed" heading={`Most Acclaimed (${acclaimed.length})`}>
