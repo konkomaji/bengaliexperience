@@ -81,7 +81,6 @@ export type PageId =
   | "uttamkumarCentenary"
   | "uttamkumarWords"
   | "uttamkumarSources"
-  | "uttamkumarCredits"
   | "privacy";
 
 export const PAGE_PATH: Record<PageId, string> = {
@@ -107,7 +106,7 @@ export const PAGE_PATH: Record<PageId, string> = {
   uttamkumarCentenary: "/uttamkumar/centenary",
   uttamkumarWords: "/uttamkumar/words",
   uttamkumarSources: "/uttamkumar/sources",
-  uttamkumarCredits: "/uttamkumar/credits",
+
   privacy: "/privacy",
 };
 
@@ -142,7 +141,6 @@ export const PATH_TO_PAGE: Record<string, PageId> = {
   "/uttamkumar/centenary": "uttamkumarCentenary",
   "/uttamkumar/words": "uttamkumarWords",
   "/uttamkumar/sources": "uttamkumarSources",
-  "/uttamkumar/credits": "uttamkumarCredits",
   "/privacy": "privacy",
 };
 

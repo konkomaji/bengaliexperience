@@ -489,6 +489,18 @@
 }
 /* A sprocket-hole rail, the film-reel equivalent of the archive's punch-tape
    edge — pure background-image, no per-hole markup. */
+/* The vertical pair of sprocket rails the whole strip runs between (see
+   TheStrip.tsx). Same idea as .uk-sprockets, turned ninety degrees and
+   repeating down the page instead of across it. */
+.uttamkumar-theme .uk-sprockets-v {
+  background-image: radial-gradient(
+    ellipse 5px 7px at center,
+    var(--color-uk-gold-dim) 0 60%,
+    transparent 62%
+  );
+  background-size: 100% 26px;
+  background-repeat: repeat-y;
+}
 .uttamkumar-theme .uk-sprockets {
   background-image: radial-gradient(circle, var(--color-uk-void) 3.5px, transparent 3.6px);
   background-size: 18px 18px;

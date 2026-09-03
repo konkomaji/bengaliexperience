@@ -161,7 +161,9 @@ export const LIFE_EVENTS: LifeEvent[] = [
   },
   {
     year: 2024,
-    headline: "Oti Uttam gives him a new, VFX-composited performance built from 54 of his old films — his first screen appearance in 37 years.",
+    headline: "Srijit Mukherji's Oti Uttam puts him back on screen — built entirely from clips of 56 of his own films, cut into a new story.",
+    detail:
+      "A tribute film, not a performance: a researcher summons the Mahanayak by planchette for advice on his love life, and the answers are assembled from footage Uttam Kumar shot decades before he died. His grandson Gourab Chatterjee appears in it as himself.",
     era: "posthumous",
   },
   {

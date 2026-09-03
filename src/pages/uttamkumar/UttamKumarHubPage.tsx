@@ -1,98 +1,86 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { CreditedImage } from "../../components/uttamkumar/CreditedImage";
-import { FilmCard } from "../../components/uttamkumar/FilmCard";
-import { LifeReel } from "../../components/uttamkumar/LifeReel";
 import { UttamKumarLayout } from "../../components/uttamkumar/UttamKumarLayout";
-import { UkFacts, UkHero, UkSection } from "../../components/uttamkumar/shared";
+import { TheStrip } from "../../components/uttamkumar/TheStrip";
+import { CreditedImage } from "../../components/uttamkumar/CreditedImage";
+import { BigTitle, Curtain, Kicker, Read } from "../../components/uttamkumar/scenes";
 import { TOTAL_FILMS } from "../../data/uttamkumar/counts.generated";
 import { LANDMARK_FILMS } from "../../data/uttamkumar/films";
-import { LIFE_EVENTS } from "../../data/uttamkumar/life";
-import { QUOTES } from "../../data/uttamkumar/quotes";
-import { CENTENARY_EVENTS } from "../../data/uttamkumar/centenary";
 import { PAGE_PATH, PAGE_SEO } from "../../data/seo";
 import { useDocumentHead } from "../../hooks/useDocumentHead";
-import { ArrowRightIcon } from "../../components/icons";
 import { buildJsonLd } from "../../lib/jsonld";
 import { JsonLd } from "../../components/JsonLd";
 
+/**
+ * The strip is the page. Not a hub with cards linking to sections — the
+ * whole career laid out as the film it was shot on, opened by a full
+ * -viewport title card and scrolled through frame by frame. The other
+ * wings still exist for the things a strip can't hold (the awards ledger,
+ * the books, the sources), but this is the thing itself.
+ */
 export function UttamKumarHubPage() {
   const seo = PAGE_SEO.uttamkumar;
   useDocumentHead(seo, PAGE_PATH.uttamkumar);
 
-  const acclaimed = LANDMARK_FILMS.filter((f) => f.detail?.acclaimed);
-  const spine = LIFE_EVENTS.filter((e) => [1926, 1952, 1954, 1967, 1974, 1980, 2026].includes(e.year));
-  const latestCentenary = CENTENARY_EVENTS[0];
-
   return (
-    <UttamKumarLayout active="hub">
+    <UttamKumarLayout active="hub" bleed>
       <JsonLd data={buildJsonLd("uttamkumar")} />
-      <div className="flex flex-col-reverse items-start gap-6 sm:flex-row sm:gap-8">
-        <div className="min-w-0 flex-1">
-          <UkHero eyebrow="Mahanayak · The Great Hero" h1={seo.h1} intro={seo.intro} />
-          <UkFacts facts={seo.facts} />
+
+      <Curtain>
+        <div className="grid gap-8 md:grid-cols-[1.6fr_minmax(0,1fr)] md:items-end">
+          <div>
+            <Kicker>1926 — 2026 · One hundred years</Kicker>
+            <BigTitle className="mt-3">
+              Two hundred
+              <br />
+              and eleven
+              <br />
+              <span className="text-uk-gold">films.</span>
+            </BigTitle>
+            <Read className="mt-6">
+              Uttam Kumar made {TOTAL_FILMS} of them in thirty-two years — a film every eight weeks,
+              from a debut nobody watched to a career Bengal still measures its cinema against. Below
+              is not a list of them. It is the strip they were shot on, one frame per film, laid out
+              in the order they came: thin and dim through the years he was called Flop Master
+              General, jammed solid through the fifties, and running out, mid-scene, in July 1980.
+            </Read>
+            <p className="uk-mono mt-6 text-[10px] uppercase tracking-[0.3em] text-uk-on-void-muted">
+              Tap any frame to project it
+            </p>
+          </div>
+          <CreditedImage slug="portrait-sketch-murty" className="w-36 justify-self-start md:w-full md:max-w-[240px]" />
         </div>
-        <CreditedImage slug="portrait-sketch-murty" className="w-32 shrink-0 sm:w-44" />
-      </div>
+      </Curtain>
 
-      {latestCentenary && (
-        <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ type: "spring", stiffness: 240, damping: 22 }}
-          className="mt-8 border-l-4 border-uk-gold bg-uk-curtain/40 px-5 py-4"
-        >
-          <p className="uk-mono text-[10px] uppercase tracking-[0.2em] text-uk-gold">Happening now — {latestCentenary.date}</p>
-          <p className="mt-1 text-[14.5px] leading-snug text-uk-on-void">{latestCentenary.headline}</p>
-          <Link to={PAGE_PATH.uttamkumarCentenary} className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-uk-gold hover:underline">
-            The full centenary programme <ArrowRightIcon size={12} />
-          </Link>
-        </motion.div>
-      )}
+      <TheStrip />
 
-      <UkSection id="life" heading="A Life, in Brief">
-        <LifeReel events={spine} />
-        <Link to={PAGE_PATH.uttamkumarLife} className="mt-5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-uk-gold hover:underline">
-          The full life, chronologically <ArrowRightIcon size={12} />
-        </Link>
-      </UkSection>
-
-      <UkSection id="acclaimed" heading={`Most Acclaimed (${acclaimed.length})`}>
-        <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-5">
-          {acclaimed.slice(0, 10).map((f, i) => (
-            <FilmCard key={f.slug} film={f} index={i} />
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="mx-auto mt-16 max-w-4xl px-8 pb-4 sm:px-14"
+      >
+        <p className="uk-mono text-[9.5px] uppercase tracking-[0.3em] text-uk-gold">What the strip can't hold</p>
+        <div className="mt-4 grid gap-x-8 gap-y-3 sm:grid-cols-2">
+          {[
+            { to: PAGE_PATH.uttamkumarFilms, label: "The filmography, searchable", note: `all ${TOTAL_FILMS}, filterable by era — ${LANDMARK_FILMS.length} with a full synopsis` },
+            { to: PAGE_PATH.uttamkumarSuchitra, label: "Uttam & Suchitra", note: "the pairing as its own subject, rumor included" },
+            { to: PAGE_PATH.uttamkumarLife, label: "The life, in full", note: "including the marriages and the 1976 broadcast" },
+            { to: PAGE_PATH.uttamkumarAwards, label: "Awards & honours", note: "the first National Award for Best Actor ever given" },
+            { to: PAGE_PATH.uttamkumarBooks, label: "The reading room", note: "two unfinished autobiographies, one real biography" },
+            { to: PAGE_PATH.uttamkumarWords, label: "Voices", note: "Ray, Soumitra, Bachchan, Dilip Kumar" },
+          ].map((l) => (
+            <Link
+              key={l.to}
+              to={l.to}
+              className="group border-b border-uk-outline-variant/60 py-2.5 transition-colors hover:border-uk-gold"
+            >
+              <p className="text-[14px] font-semibold text-uk-on-void group-hover:text-uk-gold">{l.label}</p>
+              <p className="text-[12px] text-uk-on-void-muted">{l.note}</p>
+            </Link>
           ))}
         </div>
-        <Link to={PAGE_PATH.uttamkumarFilms} className="mt-4 inline-flex items-center gap-1.5 text-[13px] font-semibold text-uk-gold hover:underline">
-          All {TOTAL_FILMS} films <ArrowRightIcon size={12} />
-        </Link>
-      </UkSection>
-
-      <UkSection id="suchitra" heading="Uttam & Suchitra">
-        <p className="max-w-[58ch] text-[14px] leading-relaxed text-uk-on-void-muted">
-          No pairing defined Bengali commercial cinema more completely — around 30 films together,
-          the marketing that called them "Witness of Our Real Love," and the off-screen rumor
-          examined honestly rather than repeated as fact.
-        </p>
-        <Link to={PAGE_PATH.uttamkumarSuchitra} className="mt-3 inline-flex items-center gap-1.5 text-[13px] font-semibold text-uk-gold hover:underline">
-          Explore the pairing <ArrowRightIcon size={12} />
-        </Link>
-      </UkSection>
-
-      <UkSection id="voice" heading="In Their Words">
-        <div className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-3 sm:mx-0 sm:grid sm:grid-cols-3 sm:gap-5 sm:overflow-visible sm:px-0">
-          {QUOTES.slice(0, 3).map((q) => (
-            <blockquote key={q.en.slice(0, 24)} className="min-w-[240px] snap-start border border-uk-outline-variant bg-uk-void-dim p-4 text-[13px] italic leading-snug text-uk-on-void sm:min-w-0">
-              "{q.en}"
-              <footer className="uk-mono mt-2 text-[10px] not-italic uppercase tracking-wide text-uk-gold">— {q.speaker}</footer>
-            </blockquote>
-          ))}
-        </div>
-        <Link to={PAGE_PATH.uttamkumarWords} className="mt-3 inline-flex items-center gap-1.5 text-[13px] font-semibold text-uk-gold hover:underline">
-          Every voice, and the collaborators <ArrowRightIcon size={12} />
-        </Link>
-      </UkSection>
+      </motion.div>
     </UttamKumarLayout>
   );
 }

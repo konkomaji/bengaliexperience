@@ -24,8 +24,7 @@ export type UttamKumarPageId =
   | "uttamkumarBooks"
   | "uttamkumarCentenary"
   | "uttamkumarWords"
-  | "uttamkumarSources"
-  | "uttamkumarCredits";
+  | "uttamkumarSources";
 
 export const PAGE_SEO_UTTAMKUMAR: Record<UttamKumarPageId, PageSeo> = {
   uttamkumar: {
@@ -71,7 +70,7 @@ export const PAGE_SEO_UTTAMKUMAR: Record<UttamKumarPageId, PageSeo> = {
     description: `The complete Uttam Kumar filmography, ${RANGE}: all ${TOTAL_FILMS} credited films sorted chronologically, ${LANDMARK_FILMS.length} of them with a full synopsis, director and co-star detail — plus his most acclaimed work and where to actually start watching.`,
     keywords: ["uttam kumar films list", "uttam kumar all movies", "uttam kumar best films", "uttam kumar filmography", "uttam kumar movies to watch"],
     h1: "The Filmography",
-    intro: `Every credited role, sorted the way it happened: ${TOTAL_FILMS} films from 1948's Drishtidan to 2024's VFX-built Oti Uttam, with ${LANDMARK_FILMS.length} of them — the ones with a real, checkable story behind the credit — given a full page. A film with no page here isn't cut; it's listed by year and role, honestly, rather than filled in with an invented plot.`,
+    intro: `Every credited role, sorted the way it happened: ${TOTAL_FILMS} films from 1948's Drishtidan to Oti Uttam in 2024, a tribute film assembled from his own old footage, with ${LANDMARK_FILMS.length} of them — the ones with a real, checkable story behind the credit — given a full page. A film with no page here isn't cut; it's listed by year and role, honestly, rather than filled in with an invented plot.`,
     facts: [
       `${TOTAL_FILMS} films, ${RANGE}, in the order Wikipedia's own filmography table lists them.`,
       `${LANDMARK_FILMS.length} films have a full detail page: synopsis, director, co-stars, and the award or box-office note that made them worth writing about.`,
@@ -151,19 +150,6 @@ export const PAGE_SEO_UTTAMKUMAR: Record<UttamKumarPageId, PageSeo> = {
       "This is an independent tribute, not affiliated with Uttam Kumar's family, estate, or the West Bengal government's centenary committee.",
     ],
   },
-  uttamkumarCredits: {
-    title: "Image Credits: Every Photo and Sketch on This Uttam Kumar Tribute",
-    description: "Full attribution for every self-hosted image on this Uttam Kumar tribute — an official India Post stamp, two artist-dedicated portrait sketches, and a photograph of a real testimonial he signed — plus which Commons files were rejected and why.",
-    keywords: ["uttam kumar image credits", "uttam kumar photo attribution", "wikimedia commons uttam kumar"],
-    h1: "Image Credits",
-    intro:
-      "Four images are self-hosted on this tribute, each chosen and verified individually rather than pulled wholesale from a category listing. This page names every one — photographer or artist, licence, source — and explains which Commons files were left out and why, so a gap in the gallery reads as a decision rather than an oversight.",
-    facts: [
-      "Four images: an official 2009 India Post stamp (GODL-India), two CC0 artist-dedicated portrait sketches, and a CC0 photo of a real signed testimonial.",
-      "Six other files in Wikimedia Commons' Uttam Kumar category were reviewed and rejected — a rephotographed print, a film-still screenshot, a misfiled photo of a different actor, an unusable night photo, and one with an unverifiable chain of custody.",
-      "No film stills or posters are used anywhere on this site; see /uttamkumar/sources and the reasoning in scripts/prepare-uttamkumar-images.mjs.",
-    ],
-  },
 };
 
 export const PAGE_FAQ_UTTAMKUMAR: Record<UttamKumarPageId, QA[]> = {
@@ -178,7 +164,7 @@ export const PAGE_FAQ_UTTAMKUMAR: Record<UttamKumarPageId, QA[]> = {
     },
     {
       q: "How many films did Uttam Kumar act in?",
-      a: `${TOTAL_FILMS} credited acting roles, 1948 to 2024, per Wikipedia's own filmography table — the last, Oti Uttam, released 44 years after his death using VFX-composited archive footage.`,
+      a: `${TOTAL_FILMS} credited acting roles, 1948 to 2024, per Wikipedia's own filmography table — the last, Srijit Mukherji's Oti Uttam, released 44 years after his death and built entirely out of clips from 56 of his own earlier films rather than any new performance.`,
     },
   ],
   uttamkumarLife: [
@@ -218,10 +204,4 @@ export const PAGE_FAQ_UTTAMKUMAR: Record<UttamKumarPageId, QA[]> = {
   ],
   uttamkumarWords: [],
   uttamkumarSources: [],
-  uttamkumarCredits: [
-    {
-      q: "Why are there only four images on the whole site?",
-      a: "Because that's how many could actually be verified as safely reusable. This site runs ads, and Indian photograph copyright runs 60 years from publication, so nearly every real photo of Uttam Kumar from his working life is still under copyright. These four survived individual review — an official government stamp, two artist-dedicated sketches, and a photo of a real testimonial — everything else in Commons' own Uttam Kumar category was rejected on inspection, listed on this page with the specific reason.",
-    },
-  ],
 };
