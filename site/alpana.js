@@ -121,9 +121,9 @@
     canvas.width = Math.round(W * DPR);
     canvas.height = Math.round(H * DPR);
     if (W > 860) {
-      CX = W * 0.72; CY = H * 0.52; R = Math.min(H * 0.43, W * 0.27);
+      CX = W * 0.72; CY = H * 0.43; R = Math.min(H * 0.34, W * 0.25);
     } else {
-      CX = W * 0.5; CY = H * 0.25; R = Math.min(W * 0.46, H * 0.22);
+      CX = W * 0.5; CY = H * 0.24; R = Math.min(W * 0.42, H * 0.2);
     }
     const first = pieces.length === 0;
     if (first) {

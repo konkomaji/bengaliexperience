@@ -24,7 +24,7 @@
     lamp.classList.toggle("out", !lit);
     lamp.setAttribute("aria-label", lit ? "A lit diya. Press to blow it out." : "A diya that has gone out. Press to light it again.");
     tip.textContent = lit
-      ? "Lit again — something new is being made."
+      ? "Lit again. Something new is being made."
       : "Gone out, like this project. Tap to light the next one.";
   });
 
