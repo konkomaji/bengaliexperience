@@ -1,6 +1,6 @@
-/* Shared look for the two pages: a warm night, glossy jewel colours taken
-   from Bengal itself (sindoor, marigold, haldi, shapla, the Ganga), Poppins
-   for type and Baloo Da 2 for the Bengali script. */
+/* Shared look for the two pages: a warm Kolkata night, glossy jewel colours
+   taken from Bengal itself (sindoor, marigold, haldi, shapla, the Ganga),
+   and Poppins for type. */
 
 :root {
   --ink: #0f0b0a;
@@ -37,7 +37,6 @@ body {
   overflow-x: hidden;
 }
 
-.bn { font-family: "Baloo Da 2", "Poppins", sans-serif; }
 
 a { color: inherit; }
 
@@ -127,7 +126,6 @@ body::after {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
-.pill .bn { color: var(--cream); font-size: 15px; line-height: 1; padding-top: 2px; }
 
 .pulse {
   position: relative;
@@ -291,4 +289,106 @@ body::after {
     transition-duration: 0.01ms !important;
   }
   .glow { display: none; }
+}
+
+/* ---- footer credit + social ------------------------------------------ */
+
+.foot { justify-content: flex-start; gap: 10px 16px; }
+.foot .sep { opacity: 0.35; }
+.social { display: inline-flex; align-items: center; gap: 6px; }
+.foot .social a {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--faint);
+  transition: transform 0.35s var(--ease-out), color 0.3s, background 0.3s, box-shadow 0.3s;
+}
+.social svg { width: 16px; height: 16px; display: block; }
+.foot .social a:hover {
+  color: #2a0a06;
+  transform: translateY(-3px);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 55%),
+    linear-gradient(100deg, var(--haldi), var(--marigold) 50%, var(--shapla));
+  box-shadow: 0 8px 22px -6px rgba(255, 120, 60, 0.7);
+}
+
+/* ---- Howrah Bridge over the Hooghly (home) ---------------------------- */
+
+.bridge {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: clamp(90px, 22vh, 230px);
+  z-index: 4;
+  pointer-events: none;
+}
+.bridge svg { width: 100%; height: 100%; display: block; overflow: visible; }
+
+.truss path { fill: none; stroke-linecap: round; }
+.truss .main { stroke: url(#steel); stroke-width: 2.2; opacity: 0.9; }
+.truss .thin { stroke: rgba(247, 237, 225, 0.2); stroke-width: 1; }
+.draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.4s var(--ease-out) forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
+.lights .bulb { fill: #fff3c4; animation: twinkle 2.6s ease-in-out infinite; }
+.lights .halo { fill: var(--marigold); animation: twinkle 2.6s ease-in-out infinite; }
+.lights .reflect { stroke: var(--marigold); stroke-width: 1.2; stroke-linecap: round; opacity: 0.12; animation: twinkle 2.6s ease-in-out infinite; }
+@keyframes twinkle {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 1; }
+}
+
+.shimmer line { stroke: rgba(30, 200, 180, 0.35); stroke-width: 1; stroke-linecap: round; animation: drift 6s linear infinite; }
+@keyframes drift {
+  0% { transform: translateX(0); opacity: 0; }
+  20%, 80% { opacity: 1; }
+  100% { transform: translateX(-60px); opacity: 0; }
+}
+
+.taxi { pointer-events: auto; cursor: pointer; }
+.taxi .honk { opacity: 0; }
+.taxi.honking .honk { animation: honk 0.9s ease-out; }
+@keyframes honk {
+  0%, 100% { opacity: 0; }
+  10%, 60% { opacity: 1; }
+}
+
+/* ---- paper kites (home) ----------------------------------------------- */
+
+.kites {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 4;
+  pointer-events: none;
+  overflow: visible;
+  opacity: 0;
+  animation: rise 1.6s var(--ease-out) 1s forwards;
+}
+.kite { pointer-events: auto; cursor: grab; touch-action: none; filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.45)); }
+.kite.held { cursor: grabbing; }
+.manja { fill: none; stroke: rgba(247, 237, 225, 0.22); stroke-width: 0.8; }
+
+@media (prefers-reduced-motion: reduce) {
+  .draw { stroke-dashoffset: 0; }
+}
+
+/* keep the credit readable over the river */
+.bridge ~ .foot,
+body:has(.bridge) .foot {
+  background: linear-gradient(to top, rgba(15, 11, 10, 0.92) 30%, rgba(15, 11, 10, 0));
+  padding-top: 40px;
+}
+@keyframes twinkle-r { 0%, 100% { opacity: 0.04; } 50% { opacity: 0.18; } }
+.lights .reflect { animation-name: twinkle-r; }
+
+@media (max-width: 860px) {
+  .bridge { height: 13vh; }
 }
