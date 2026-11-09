@@ -1,40 +1,9 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
 node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+*.log
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+.vscode/*
+.idea
 
 # Cloudflare
 .wrangler
 .dev.vars
-
-# generated-image sources (kept locally, not deployed)
-design/
-
-# written by scripts/stamp-lastmod.mjs on every build, from git itself
-src/data/lastmod.ts
-
-# asset brief, kept local
-ASSETS.md
-
-# ingest cache for scripts/fetch-suman-archive.mjs (derived output is committed)
-scripts/.cache/

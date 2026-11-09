@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Project Retired · Bengal</title>
+  <meta name="description" content="This project is no longer continuing. Something very interesting about Bengal and West Bengal is coming up instead." />
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#0f0b0a" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  <!-- Microsoft Clarity (same project as before the site was retired) -->
+  <script>
+    (function (c, l, a, r, i, t, y) {
+      c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+      t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i + "?ref=bwt";
+      y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+    })(window, document, "clarity", "script", "y2nocf9q82");
+  </script>
+  <style>
+    body { min-height: 100svh; display: flex; flex-direction: column; }
+
+    #embers { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 3; pointer-events: none; }
+
+    .stage {
+      position: relative;
+      z-index: 10;
+      flex: 1;
+      display: grid;
+      place-items: center;
+      padding: 0 var(--gutter) 24px;
+      text-align: center;
+    }
+    .card { max-width: 620px; width: 100%; min-width: 0; }
+
+    .lamp {
+      position: relative;
+      display: block;
+      width: min(300px, 70vw);
+      margin: -10px auto 4px;
+      padding: 0;
+      border: 0;
+      background: none;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .lamp svg { display: block; width: 100%; height: auto; overflow: visible; }
+    .lamp:focus-visible { outline: 2px solid var(--haldi); outline-offset: 6px; border-radius: 24px; }
+
+    #flame { transform-box: fill-box; transform-origin: 50% 100%; transition: opacity 0.25s; }
+    #halo { transition: opacity 0.6s; }
+    .out #flame { opacity: 0; }
+    .out #halo { opacity: 0.08 !important; }
+
+    .smoke {
+      position: absolute;
+      left: 50%;
+      top: 34%;
+      width: 18px;
+      height: 18px;
+      margin-left: -9px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(247, 237, 225, 0.4), transparent 70%);
+      opacity: 0;
+      pointer-events: none;
+    }
+    .out .smoke { animation: smoke 2.4s ease-out forwards; }
+    .out .smoke:nth-child(2) { animation-delay: 0.25s; }
+    .out .smoke:nth-child(3) { animation-delay: 0.5s; }
+    @keyframes smoke {
+      0% { opacity: 0; transform: translate(0, 0) scale(0.6); }
+      15% { opacity: 0.9; }
+      100% { opacity: 0; transform: translate(14px, -120px) scale(3.4); }
+    }
+
+    .code {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 18px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+    .code b {
+      font-weight: 600;
+      color: #2a0a06;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 55%), linear-gradient(100deg, var(--haldi), var(--marigold));
+    }
+
+    h1 {
+      margin: 0;
+      font-weight: 600;
+      font-size: clamp(36px, 6vw, 68px);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+    }
+    h1 .light { font-weight: 300; }
+
+    .msg {
+      margin: 24px auto 0;
+      max-width: 46ch;
+      font-size: clamp(16px, 1.4vw, 18px);
+      line-height: 1.65;
+      font-weight: 300;
+      color: var(--muted);
+    }
+    .msg strong { color: var(--cream); font-weight: 500; }
+
+    .sign { margin: 22px 0 0; font-size: 15px; color: var(--muted); }
+    .sign .bn { font-size: 17px; color: var(--cream); margin-right: 6px; }
+
+    .path {
+      margin: 26px 0 0;
+      font-size: 12px;
+      color: rgba(247, 237, 225, 0.42);
+      word-break: break-all;
+    }
+    .path code {
+      font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+      padding: 2px 7px;
+      border-radius: 6px;
+      border: 1px solid var(--faint);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 32px;
+    }
+    .tip { margin: 14px 0 0; font-size: 12.5px; color: var(--muted); min-height: 1.4em; transition: opacity 0.3s; }
+  </style>
+</head>
+<body>
+  <div class="vignette" aria-hidden="true"></div>
+  <canvas id="embers" aria-hidden="true"></canvas>
+
+  <header class="top">
+    <a class="mark" href="/"><span class="bead" aria-hidden="true"></span>bengaliexperience</a>
+    <span class="pill"><span class="pulse" aria-hidden="true"></span>Project retired</span>
+  </header>
+
+  <main class="stage">
+    <div class="card">
+      <button class="lamp fade-in" id="lamp" type="button" aria-label="A lit diya. Press to blow it out or light it again." style="--d: .05s">
+        <span class="smoke"></span><span class="smoke"></span><span class="smoke"></span>
+        <svg viewBox="0 0 260 220" aria-hidden="true">
+          <defs>
+            <radialGradient id="g-halo" cx="50%" cy="50%" r="50%">
+              <stop offset="0" stop-color="#ffb627" stop-opacity=".55" />
+              <stop offset=".45" stop-color="#ee2d3f" stop-opacity=".14" />
+              <stop offset="1" stop-color="#ee2d3f" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="g-flame" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0" stop-color="#ee2d3f" />
+              <stop offset=".35" stop-color="#ff7a1a" />
+              <stop offset=".7" stop-color="#ffc23a" />
+              <stop offset="1" stop-color="#fff4c8" stop-opacity=".2" />
+            </linearGradient>
+            <linearGradient id="g-core" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0" stop-color="#5a63ff" stop-opacity=".9" />
+              <stop offset=".3" stop-color="#fffbe8" />
+              <stop offset="1" stop-color="#fff2b0" />
+            </linearGradient>
+            <radialGradient id="g-bowl" cx="38%" cy="18%" r="85%">
+              <stop offset="0" stop-color="#ffc39a" />
+              <stop offset=".3" stop-color="#ec6a37" />
+              <stop offset=".75" stop-color="#b8361c" />
+              <stop offset="1" stop-color="#5e1609" />
+            </radialGradient>
+            <linearGradient id="g-oil" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffcf5a" />
+              <stop offset="1" stop-color="#9c4a0c" />
+            </linearGradient>
+            <radialGradient id="g-shadow" cx="50%" cy="50%" r="50%">
+              <stop offset="0" stop-color="#000" stop-opacity=".55" />
+              <stop offset="1" stop-color="#000" stop-opacity="0" />
+            </radialGradient>
+          </defs>
+
+          <circle id="halo" cx="130" cy="88" r="110" fill="url(#g-halo)" />
+          <ellipse cx="130" cy="196" rx="104" ry="12" fill="url(#g-shadow)" />
+
+          <!-- bowl: a boat-shaped clay diya -->
+          <path d="M22 124 Q130 222 238 124 Q130 150 22 124 Z" fill="url(#g-bowl)" />
+          <!-- oil surface -->
+          <path d="M22 124 Q130 104 238 124 Q130 148 22 124 Z" fill="url(#g-oil)" />
+          <path d="M60 122 Q130 110 200 122" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="2" stroke-linecap="round" />
+          <!-- glaze highlight -->
+          <path d="M46 140 Q86 170 128 176" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="5" stroke-linecap="round" />
+          <!-- rice-paste dots along the bowl -->
+          <g fill="#f7ede1" opacity=".85">
+            <circle cx="70" cy="160" r="2.6" /><circle cx="88" cy="168" r="2.6" /><circle cx="108" cy="173" r="2.6" />
+            <circle cx="130" cy="175" r="3.2" /><circle cx="152" cy="173" r="2.6" /><circle cx="172" cy="168" r="2.6" />
+            <circle cx="190" cy="160" r="2.6" />
+          </g>
+          <!-- wick -->
+          <path d="M130 126 Q128 118 131 110" fill="none" stroke="#2b1208" stroke-width="3.2" stroke-linecap="round" />
+
+          <g id="flame">
+            <path d="M131 112 C 106 102, 104 66, 131 18 C 158 66, 156 102, 131 112 Z" fill="url(#g-flame)" />
+            <path d="M131 110 C 118 102, 118 82, 131 56 C 144 82, 144 102, 131 110 Z" fill="url(#g-core)" />
+          </g>
+        </svg>
+      </button>
+
+      <p class="code fade-in" style="--d: .25s"><b>410</b> This page has been retired</p>
+      <h1 class="split"><span class="light">Sorry —</span> this project has <span class="gloss-text">ended.</span></h1>
+      <p class="msg fade-in" style="--d: .9s">
+        We're no longer continuing this project. Instead, we're coming up with
+        <strong>very interesting work on Bengal, West Bengal</strong>. Thanks for understanding.
+      </p>
+      <p class="sign fade-in" style="--d: 1.05s"><span class="bn">ধন্যবাদ</span>— <a href="https://konkomaji.com" rel="noopener">Konko M (Creator)</a></p>
+
+      <div class="actions fade-in" style="--d: 1.2s">
+        <a class="btn" href="/">See what's coming <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn btn-ghost" href="https://konkomaji.com" rel="noopener">konkomaji.com</a>
+      </div>
+      <p class="tip fade-in" id="tip" style="--d: 1.4s" aria-live="polite">Tap the diya.</p>
+      <p class="path fade-in" id="path" style="--d: 1.5s" hidden>You were looking for <code></code></p>
+    </div>
+  </main>
+
+  <footer class="foot fade-in" style="--d: 1.6s">
+    <span>© 2026 · Made by <a href="https://konkomaji.com" rel="noopener">Konko M (Creator)</a></span>
+    <span>bengaliexperience.wtf</span>
+  </footer>
+
+  <script src="/fx.js" defer></script>
+  <script src="/diya.js" defer></script>
+</body>
+</html>
