@@ -1,12 +1,3 @@
 name = "bengaliexperience"
-compatibility_date = "2025-01-01"
-pages_build_output_dir = "dist"
-
-# KV namespace behind the live "N aboard" counter (functions/api/aboard.ts).
-# Create both once, then paste the ids in:
-#   npx wrangler kv namespace create ABOARD
-#   npx wrangler kv namespace create ABOARD --preview
-[[kv_namespaces]]
-binding = "ABOARD"
-id = "cd29e734e202435eb5c0ad7d6c803e9b"
-preview_id = "c423e5855f8c4d2ebbb6130ee47643a1"
+compatibility_date = "2026-11-01"
+pages_build_output_dir = "site"
