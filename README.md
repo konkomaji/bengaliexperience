@@ -2,8 +2,8 @@
 
 The Bengali Experience project (the bus playlist, Mahalaya, Tarakeswar,
 Kabir Suman, Uttam Kumar and the Marvel Multiverse Atlas) was retired on
-2026-11-09. Its full source is kept at the git tag
-`archive/bengaliexperience-final`.
+2026-11-09. Its full source is still in this repo's history at commit
+`93878c0` (`git checkout 93878c0`).
 
 The domain now serves two static pages on Cloudflare Pages while new work on
 Bengal and West Bengal is being made:
