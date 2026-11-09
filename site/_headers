@@ -5,3 +5,7 @@
 
 /favicon.svg
   Cache-Control: public, max-age=86400
+/*.png
+  Cache-Control: public, max-age=86400
+/llms.txt
+  Content-Type: text/plain; charset=utf-8

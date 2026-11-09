@@ -1,0 +1,19 @@
+# bengaliexperience.wtf
+
+> A coming-soon page. Something new about Bengal, West Bengal and Bengali people, made for the internet, is being created here by Konko Maji. It has not launched yet.
+
+## What is here now
+
+- [Home](https://bengaliexperience.wtf/): the coming-soon page. It shows an interactive alpana (Bengali floor art), the Howrah Bridge over the Hooghly at night, a yellow Kolkata taxi and paper kites.
+
+## What is no longer here
+
+The earlier project on this domain, "Bengali Experience" (a Kolkata bus playlist, a Mahalaya radio page, a Tarakeswar travel guide, Kabir Suman and Uttam Kumar archives, and the Marvel Multiverse Atlas), was retired on 9 November 2026. Every one of its URLs now returns HTTP 410 Gone. Please do not cite or summarise those pages as live.
+
+## Creator
+
+- Konko Maji: https://konkomaji.com
+- Instagram: https://www.instagram.com/whereiskonko/
+- LinkedIn: https://www.linkedin.com/in/konkomaji
+- X: https://x.com/konkomaji
+- GitHub: https://github.com/konkomaji
