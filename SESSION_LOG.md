@@ -91,3 +91,16 @@
    optionally add prefix removals for the old sections.
 2. AdSense: remove `bengaliexperience.wtf` under Sites.
 3. Clarity: optionally rename project `y2nocf9q82`.
+
+## 8. Commits
+
+| PR | Change |
+|---|---|
+| #17 | Replace the old site with the static coming-soon and sorry pages |
+| #18 | No Bengali text, new credit and footer, Bengal-rooted graphics |
+| #19 | Full SEO, AEO and GEO reset |
+| #20 | This session log |
+
+- `main` is at merge commit `6365569`. Cloudflare Pages deployed it.
+- Open item: the GitHub repo description still says "Konko M". It
+  should say "Konko Maji".
